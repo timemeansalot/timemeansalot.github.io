@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/timemeansalot/timemeansalot.github.io.git/"/>
-  <updated>2020-07-04T03:54:42.000Z</updated>
+  <updated>2020-07-04T12:43:20.099Z</updated>
   <id>https://github.com/timemeansalot/timemeansalot.github.io.git/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>DS_chapter01_introduction</title>
+    <link href="https://github.com/timemeansalot/timemeansalot.github.io.git/2020/07/04/DS-chapter01-introduction/"/>
+    <id>https://github.com/timemeansalot/timemeansalot.github.io.git/2020/07/04/DS-chapter01-introduction/</id>
+    <published>2020-07-04T11:54:54.000Z</published>
+    <updated>2020-07-04T12:43:20.099Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="数据结构-第一章-绪论"><a href="#数据结构-第一章-绪论" class="headerlink" title="数据结构 第一章 绪论"></a>数据结构 第一章 绪论</h1><h2 id="863考试大纲"><a href="#863考试大纲" class="headerlink" title="863考试大纲"></a>863考试大纲</h2><p>（1）数据结构的基本概念，数据的逻辑结构、存储结构。</p><p>（2）算法的定义、算法的基本特性以及算法分析的基本概念。</p><p><img src="https://i.loli.net/2020/07/04/HV5cOfaWqu2DAox.png" alt="image-20200704204305435"></p><h2 id="错题"><a href="#错题" class="headerlink" title="错题"></a>错题</h2><ul><li>P3：1、3、4</li><li>P4：7、1</li><li>P7：2、6</li><li>P8：12</li></ul><h2 id="1-1-数据结构的基本概念"><a href="#1-1-数据结构的基本概念" class="headerlink" title="1.1 数据结构的基本概念"></a>1.1 数据结构的基本概念</h2><p>数据：数据是信息的载体，用于描述客观事物。</p><p>数据元素：数据的基本单位，一个数据元素包含多个数据项。例如，学生记录就是一个数据元素，它包含学号、姓名等数据项。</p><p>数据对象：具有相同性质的数据元素的集合。</p><p>抽象数据类型：</p><ul><li>定于：数学模型和定义在该模型上的一组操作</li><li>组成要素：<ul><li>数学模型：指明了数据对象和数据关系；即数据的逻辑结构和存储结构</li><li>基本操作集：定义的操作即如何实现数据的逻辑结构</li></ul></li></ul><p>数据结构：</p><ul><li>定义：数据元素彼此不是孤立的，他们之间的关系称为<strong>结构</strong>。<strong>数据结构</strong>是相互之间存在关系的数据元素的集合。</li><li>三要素：<ul><li>逻辑结构：线性结构、非线性结构</li><li>存储结构：顺序存储、链式存储、索引存储、散列存储（Hash存储）</li><li>定义的操作：如何实现数据的逻辑结果</li></ul></li></ul><h2 id="1-2-算法"><a href="#1-2-算法" class="headerlink" title="1.2 算法"></a>1.2 算法</h2><p>定义：对特定问题求解步骤的一种<strong>描述</strong></p><p>基本特性：</p><ul><li>有穷性</li><li>确定性：算法每一步的意思必须明确</li><li>可行性：算法中的每一步都必须是可行的</li><li>输入</li><li>输出</li></ul><p>算法分析：</p><ul><li>时间复杂度T(n)</li><li>空间复杂度S(n)</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;数据结构-第一章-绪论&quot;&gt;&lt;a href=&quot;#数据结构-第一章-绪论&quot; class=&quot;headerlink&quot; title=&quot;数据结构 第一章 绪论&quot;&gt;&lt;/a&gt;数据结构 第一章 绪论&lt;/h1&gt;&lt;h2 id=&quot;863考试大纲&quot;&gt;&lt;a href=&quot;#863考试大纲&quot; c
+      
+    
+    </summary>
+    
+    
+    
+      <category term="DataStructure" scheme="https://github.com/timemeansalot/timemeansalot.github.io.git/tags/DataStructure/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DS_chapter02_vector</title>
+    <link href="https://github.com/timemeansalot/timemeansalot.github.io.git/2020/07/04/DS-chapter02-vector/"/>
+    <id>https://github.com/timemeansalot/timemeansalot.github.io.git/2020/07/04/DS-chapter02-vector/</id>
+    <published>2020-07-04T09:37:37.000Z</published>
+    <updated>2020-07-04T12:37:42.829Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="数据结构-第二章-向量"><a href="#数据结构-第二章-向量" class="headerlink" title="数据结构 第二章 向量"></a>数据结构 第二章 向量</h1><h2 id="863考试大纲"><a href="#863考试大纲" class="headerlink" title="863考试大纲"></a>863考试大纲</h2><p>（1）线性表的定义、基本操作。</p><p>（2）线性表的存储结构（包括顺序存储结构、链式存储结构）及操作实现。</p><p>（3）线性表的应用。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;数据结构-第二章-向量&quot;&gt;&lt;a href=&quot;#数据结构-第二章-向量&quot; class=&quot;headerlink&quot; title=&quot;数据结构 第二章 向量&quot;&gt;&lt;/a&gt;数据结构 第二章 向量&lt;/h1&gt;&lt;h2 id=&quot;863考试大纲&quot;&gt;&lt;a href=&quot;#863考试大纲&quot; c
+      
+    
+    </summary>
+    
+    
+    
+      <category term="DataStructure" scheme="https://github.com/timemeansalot/timemeansalot.github.io.git/tags/DataStructure/"/>
+    
+  </entry>
   
   <entry>
     <title>AppIdeas</title>
