@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Hexo搭建博客手把手教程"><meta name="keywords" content="Hexo,Blog"><meta name="author" content="TimeMeansALot"><meta name="copyright" content="TimeMeansALot"><title>Hexo搭建博客手把手教程 | TimeMeansALot Bro</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="TimeMeansALot Bro" type="application/atom+xml">
+</head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用hexo搭建博客详细教程"><span class="toc-number">1.</span> <span class="toc-text"> 使用hexo搭建博客详细教程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建hexo"><span class="toc-number">2.</span> <span class="toc-text">创建hexo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关联hexo和github仓库"><span class="toc-number">3.</span> <span class="toc-text">关联hexo和github仓库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSH配置"><span class="toc-number">4.</span> <span class="toc-text">SSH配置</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">TimeMeansALot</div><div class="author-info__description text-center">Study Record Of Me</div><div class="follow-button"><a href="https://github.com/timemeansalot">follow me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">7</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">7</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">TimeMeansALot Bro</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">Hexo搭建博客手把手教程</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-01-13</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">427</span><span class="post-meta__separator">|</span><span>阅读时长: 1 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="使用hexo搭建博客详细教程"><a href="#使用hexo搭建博客详细教程" class="headerlink" title=" 使用hexo搭建博客详细教程"></a><center> <font color=#A52A2A size=7>使用hexo搭建博客详细教程</font></center></h1><center>[![VoMXAs.md.png](https://s2.ax1x.com/2019/06/15/VoMXAs.md.png)](https://imgchr.com/i/VoMXAs)</center>
+
+<a id="more"></a>
+
+
+
+<h1 id="创建hexo"><a href="#创建hexo" class="headerlink" title="创建hexo"></a><font color="#EE0000">创建hexo</font></h1><ol>
+<li><p><font color="#4EEE94">安装Git、NodeJS、npm</font></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install git nodejs npm</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p><font color="#4EEE94">安装hexo</font><br>创建一个文件夹如<strong>blog</strong>，当做是博客文件夹。安装hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo npm install hexo -g</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p><font color="#4EEE94">初始化hexo</font></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p><font color="#4EEE94">配置hexo组件</font></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo npm install</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p><font color="#4EEE94">安装deployer扩展，推送hexo到github</font></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="6">
+<li><font color="#4EEE94">hexo 命令常用</font></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g </span><br><span class="line"> hexo init </span><br><span class="line"> npm install</span><br><span class="line"> hexo s</span><br><span class="line"> hexo new <span class="string">"postName"</span>          <span class="comment">#新建文章</span></span><br><span class="line"> hexo new page <span class="string">"pageName"</span>     <span class="comment">#新建页面</span></span><br><span class="line"> hexo generate                <span class="comment">#生成静态页面至public目录</span></span><br><span class="line"> hexo server     <span class="comment">#开启预览访问端口（默认端口4000，'ctrl + c'关闭server）</span></span><br><span class="line"> hexo deploy     <span class="comment">#部署到GitHub</span></span><br><span class="line"> hexo <span class="built_in">help</span>       <span class="comment">#查看帮助</span></span><br><span class="line"> hexo version    <span class="comment">#查看Hexo的版本</span></span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>在本地查看hexo</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo cl</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<p> <img src="https://i.loli.net/2020/07/04/9HDlWJO4xhnkv5T.png" alt="image-20200704142533529"></p>
+<p> <img src="https://i.loli.net/2020/07/04/FEdtfRTjlA8q4gS.png" alt="image-20200704142557342"></p>
+</li>
+</ol>
+<h1 id="关联hexo和github仓库"><a href="#关联hexo和github仓库" class="headerlink" title="关联hexo和github仓库"></a><font color="#EE0000">关联hexo和github仓库</font></h1><ol>
+<li><font color="#4EEE94">配置密匙</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;.ssh</span><br><span class="line">ssh-keygen -t rsa -C &#39;你的github账号&#39;</span><br></pre></td></tr></table></figure>
+添加密匙到你的github中</li>
+<li><font color="#4EEE94">配置hexo的_config文件</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: 你的github仓库链接</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure></li>
+<li><font color="#4EEE94">配置本机的git环境</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global user.name &#39;github名字&#39;</span><br><span class="line">git config --global user.email &#39;github账号&#39;</span><br></pre></td></tr></table></figure>
+然后可以用<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br></pre></td></tr></table></figure>
+查看配置信息</li>
+</ol>
+<p><a href="[https://molunerfinn.com/hexo-theme-melody-doc/zh-Hans/#%E7%89%B9%E6%80%A7](https://molunerfinn.com/hexo-theme-melody-doc/zh-Hans/#特性)">配置melody主题</a></p>
+<h1 id="SSH配置"><a href="#SSH配置" class="headerlink" title="SSH配置"></a><font color="#EE0000">SSH配置</font></h1><ol>
+<li><font color="#4EEE94">在本地用命令生成ssh key,名字要自己取</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &#39;email&#39;</span><br></pre></td></tr></table></figure></li>
+<li><font color="#4EEE94">添加到ssh库</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-add rsa</span><br><span class="line">ssh-add -l</span><br></pre></td></tr></table></figure></li>
+<li><font color="#4EEE94">配置ssh的config文件，例如：</font><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Host test-github</span><br><span class="line">	HostName github.com</span><br><span class="line">	User git</span><br><span class="line">	IdentityFile ~&#x2F;.ssh&#x2F;id_rsa_test_github</span><br></pre></td></tr></table></figure>
+其中 Host的IdentityFile最重要，在克隆的时候，用Host来取代github.com</li>
+<li><font color="#4EEE94">添加公匙到github的仓库的key中</font></li>
+</ol>
+<blockquote>
+<p><strong>参考文献</strong></p>
+</blockquote>
+<ul>
+<li>Hexo美化：<a href="https://www.jianshu.com/p/9f0e90cc32c2" target="_blank" rel="noopener">https://www.jianshu.com/p/9f0e90cc32c2</a></li>
+<li>SSH详细教程：<a href="http://shinancao.github.io/2016/12/18/Programming-Git-1/" target="_blank" rel="noopener">http://shinancao.github.io/2016/12/18/Programming-Git-1/</a></li>
+<li>更改颜色： <a href="https://blog.csdn.net/weixin_40837922/article/details/88047241" target="_blank" rel="noopener">https://blog.csdn.net/weixin_40837922/article/details/88047241</a></li>
+<li>git的submodule： <a href="https://blog.csdn.net/xuanwolanxue/article/details/80609986" target="_blank" rel="noopener">https://blog.csdn.net/xuanwolanxue/article/details/80609986</a></li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">TimeMeansALot</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://github.com/timemeansalot/timemeansalot.github.io.git/2019/01/13/HexoAndBlog/">https://github.com/timemeansalot/timemeansalot.github.io.git/2019/01/13/HexoAndBlog/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://github.com/timemeansalot/timemeansalot.github.io.git">TimeMeansALot Bro</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/Blog/">Blog</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2019/03/10/Diary/"><i class="fa fa-chevron-left">  </i><span>欢乐时光</span></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2021 - 2020 By TimeMeansALot</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
