@@ -27,28 +27,23 @@
 <meta property="og:site_name" content="timemeansalot">
 <meta property="og:description" content="RISCV 5 级流水线“取指”部分设计  开源项目中“取指级”参考 本项目“取指级”设计">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/nutshell_if.jpg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230329100629799.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/EBirt2StagePipeline.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/cVzHaL2BuUrMJQv.png">
 <meta property="og:image" content="https://s2.loli.net/2023/04/06/EIQD1LbWTl7OvGy.png">
 <meta property="og:image" content="https://s2.loli.net/2023/04/06/SKnDXtylg2pUuso.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/leftover%20buffer.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/2bankSram.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/ebirtCommit.jpg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/flushID.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/pipeline_scratch.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/sbtTaluN.svg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/D5VAzyJ6pO49sd7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/SiUlO7ZA83y2D5p.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/Ob1fdTnopXZYVmF.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/23/OSDrPmAwNLc5iF7.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/method2.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/method3.svg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/redirectionSrc.svg">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/3YviMgsdQ8Zx1fH.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/JaVN9chLMnCQklm.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/sVIvNR3qoMp9TPy.png">
 <meta property="og:image" content="https://s2.loli.net/2023/06/01/NrQDle4aohYsRmc.png">
 <meta property="article:published_time" content="2023-03-27T02:57:57.000Z">
-<meta property="article:modified_time" content="2023-06-18T09:37:50.846Z">
+<meta property="article:modified_time" content="2023-06-27T05:58:40.954Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/IF/nutshell_if.jpg">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/27/cVzHaL2BuUrMJQv.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/03/27/riscv-IF/">
@@ -265,7 +260,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+      <time title="修改时间：2023-06-27 13:58:40" itemprop="dateModified" datetime="2023-06-27T13:58:40+08:00">2023-06-27</time>
     </span>
 
   
@@ -275,7 +270,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>7.5k</span>
+      <span>7.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -305,9 +300,9 @@
 <h2 id="开源项目取指参考">开源项目取指参考</h2>
 <h3 id="果壳">果壳</h3>
 <figure>
-<img src="/Users/fujie/Pictures/typora/IF/nutshell_if.jpg"
-alt="nutshell_if" />
-<figcaption aria-hidden="true">nutshell_if</figcaption>
+<img src="https://s2.loli.net/2023/06/27/cVzHaL2BuUrMJQv.png"
+alt="image-20230627130147655" />
+<figcaption aria-hidden="true">image-20230627130147655</figcaption>
 </figure>
 <ol type="1">
 <li><p>取指</p>
@@ -327,8 +322,9 @@ alt="nutshell_if" />
 </blockquote>
 <ol type="1">
 <li>默认 PC+8</li>
-<li>BTB：512 entry，每个 entry 的数据如下图所示： -&gt; JAL, JALR
-<img src="/Users/fujie/Pictures/typora/image-20230329100629799.png" alt="image-20230329100629799" style="zoom:67%;" /></li>
+<li>BTB：512 entry，每个 entry 的数据如下图所示： -&gt; JAL, JALR <img
+src="https://s2.loli.net/2023/06/27/pP3GTXNriet15Ec.png"
+alt="image-20230627130221058" /></li>
 <li>RAS：16 entry, 每个 entry 是 32bit 的 PC 地址 -&gt; call, ret</li>
 <li>PHT: 512entry，每个 entry 是 2bit 预测器-&gt;
 处理条件分支指令(B-Type Instructions)</li>
@@ -364,7 +360,6 @@ File</li>
 </ol></li>
 </ol>
 <h3 id="蜂鸟低功耗处理器核">蜂鸟低功耗处理器核</h3>
-<p><img src="/Users/fujie/Pictures/typora/IF/EBirt2StagePipeline.jpg" alt="EBirt2StagePipeline" style="zoom:50%;" /></p>
 <figure>
 <img src="https://s2.loli.net/2023/04/06/EIQD1LbWTl7OvGy.png"
 alt="e203 storage system" />
@@ -387,10 +382,15 @@ alt="ITCM" />
 蜂鸟采用 leftover buffer 来实现指令对齐，存储指令的高 16bits 到 leftover
 buffer：连续取指的时候，1 个 cycle
 可以解决指令不对齐问题；非连续取指的时候，必须 2 个 cycle
-才可以解决指令不对齐问题
-<img src="/Users/fujie/Pictures/typora/IF/leftover buffer.svg" alt="leftover buffer" style="zoom: 67%;" /></p></li>
+才可以解决指令不对齐问题 <img
+src="https://s2.loli.net/2023/06/27/E5l3Lv1VtTP4cwI.png"
+alt="image-20230627130320584" /></p></li>
 <li><p>2 bank SRAM</p>
-<p><img src="/Users/fujie/Pictures/typora/IF/2bankSram.svg" alt="2bankSram" style="zoom: 70%;" /></p></li>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/D5VAzyJ6pO49sd7.png"
+alt="image-20230627130610648" />
+<figcaption aria-hidden="true">image-20230627130610648</figcaption>
+</figure></li>
 </ul></li>
 <li><p>蜂鸟支持 C 压缩指令集，因此它需要考虑指令对齐的问题(16bit 和
 32bit 的指令混合存储在 I-memory 中)</p>
@@ -402,7 +402,8 @@ buffer：连续取指的时候，1 个 cycle
 </ul></li>
 <li><p>蜂鸟 EXE
 级在遇到<u>分支预测错误、trap</u>的时候，都会触发重定向，会返回给 IF
-<img src="/Users/fujie/Pictures/typora/IF/ebirtCommit.jpg" alt="ebirtCommit" style="zoom:50%;" /></p>
+<img src="https://s2.loli.net/2023/06/27/SiUlO7ZA83y2D5p.png"
+alt="image-20230627130908630" /></p>
 <ul>
 <li>BP 错误：条件跳转指令的结果由 EXE 级的 ALU 计算得到</li>
 <li>CSR: 蜂鸟只支持机器模式、没有虚拟地址不存在 page 缺失相关的异常</li>
@@ -423,17 +424,13 @@ buffer：连续取指的时候，1 个 cycle
 delay，需要保证 PC 和 instruction
 在流水线上是匹配的，在代码里使用了一个额外的<code>pc_delay</code>寄存器来提供额外一个
 cycle 的 PC 延迟 <img
-src="/Users/fujie/Pictures/typora/IF/if_id_sbp.svg"
-alt="if_id_sbp" /></p></li>
+src="https://s2.loli.net/2023/06/27/hsogZdXDfIykOTw.png"
+alt="image-20230627131000094" /></p></li>
 <li><p>当流水线刷新之后，新地址对应的指令在 2 个 cycle 之后送到 ID Stage
 ，因此其后续两个 cycle 的指令都是无效指令，看作 2 条 nop 指令</p></li>
 <li><p>EXE 如果和 ID 同时发来了重定向信号，则 EXE 的信号优先级更高：因为
 EXE 的指令更老</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineIF.v</span></span><br><span class="line"><span class="keyword">assign</span> pc_mux = (taken_e_i == <span class="number">1&#x27;b1</span>) ? redirection_e_i:</span><br><span class="line">  							(taken_d_i == <span class="number">1&#x27;b1</span>) ? redirection_d_i : pc_register;</span><br></pre></td></tr></table></figure>
-<figure>
-<img src="/Users/fujie/Pictures/typora/IF/flushID.svg" alt="flushID" />
-<figcaption aria-hidden="true">flushID</figcaption>
-</figure></li>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineIF.v</span></span><br><span class="line"><span class="keyword">assign</span> pc_mux = (taken_e_i == <span class="number">1&#x27;b1</span>) ? redirection_e_i:</span><br><span class="line">  							(taken_d_i == <span class="number">1&#x27;b1</span>) ? redirection_d_i : pc_register;</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="pc-重定向">PC 重定向</h3>
 <ol type="1">
@@ -463,25 +460,20 @@ IF</li>
 <li><p>ID 采用静态分支预测，如果解码判断是分支指令，会计算 target
 PC<br />
 不会冲刷流水线 <img
-src="/Users/fujie/Pictures/typora/IF/redirection_ID.svg"
-alt="redirection_ID" /></p></li>
+src="https://s2.loli.net/2023/06/27/B5KJ7oQVm4SY3a6.png"
+alt="image-20230627131128707" /></p></li>
 <li><p>EXE 的 ALU 会对条件分支指令的结果进行判断，如果 ID 判断错误，EXE
 会产生重定向 PC<br />
 冲刷 1 条流水线 <img
-src="/Users/fujie/Pictures/typora/IF/redirection_EXE.svg"
-alt="redirection_EXE" /></p></li>
+src="https://s2.loli.net/2023/06/27/EUNcdCjw3Q12Mgh.png"
+alt="image-20230627131140165" /></p></li>
 <li><p>MEM 的 CSR 单元会判断 trap 是否发生，如果发生 EXE 也会产生重定向
 PC<br />
 冲刷 2 条流水线 <img
-src="/Users/fujie/Pictures/typora/IF/redirection_MEM.svg"
-alt="redirection_MEM" /></p></li>
+src="https://s2.loli.net/2023/06/27/zmbJUyurotLqQiN.png"
+alt="image-20230627131150989" /></p></li>
 </ol>
 <h3 id="指令对齐">指令对齐</h3>
-<figure>
-<img src="/Users/fujie/Pictures/typora/IF/pipeline_scratch.svg"
-alt="pipeline_scratch" />
-<figcaption aria-hidden="true">pipeline_scratch</figcaption>
-</figure>
 <p>ITCM 占 64kB</p>
 <ol type="1">
 <li><p>FIFO 工作原理</p>
@@ -570,9 +562,9 @@ prediction_addr</li>
 pc_next_next, 并且冲刷到 prediction_addr 取出的指令</li>
 </ol>
 <figure>
-<img src="/Users/fujie/Pictures/typora/IF/sbtTaluN.svg"
-alt="sbp taken, alu not taken" />
-<figcaption aria-hidden="true">sbp taken, alu not taken</figcaption>
+<img src="https://s2.loli.net/2023/06/27/Ob1fdTnopXZYVmF.png"
+alt="image-20230627131305174" />
+<figcaption aria-hidden="true">image-20230627131305174</figcaption>
 </figure></li>
 </ol>
 <h3 id="方案-1">方案 1</h3>
@@ -610,7 +602,11 @@ SRAM 才可以拼成一个整数指令</li>
 <h3 id="方案-2">方案 2</h3>
 <p><strong>核心思想</strong>：在方案 1 的基础上，将 32bits 的 SRAM
 拆分成 2 块 16bits 的 SRAM，这样取指的粒度从 4B 变成了 2B</p>
-<p><img src="/Users/fujie/Pictures/typora/IF/method2.svg" /></p>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/3YviMgsdQ8Zx1fH.png"
+alt="image-20230627131329377" />
+<figcaption aria-hidden="true">image-20230627131329377</figcaption>
+</figure>
 <ol type="1">
 <li><p>整数指令对齐：利用 2 back SRAM 来处理非对齐地址，取指的时候，根据
 addr 是否 4B 对齐，分为两种情况</p>
@@ -621,7 +617,8 @@ addr 是否 4B 对齐，分为两种情况</p>
 <li>addr 是 2B
 对齐：<code>instr=&#123;Left[Right[addr&gt;&gt;2+1], Left[addr&gt;&gt;2]&#125;</code>，如图
 pc==2 的情况 <img
-src="/Users/fujie/Pictures/typora/IF/method2Sram.svg" /></li>
+src="https://s2.loli.net/2023/06/27/K3c12ZuPn7vH9JX.png"
+alt="image-20230627131344666" /></li>
 </ol></li>
 <li><p>压缩指令判断，由于不存在 leftover
 buffer，判断压缩指令与整数指令，只需要看 instr[1:0]即可,
@@ -681,7 +678,11 @@ FIFO 中，节约<code>C+C</code>类型指令存储的访问 SRAM</p>
 <blockquote>
 <p>Q: 是否 4*16 的 FIFO 也能保证没有 overflow?</p>
 </blockquote>
-<p><img src="/Users/fujie/Pictures/typora/IF/method3.svg" /></p>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/JaVN9chLMnCQklm.png"
+alt="image-20230627131400942" />
+<figcaption aria-hidden="true">image-20230627131400942</figcaption>
+</figure>
 <ol type="1">
 <li>整数指令对齐：取指逻辑跟方案 2 相同，差别在于：
 <ol type="1">
@@ -759,9 +760,9 @@ ID Stage
 </blockquote>
 <h3 id="取指时可能更新的-pc-值">取指时可能更新的 PC 值</h3>
 <figure>
-<img src="/Users/fujie/Pictures/typora/IF/redirectionSrc.svg"
-alt="redirectionSrc" />
-<figcaption aria-hidden="true">redirectionSrc</figcaption>
+<img src="https://s2.loli.net/2023/06/27/sVIvNR3qoMp9TPy.png"
+alt="image-20230627131422562" />
+<figcaption aria-hidden="true">image-20230627131422562</figcaption>
 </figure>
 <p>IF Stage
 可能的取指地址有如下一些情况，其优先级：<code>TOP &gt; EXE &gt; ID &gt; IF</code></p>
@@ -786,8 +787,6 @@ alt="redirectionSrc" />
 </blockquote></li>
 </ul></li>
 </ol>
-<p><img
-src="/Users/fujie/Pictures/typora/IF/compress_with_pc.svg" /></p>
 <p><img src="https://s2.loli.net/2023/06/01/NrQDle4aohYsRmc.png"
 alt="verification" /> 测试的情况有：</p>
 <ul class="task-list">
@@ -863,7 +862,7 @@ stall（0bits）</label></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">330k</span>
+    <span title="站点总字数">329k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">

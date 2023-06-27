@@ -31,14 +31,8 @@
 <meta property="og:image" content="https://s2.loli.net/2023/03/11/D6uWOnjrogmNsvk.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/11/wSgedMkjVhoq1A6.jpg">
 <meta property="og:image" content="https://s2.loli.net/2023/03/11/Wv3ZMVen9fEbXpY.jpg">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512151143360.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512152204442.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512155556061.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512155913379.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512160412862.png">
-<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230512163723257.png">
 <meta property="article:published_time" content="2023-04-04T07:38:11.000Z">
-<meta property="article:modified_time" content="2023-06-18T09:37:50.845Z">
+<meta property="article:modified_time" content="2023-06-27T05:19:11.255Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -155,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#shifter-design"><span class="nav-number">1.</span> <span class="nav-text">32 Shifter Design</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">对跳转指令的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jalr-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.0.1.</span> <span class="nav-text">JALR 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-type-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.0.2.</span> <span class="nav-text">B-type 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">仿真结果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jalr-%E5%AD%98%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96"><span class="nav-number">3.1.</span> <span class="nav-text">jalr 存在数据依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jalr-%E4%B8%8D%E5%AD%98%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96"><span class="nav-number">3.2.</span> <span class="nav-text">jalr 不存在数据依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-type-%E6%8C%87%E4%BB%A4%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.3.</span> <span class="nav-text">B-Type 指令仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-not-taken-alu-not-taken"><span class="nav-number">3.3.1.</span> <span class="nav-text">sbp not taken, alu not taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-not-taken-alu-taken"><span class="nav-number">3.3.2.</span> <span class="nav-text">sbp not taken, alu taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-taken-alu-not-taken"><span class="nav-number">3.3.3.</span> <span class="nav-text">sbp taken, alu not taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-taken-alu-taken"><span class="nav-number">3.3.4.</span> <span class="nav-text">sbp taken, alu taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image-20230512160631459"><span class="nav-number">3.3.5.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%8C%87%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">混合指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%86%B2%E5%88%B7%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">流水线冲刷总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E5%88%B7-ifid-pipeline-register-%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.0.1.</span> <span class="nav-text">冲刷 IF&#x2F;ID pipeline register
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#shifter-design"><span class="nav-number">1.</span> <span class="nav-text">32 Shifter Design</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">对跳转指令的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jalr-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.0.1.</span> <span class="nav-text">JALR 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-type-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.0.2.</span> <span class="nav-text">B-type 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">仿真结果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jalr-%E5%AD%98%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96"><span class="nav-number">3.1.</span> <span class="nav-text">jalr 存在数据依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jalr-%E4%B8%8D%E5%AD%98%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96"><span class="nav-number">3.2.</span> <span class="nav-text">jalr 不存在数据依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-type-%E6%8C%87%E4%BB%A4%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.3.</span> <span class="nav-text">B-Type 指令仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-not-taken-alu-not-taken"><span class="nav-number">3.3.1.</span> <span class="nav-text">sbp not taken, alu not taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-not-taken-alu-taken"><span class="nav-number">3.3.2.</span> <span class="nav-text">sbp not taken, alu taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-taken-alu-not-taken"><span class="nav-number">3.3.3.</span> <span class="nav-text">sbp taken, alu not taken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbp-taken-alu-taken"><span class="nav-number">3.3.4.</span> <span class="nav-text">sbp taken, alu taken</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%8C%87%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">混合指令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%86%B2%E5%88%B7%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">流水线冲刷总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E5%88%B7-ifid-pipeline-register-%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.0.1.</span> <span class="nav-text">冲刷 IF&#x2F;ID pipeline register
 的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E5%88%B7-idexe-pipeline-register-%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.0.2.</span> <span class="nav-text">冲刷 ID&#x2F;EXE pipeline
 register 的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E5%88%B7-exemem-pipeline-register-%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.0.3.</span> <span class="nav-text">冲刷 EXE&#x2F;MEM pipeline
 register 的情况</span></a></li></ol></li></ol></li></ol></div>
@@ -262,7 +256,7 @@ register 的情况</span></a></li></ol></li></ol></li></ol></div>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+      <time title="修改时间：2023-06-27 13:19:11" itemprop="dateModified" datetime="2023-06-27T13:19:11+08:00">2023-06-27</time>
     </span>
 
   
@@ -272,14 +266,14 @@ register 的情况</span></a></li></ol></li></ol></li></ol></div>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>7.2k</span>
+      <span>7.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>7 分钟</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
@@ -474,11 +468,6 @@ pipeline register flush=1</strong></li>
 取出指令<code>addi x5, x6, 4</code> 从`<code>counter==3</code>开始循环:
 <code>addi-&gt;addi-&gt;nop-&gt;nop-&gt;nop-&gt;jr</code></p></li>
 </ol>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512151143360.png"
-alt="image-20230512151143360" />
-<figcaption aria-hidden="true">image-20230512151143360</figcaption>
-</figure>
 <h2 id="jalr-不存在数据依赖">jalr 不存在数据依赖</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    # test JALR</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    jr x2</span><br><span class="line">    addi x2, x2, 2</span><br><span class="line">    addi x3, x3, 3</span><br><span class="line">    addi x4, x4, 4</span><br><span class="line"></span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br></pre></td></tr></table></figure>
 <p>期待运行过程：</p>
@@ -510,50 +499,22 @@ alt="image-20230512151143360" />
 从<code>counter==3</code>开始循环：<code>addi, addi, nop, nop, nop, jr</code></li>
 </ul></li>
 </ol>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512152204442.png"
-alt="image-20230512152204442" />
-<figcaption aria-hidden="true">image-20230512152204442</figcaption>
-</figure>
 <h2 id="b-type-指令仿真">B-Type 指令仿真</h2>
 <h3 id="sbp-not-taken-alu-not-taken">sbp not taken, alu not taken</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    # sbp not taken, alu taken</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    beq  x0, x5, stop</span><br><span class="line">    addi x2, x2, 1</span><br><span class="line">    addi x3, x3, 1</span><br><span class="line">    addi x4, x4, 1</span><br><span class="line"></span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br></pre></td></tr></table></figure>
 <p>期待运行过程：<code>addi, addi, nop, nop, nop, beq, addi, addi, addi, j</code></p>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512155556061.png"
-alt="image-20230512155556061" />
-<figcaption aria-hidden="true">image-20230512155556061</figcaption>
-</figure>
 <h3 id="sbp-not-taken-alu-taken">sbp not taken, alu taken</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    # sbp not taken, alu taken</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    bne  x0, x5, stop</span><br><span class="line">    addi x2, x2, 1</span><br><span class="line">    addi x3, x3, 1</span><br><span class="line">    addi x4, x4, 1</span><br><span class="line"></span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br></pre></td></tr></table></figure>
 <p>期待运行过程：<code>addi, addi, nop, nop, nop, bne, j</code></p>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512155913379.png"
-alt="image-20230512155913379" />
-<figcaption aria-hidden="true">image-20230512155913379</figcaption>
-</figure>
 <h3 id="sbp-taken-alu-not-taken">sbp taken, alu not taken</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    # sbp taken, alu not taken</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    bge  x0, x5, _start</span><br><span class="line">    addi x2, x2, 1</span><br><span class="line">    addi x3, x3, 1</span><br><span class="line">    addi x4, x4, 1</span><br><span class="line"></span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>期待运行过程：<code>addi, addi, nop, nop, nop, bge, addi, addi, addi, j</code></p>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512160412862.png"
-alt="image-20230512160412862" />
-<figcaption aria-hidden="true">image-20230512160412862</figcaption>
-</figure>
 <h3 id="sbp-taken-alu-taken">sbp taken, alu taken</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    # sbp taken, alu taken</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    bltu  x0, x5, _start</span><br><span class="line">    addi x2, x2, 1</span><br><span class="line">    addi x3, x3, 1</span><br><span class="line">    addi x4, x4, 1</span><br><span class="line"></span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br></pre></td></tr></table></figure>
 <p>期待运行过程：<code>addi, addi, nop, nop, nop, bltu, addi, addi</code></p>
-<h3 id="image-20230512160631459"><img
-src="/Users/fujie/Pictures/typora/image-20230512160631459.png"
-alt="image-20230512160631459" /></h3>
 <h2 id="混合指令">混合指令</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	.text			# Define beginning of text section</span><br><span class="line">	.global	_start		# Define entry _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    addi x5, x6, 4</span><br><span class="line">    addi x1, x1, 1</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    nop</span><br><span class="line">    beq  x0, x5, stop</span><br><span class="line">    bne  x0, x5, _start</span><br><span class="line">    j stop</span><br><span class="line">    addi x2, x2, 1</span><br><span class="line">    addi x3, x3, 1</span><br><span class="line">    addi x4, x4, 1</span><br><span class="line">stop:</span><br><span class="line">	j stop			# Infinite loop to stop execution</span><br><span class="line"></span><br><span class="line">	.end			# End of file</span><br></pre></td></tr></table></figure>
 <p>期待运行过程：<code>addi, addi, nop, nop, nop, beq, bne, j, j, j</code></p>
-<figure>
-<img src="/Users/fujie/Pictures/typora/image-20230512163723257.png"
-alt="image-20230512163723257" />
-<figcaption aria-hidden="true">image-20230512163723257</figcaption>
-</figure>
 <h1 id="流水线冲刷总结">流水线冲刷总结</h1>
 <h3 id="冲刷-ifid-pipeline-register-的情况">冲刷 IF/ID pipeline register
 的情况</h3>
@@ -634,7 +595,7 @@ register 的情况</h3>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">330k</span>
+    <span title="站点总字数">329k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">

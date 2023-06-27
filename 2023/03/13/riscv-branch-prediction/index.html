@@ -30,6 +30,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/03/15/ABW43YhqrETUZgJ.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/15/74SaG9DQpFMXn5h.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/15/F4uTR8pC5cMwDWg.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/wIE19XqW8dpJlLR.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/17/32mjZwOb61SdtnD.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/17/RiulW7f1bzwVYA6.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/17/HK7wRZy3sE1DSFx.png">
@@ -37,7 +38,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/03/15/HIDYNUkJPX1K5Qu.png">
 <meta property="og:image" content="https://s2.loli.net/2023/03/18/bspUwoWaF5tTvhl.png">
 <meta property="article:published_time" content="2023-03-13T08:15:33.000Z">
-<meta property="article:modified_time" content="2023-06-18T09:37:50.846Z">
+<meta property="article:modified_time" content="2023-06-27T05:43:14.096Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -266,7 +267,7 @@ predictor</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="na
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+      <time title="修改时间：2023-06-27 13:43:14" itemprop="dateModified" datetime="2023-06-27T13:43:14+08:00">2023-06-27</time>
     </span>
 
   
@@ -501,14 +502,13 @@ pc</strong>、也避免了<strong>delay slot 的引入</strong></li>
 <li>flush <strong>EXE Pipeline Register</strong></li>
 </ul>
 <figure>
-<img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/branch_prediction_exe_fail.svg"
-alt="Branch Prediction EXE Fail" />
-<figcaption aria-hidden="true">Branch Prediction EXE Fail</figcaption>
+<img src="https://s2.loli.net/2023/06/27/wIE19XqW8dpJlLR.png"
+alt="image-20230627132542526" />
+<figcaption aria-hidden="true">image-20230627132542526</figcaption>
 </figure></li>
 <li><p>在 EXE 判断分支预测<strong>正确</strong> <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/branch_prediction_exe_success.svg"
-alt="Branch Prediction EXE Success" /></p></li>
+src="https://s2.loli.net/2023/06/27/v5DHrlupi2XEIBh.png"
+alt="image-20230627132552894" /></p></li>
 </ol>
 <h3 id="id-阶段静态分支预测">ID 阶段静态分支预测</h3>
 <blockquote>
@@ -535,26 +535,26 @@ EXE
 <li><p>针对 JAL 和 JALR 指令：其必定会发生跳转; 在 ID
 阶段会计算到下一条指令真实的 target pc、会冲刷到此时 IF 阶段的指令<br />
 JAL, JALR 的 miss penalty 恒为 1 个 cycle <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/static_bp_jal.svg"
-alt="static_bp_jal" /></p></li>
+src="https://s2.loli.net/2023/06/27/2IErlj3aYTWyFKv.png"
+alt="image-20230627132608772" /></p></li>
 <li><p>针对条件分支 B-Type 指令，其流水线有如下四种情况：</p>
 <ol type="1">
 <li>ID 预测跳转、EXE 判断 BP 正确(实际上跳转) -&gt; flush掉instruction
 2, penalty cycle = 1 <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/static_bp_btype_success.svg"
-alt="static_bp_btype_success" /></li>
+src="https://s2.loli.net/2023/06/27/YCOLWG8Spw2zHTv.png"
+alt="image-20230627132630807" /></li>
 <li>ID 预测跳转、EXE 判断 BP 错误(实际不跳转) -&gt; flush掉instruction
 3, penalty cycle = 1 <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/static_bp_btype_fail.svg"
-alt="static_bp_btype_fail" /></li>
+src="https://s2.loli.net/2023/06/27/QZ6FcelEtxiVJAv.png"
+alt="image-20230627132649447" /></li>
 <li>ID 预测不跳转、EXE 判断 BP 正确(实际不跳转) -&gt; 不用flush流水线,
 penalty cycle = 0 <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/static_bp_btype_ntaken_success.svg"
-alt="static_bp_btype_ntaken_success" /></li>
+src="https://s2.loli.net/2023/06/27/r4phIq7sXiFE2mT.png"
+alt="image-20230627132706336" /></li>
 <li>ID 预测不跳转、EXE 判断 BP 错误(实际上跳转) -&gt; flush掉instruction
 2, 3, penalty cycle = 2 <img
-src="/Users/fujie/Pictures/typora/riscv-micro-arch/bp/static_bp_btype_ntaken_fail.svg"
-alt="static_bp_btype_ntaken_fail" /></li>
+src="https://s2.loli.net/2023/06/27/iXs8NyMA2DLaecu.png"
+alt="image-20230627132720722" /></li>
 </ol></li>
 </ol>
 <h1 id="主流的分支预测器-预测准确率和其对-cpi-的影响">主流的分支预测器:
@@ -882,7 +882,7 @@ checked="" />看分支预测设计的论文</label></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">330k</span>
+    <span title="站点总字数">329k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
