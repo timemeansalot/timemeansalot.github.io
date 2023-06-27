@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISC-V 处理器验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V测试">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/05/15/riscv-tests/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISC-V 处理器验证">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/05/19/trjTgvokFKhSi8V.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/25/TcrkZPS9DbLeV8h.png">
+<meta property="article:published_time" content="2023-05-15T07:30:47.000Z">
+<meta property="article:modified_time" content="2023-06-25T01:25:41.612Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/05/19/trjTgvokFKhSi8V.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/05/15/riscv-tests/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/05/15/riscv-tests/","path":"2023/05/15/riscv-tests/","title":"RISC-V测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V测试 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E9%AA%8C%E8%AF%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">处理器核验证的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#self-check"><span class="nav-number">1.1.</span> <span class="nav-text">Self Check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signature-comparison"><span class="nav-number">1.2.</span> <span class="nav-text">Signature Comparison</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trace-log-comparison"><span class="nav-number">1.3.</span> <span class="nav-text">Trace Log Comparison</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syncasync-step-and-compare"><span class="nav-number">1.4.</span> <span class="nav-text">Sync&#x2F;Async Step and Compare</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#risc-v-%E5%A4%84%E7%90%86%E5%99%A8%E9%AA%8C%E8%AF%81%E7%BB%84%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">RISC-V 处理器验证组建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8Btest-case-suite"><span class="nav-number">2.1.</span> <span class="nav-text">测试用例(Test Case Suite)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-tests"><span class="nav-number">2.1.1.</span> <span class="nav-text">riscv-tests</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-compliance"><span class="nav-number">2.1.2.</span> <span class="nav-text">riscv-compliance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-arch-test"><span class="nav-number">2.1.3.</span> <span class="nav-text">riscv-arch-test</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#imperas-test-suite"><span class="nav-number">2.1.4.</span> <span class="nav-text">🌟🌟🌟🌟imperas test suite</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%B5%81%E7%94%9F%E6%88%90%E5%99%A8instruction-stream-generators"><span class="nav-number">2.2.</span> <span class="nav-text">指令流生成器(Instruction
+Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E8%A6%86%E7%9B%96functional-coverage"><span class="nav-number">2.3.</span> <span class="nav-text">功能覆盖(Functional Coverage)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8Breference-model"><span class="nav-number">2.4.</span> <span class="nav-text">参考模型(reference model)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#soc-%E5%90%8E%E7%BB%AD%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">SoC 后续测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%80%A7%E9%AA%8C%E8%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">功能性验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%BF%E7%BA%A7%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">板级验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E9%9D%A2%E7%A7%AF%E5%8A%9F%E8%80%97"><span class="nav-number">3.3.</span> <span class="nav-text">时序、面积、功耗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#riscv-tests-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">4.</span> <span class="nav-text">riscv-tests 环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-verilog-%E7%BC%96%E5%86%99%E7%9A%84-risc-v-%E5%A4%84%E7%90%86%E5%99%A8%E6%8E%A5%E5%85%A5%E5%88%B0-difftest-%E6%A1%86%E6%9E%B6"><span class="nav-number">5.</span> <span class="nav-text">用 Verilog
+编写的 RISC-V 处理器接入到 Difftest 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">安稳就是稳定的穷</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/05/15/riscv-tests/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="安稳就是稳定的穷">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V测试 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-15 15:30:47" itemprop="dateCreated datePublished" datetime="2023-05-15T15:30:47+08:00">2023-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-25 09:25:41" itemprop="dateModified" datetime="2023-06-25T09:25:41+08:00">2023-06-25</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RISC-V 处理器验证</p>
+<span id="more"></span>
+<p>[TOC]</p>
+<h2 id="处理器核验证的方法">处理器核验证的方法</h2>
+<ol type="1">
+<li>验证目标：验证处理器微架构设计，是否符合 RISC-V
+手册的规范，保证处理器的行为符合 RISC-V 定义</li>
+<li>验证方法（从简单到复杂）：Self Check, Signature Comparison, Trace
+Log Comparison, Step and Compare</li>
+</ol>
+<h3 id="self-check">Self Check</h3>
+<ol type="1">
+<li>验证方法：测试激励内包含了测试的正确答案，如果 DUT(Device Under
+Test) 的运行结果匹配争取答案，则测试通过，否则不通过<br />
+典型的代表是：<strong><a
+target="_blank" rel="noopener" href="https://github.com/riscv-software-src/riscv-tests">riscv-tests</a></strong>
+, 编写定量指令码验证内核的功能，
+<ul>
+<li>包括各类指令的逻辑功能</li>
+<li>数据冒险</li>
+<li>分支跳转</li>
+<li>流水线刷新(refresh)、暂停(stall)</li>
+<li>CSR 指令</li>
+</ul></li>
+<li>优点：
+<ul>
+<li>最简单实现：测试的 assmbly 文件编写简单</li>
+<li>运行方式最简单：只需要将 assmbly 文件编译得到机器码，加载到
+testbench 中运行</li>
+<li>运行结果最简单：只有正确和错误两种结果</li>
+</ul></li>
+<li>缺点：
+<ul>
+<li>涉及到的 DUT 内部变量、状态最少</li>
+<li>正确答案、错误过程：DUT
+是错误的，但是得到了跟正确答案一样的结果</li>
+</ul></li>
+<li>Self Check 举例: <img
+src="/Users/fujie/Pictures/typora/image-20230518180223338.png"
+alt="Self Check Example" /></li>
+</ol>
+<h3 id="signature-comparison">Signature Comparison</h3>
+<ol type="1">
+<li>验证方法：
+<ul>
+<li>Self Check 的改进</li>
+<li>可以在关键时刻记录内部变量的信息到 Signature 中，将该 Signature
+与参考的比较来判断 DUT 的功能<br />
+典型的代表是：<strong><a
+target="_blank" rel="noopener" href="https://github.com/lowRISC/riscv-compliance/blob/master/doc/README.adoc">riscv-compliance</a></strong></li>
+<li>可以完成基础的功能性测试</li>
+</ul></li>
+<li>优点：
+<ul>
+<li>相比 Self Check 在验证的时候，可以暴露更多内部的信息</li>
+</ul></li>
+<li>缺点：
+<ul>
+<li>暴露的 DUT 内部信息、状态也是有限的</li>
+</ul></li>
+<li>Signature Comparison 举例: <img
+src="/Users/fujie/Pictures/typora/image-20230518180427488.png"
+alt="Signature Comparison Example" /></li>
+</ol>
+<h3 id="trace-log-comparison">Trace Log Comparison</h3>
+<ol type="1">
+<li>验证方法：
+<ul>
+<li>与 reference-model 进行对比来验证 DUT 的功能</li>
+<li>将测试用例编译，作为输入同时给到 DUT 和 reference-model，
+运行的时候分别记录 DUT 和 reference-model 的内部信息到 trace 文件中</li>
+<li>仿真完成之后：将二者的 trace
+文件进行对比，如果匹配则表示验证通过</li>
+</ul></li>
+<li>优点：
+<ul>
+<li>验证的时候会记录大量的内部状态，如：具体指令、寄存器信息、处理器状态信息等</li>
+<li>由于跟 reference-model
+做对比，因此每个测试向量的正确答案不用知道，并且可以使用 ISG(instruction
+Sequence Generator) 来生成随机的测试向量</li>
+</ul></li>
+<li>缺点：
+<ul>
+<li>对于异步事件，很难做到 DUT 和 reference-model
+一致，如：中断、调试、流水线暂停等</li>
+<li>时间长：需要完成所有仿真之后，再对 trace 文件进行比较</li>
+<li>仿真的 trace 文件会很大</li>
+<li>跑飞(runaway execution)</li>
+</ul></li>
+<li>Trace Log Comparison 举例: <img
+src="/Users/fujie/Pictures/typora/image-20230518191123232.png"
+alt="Trace Log Comparison" /></li>
+</ol>
+<h3 id="syncasync-step-and-compare">Sync/Async Step and Compare</h3>
+<ol type="1">
+<li>验证方法：
+<ul>
+<li><strong>业界质量最高、最高效的</strong>验证方法</li>
+<li>在 Trace Log Comparison 的基础上，将比较的过程放到了仿真里</li>
+<li>每一步都会将 DUT 跟 reference-model
+进行比较，如果不匹配会直接报错</li>
+</ul></li>
+<li>优点：
+<ul>
+<li>验证的时候会记录大量的内部状态，如：具体指令, GPR, CSR,
+和其他内部信息等</li>
+<li>在仿真的时候每个 cycle
+都可以比较二者的内部状态，不需要存储仿真的结果到文件</li>
+<li>当异步事件发生的时候，也可以对 DUT 跟 reference-model 进行比较</li>
+<li>当发现仿真结果匹配不上的时候，会立刻结束仿真,
+能够快速的报告错误</li>
+</ul></li>
+<li>缺点：
+<ul>
+<li>实现的复杂度很高，需要处理异步事件发生时 DUT 和 reference-model
+之间的同步</li>
+</ul></li>
+<li>Step and Compare 举例: <img
+src="https://s2.loli.net/2023/05/19/y6BxWXvJ7dhOkle.webp"
+alt="Imperas Open Verification to RISC-V" /></li>
+</ol>
+<h2 id="risc-v-处理器验证组建">RISC-V 处理器验证组建</h2>
+<figure>
+<img src="https://s2.loli.net/2023/05/19/trjTgvokFKhSi8V.png"
+alt="test bench components" />
+<figcaption aria-hidden="true">test bench components</figcaption>
+</figure>
+<h3 id="测试用例test-case-suite">测试用例(Test Case Suite)</h3>
+<h4 id="riscv-tests">riscv-tests</h4>
+<ol type="1">
+<li><p>RISC-V 基金会提供了一组开源的测试实例 riscv-tests，用于测试
+RISC-V 处理器的指令功能</p></li>
+<li><p>riscv-tests
+中的测试程序由汇编语言编写，可由用户自行选择测试覆盖的指令集</p></li>
+<li><p>测试原理：</p>
+<ul>
+<li>由处理器运行指令的测试用例，并将每一步运行结果与预期结果对比</li>
+<li>如果对比结果不同，则 TestBench
+控制处理器跳转至异常地址，停止执行程序，并在终端打印 FAIL</li>
+<li>如果对比结果相同，则处理器继续执行下一条指令，直到所有指令执行结束，TestBench
+在终端打印 PASS</li>
+</ul></li>
+<li><p>测试的基本框架：</p>
+<ul>
+<li>所有的测试激励都有一个共同的入口地址，在 riscv-tests 里是
+0x800000000</li>
+<li>从 0x800000000 会跳到 reset_vector
+地址，完成内部寄存器的初始化、处理器状态的初始化</li>
+<li>初始化完成之后，调用 mret，跳转到第一个 test case 地址开始测试</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">rv32ui-p-add:     file format elf32-littleriscv</span><br><span class="line"></span><br><span class="line">Disassembly of section .text.init:</span><br><span class="line"></span><br><span class="line">80000000 &lt;_start&gt;:</span><br><span class="line">80000000:	0500006f          	j	80000050 &lt;reset_vector&gt;</span><br><span class="line">...</span><br><span class="line">80000050 &lt;reset_vector&gt;:</span><br><span class="line">80000050:	00000093          	li	ra,0</span><br><span class="line">80000054:	00000113          	li	sp,0</span><br><span class="line">...</span><br><span class="line">8000017c:	01428293          	add	t0,t0,20  8000018c &lt;test_2&gt;</span><br><span class="line">80000180:	34129073          	csrw	mepc,t0</span><br><span class="line">80000184:	f1402573          	csrr	a0,mhartid</span><br><span class="line">80000188:	30200073          	mret   跳到mepc地址，80000018C</span><br><span class="line"></span><br><span class="line">8000018c &lt;test_2&gt;:</span><br><span class="line">8000018c:	00200193          	li	gp,2</span><br><span class="line">80000190:	00000093          	li	ra,0</span><br><span class="line">80000194:	00000113          	li	sp,0</span><br><span class="line">80000198:	00208733          	add	a4,ra,sp</span><br><span class="line">8000019c:	00000393          	li	t2,0</span><br><span class="line">800001a0:	4c771663          	bne	a4,t2,8000066c &lt;fail&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>例：riscv-tests 中对 <code>ADD</code> 指令测试三部分功能：</p>
+<ul>
+<li><p>asm test source file:</p>
+<ul>
+<li>加法操作正确性</li>
+<li>源/目的寄存器测试</li>
+<li>bypass</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> file: rv32ui-p-add.S</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"> Arithmetic tests</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">TEST_RR_OP( 2,  add, 0x00000000, 0x00000000, 0x00000000 );</span><br><span class="line">TEST_RR_OP( 3,  add, 0x00000002, 0x00000001, 0x00000001 );</span><br><span class="line"></span><br><span class="line">....</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"> Source/Destination tests</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">TEST_RR_SRC1_EQ_DEST( 17, add, 24, 13, 11 );</span><br><span class="line">TEST_RR_SRC2_EQ_DEST( 18, add, 25, 14, 11 );</span><br><span class="line">TEST_RR_SRC12_EQ_DEST( 19, add, 26, 13 );</span><br><span class="line">....</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"> Bypassing tests</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">TEST_RR_DEST_BYPASS( 20, 0, add, 24, 13, 11 );</span><br><span class="line">TEST_RR_DEST_BYPASS( 21, 1, add, 25, 14, 11 );</span><br><span class="line">TEST_RR_DEST_BYPASS( 22, 2, add, 26, 15, 11 );</span><br><span class="line">...</span><br><span class="line">TEST_RR_ZERODEST( 38, add, 16, 30 );</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> file: test_macros.h</span><br><span class="line">define TEST_CASE( testnum, testreg, correctval, code... ) \</span><br><span class="line">    test_ ## testnum: \</span><br><span class="line">        li  TESTNUM, testnum; \</span><br><span class="line">        code; \</span><br><span class="line">        li  x7, MASK_XLEN(correctval); \</span><br><span class="line">        bne testreg, x7, fail;</span><br><span class="line"></span><br><span class="line">define TEST_RR_OP( testnum, inst, result, val1, val2 ) \</span><br><span class="line">    TEST_CASE( testnum, x14, result, \</span><br><span class="line">      li  x1, MASK_XLEN(val1); \</span><br><span class="line">      li  x2, MASK_XLEN(val2); \</span><br><span class="line">      inst x14, x1, x2; \</span><br><span class="line"></span><br><span class="line">define RVTEST_FAIL                                                     \</span><br><span class="line">     fence;                                                          \</span><br><span class="line">     1:      beqz TESTNUM, 1b;                                               \</span><br><span class="line">     sll TESTNUM, TESTNUM, 1;                                        \</span><br><span class="line">     or TESTNUM, TESTNUM, 1;                                         \</span><br><span class="line">     li a7, 93;                                                      \</span><br><span class="line">     addi a0, TESTNUM, 0;                                            \</span><br><span class="line">     ecall</span><br></pre></td></tr></table></figure></li>
+<li><p>compile the asm file and get dump file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"> file: rv32ui-p-add.dump</span><br><span class="line"> init system like reset RF, set trap vectors</span><br><span class="line">...</span><br><span class="line"> test codes</span><br><span class="line">## add test</span><br><span class="line">8000018c &lt;test_2&gt;:</span><br><span class="line">8000018c:	00200193          	li	gp,2</span><br><span class="line">80000190:	00000093          	li	ra,0</span><br><span class="line">80000194:	00000113          	li	sp,0</span><br><span class="line">80000198:	00208733          	add	a4,ra,sp</span><br><span class="line">8000019c:	00000393          	li	t2,0</span><br><span class="line">800001a0:	4c771663          	bne	a4,t2,8000066c &lt;fail&gt;</span><br><span class="line">...</span><br><span class="line">## source/destination test</span><br><span class="line">80000324 &lt;test_17&gt;:</span><br><span class="line">80000324:	01100193          	li	gp,17</span><br><span class="line">80000328:	00d00093          	li	ra,13</span><br><span class="line">8000032c:	00b00113          	li	sp,11</span><br><span class="line">80000330:	002080b3          	add	ra,ra,sp</span><br><span class="line">80000334:	01800393          	li	t2,24</span><br><span class="line">80000338:	32709a63          	bne	ra,t2,8000066c &lt;fail&gt;</span><br><span class="line">...</span><br><span class="line">## bypass test</span><br><span class="line">80000368 &lt;test_20&gt;:</span><br><span class="line">80000368:	01400193          	li	gp,20</span><br><span class="line">8000036c:	00000213          	li	tp,0</span><br><span class="line">80000370:	00d00093          	li	ra,13</span><br><span class="line">80000374:	00b00113          	li	sp,11</span><br><span class="line">80000378:	00208733          	add	a4,ra,sp</span><br><span class="line">8000037c:	00070313          	mv	t1,a4</span><br><span class="line">80000380:	00120213          	add	tp,tp,1  1 &lt;_start-0x7fffffff&gt;</span><br><span class="line">80000384:	00200293          	li	t0,2</span><br><span class="line">80000388:	fe5214e3          	bne	tp,t0,80000370 &lt;test_20+0x8&gt;</span><br><span class="line">8000038c:	01800393          	li	t2,24</span><br><span class="line">80000390:	2c731e63          	bne	t1,t2,8000066c &lt;fail&gt;</span><br><span class="line"></span><br><span class="line"> test fail operations</span><br><span class="line">8000066c &lt;fail&gt;:</span><br><span class="line">8000066c:	0ff0000f          	fence</span><br><span class="line">80000670:	00018063          	beqz	gp,80000670 &lt;fail+0x4&gt;</span><br><span class="line">80000674:	00119193          	sll	gp,gp,0x1</span><br><span class="line">80000678:	0011e193          	or	gp,gp,1</span><br><span class="line">8000067c:	05d00893          	li	a7,93</span><br><span class="line">80000680:	00018513          	mv	a0,gp</span><br><span class="line">80000684:	00000073          	ecall</span><br><span class="line"> all test pass operations</span><br><span class="line">80000688 &lt;pass&gt;:</span><br><span class="line">80000688:	0ff0000f          	fence</span><br><span class="line">8000068c:	00100193          	li	gp,1  all test fass, set x3 to 1</span><br><span class="line">80000690:	05d00893          	li	a7,93</span><br><span class="line">80000694:	00000513          	li	a0,0</span><br><span class="line">80000698:	00000073          	ecall</span><br><span class="line">8000069c:	c0001073          	unimp</span><br></pre></td></tr></table></figure></li>
+<li><p>test bench output 如果测试不通过，会显示不通过的测试
+case，<code>case=x3&gt;&gt;1</code> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~ Test Result Summary ~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~TESTCASE:/Users/fujie/Desktop/Developer/git_repos/hbird/e203_hbirdv2/vsim/run/../../riscv-tools/riscv-tests/isa/generated/rv32ui-p-add ~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~Total cycle_count value:      23205 ~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~The valid Instruction Count:      14117 ~~~~~~~~~~~~~</span><br><span class="line">~~~~~The test ending reached at cycle:      23165 ~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~The final x3 Reg value:          7 ~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~ TEST_FAIL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~######    ##       #    #     ~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~        ##  #      #    #     ~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~#####   #    #     #    #     ~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~       #######     #    #     ~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~       ##    #     #    #     ~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~       ##    #     #    ######~~~~~~~~~~~~~~~~</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+</ol>
+<h4 id="riscv-compliance">riscv-compliance</h4>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/lowRISC/riscv-compliance/blob/master/doc/README.adocintroduction">riscv-compliance</a>
+的目标是检查正在开发的处理器是否符合开放的 RISC-V 标准。 通过了
+riscv-compliance 的设计，可以被声明为<u>RISC-V compliant</u> <img
+src="https://s2.loli.net/2023/05/19/mpz6BZsoAC152VN.png"
+alt="riscv-compliance" /></p>
+<ol type="1">
+<li>选定了测试集之后可以编译得到可执行文件</li>
+<li>在 DUT
+中执行可执行文件，仿真的时候会把内部变量写到某个内存中，仿真结束之后，会把内存里的数据
+dump 到文件，得到仿真的 signatures</li>
+<li>将 signatures 跟正确的 signatures 比较，如果通过了则代表 DUT
+通过测试</li>
+<li>仿真结束可以得到 Coverage Report</li>
+</ol>
+<h4 id="riscv-arch-test">riscv-arch-test</h4>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-arch-test">riscv-arch-test</a>
+是按照 RISC-V 指令集模块化分类了的一个测试集</p>
+<ol type="1">
+<li>其测试集是由<a
+target="_blank" rel="noopener" href="https://github.com/riscv/riscv-ctg">Compatibility Test Generator
+from InCore Semiconductors</a>生成的</li>
+<li>参考的 signatures 是有 spike 仿真得到的</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">├── env                        contains the architectural test header files</span><br><span class="line">└── rv32i_m                    top level folder indicate rv32 tests for machine mode</span><br><span class="line">    ├── C                      include tests and references for &quot;C&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;C&quot; extension</span><br><span class="line">    ├── F                      include tests and references for &quot;rv32F&quot; extension</span><br><span class="line">    │   ├── references         static references signatures for &quot;rv32F&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;rv32F&quot; extension</span><br><span class="line">    ├── I                      include tests and references for &quot;I&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;I&quot; extension</span><br><span class="line">    ├── M                      include tests and references for &quot;M&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;M&quot; extension</span><br><span class="line">    ├── K_unratified           include tests and references for &quot;K&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;K&quot; extension</span><br><span class="line">    ├── P_unratified           include tests and references for &quot;P&quot; extension</span><br><span class="line">    │   ├── references         static references signatures for &quot;P&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;P&quot; extension</span><br><span class="line">    ├── privilege              include tests and references for tests which require Privilege Spec</span><br><span class="line">    │   └── src                assembly tests for tests which require Privilege Spec</span><br><span class="line">    └── Zifencei               include tests and references for &quot;Zifencei&quot; extension</span><br><span class="line">        └── src                assembly tests for &quot;Zifencei&quot; extension</span><br><span class="line">└── rv64i_m                    top level folder indicate rv64 tests for machine mode</span><br><span class="line">    ├── C                      include tests and references for &quot;C&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;C&quot; extension</span><br><span class="line">    ├── I                      include tests and references for &quot;I&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;I&quot; extension</span><br><span class="line">    ├── M                      include tests and references for &quot;M&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;M&quot; extension</span><br><span class="line">    ├── K_unratified           include tests and references for &quot;K&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;K&quot; extension</span><br><span class="line">    ├── P_unratified           include tests and references for &quot;P&quot; extension</span><br><span class="line">    │   ├── references         static references signatures for &quot;P&quot; extension</span><br><span class="line">    │   └── src                assembly tests for &quot;P&quot; extension</span><br><span class="line">    ├── privilege              include tests and references for tests which require Privilege Spec</span><br><span class="line">    │   └── src                assembly tests for tests which require Privilege Spec</span><br><span class="line">    └── Zifencei               include tests and references for &quot;Zifencei&quot; extension</span><br><span class="line">        └── src                assembly tests for &quot;Zifencei&quot; extension</span><br></pre></td></tr></table></figure>
+<h4 id="imperas-test-suite">🌟🌟🌟🌟imperas test suite</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com/riscv-ovpsim/imperas-riscv-tests">imperas
+test suite</a></p>
+<ol type="1">
+<li>针对不同的指令模块提供了测试集，如：I,M,C,F,D,B,K,V,P</li>
+<li>自带模拟器: riscvOVPsim simulators</li>
+<li>能够生成 Coverage Report</li>
+<li>参考资料丰富，GitHub, YouTube 上资源较多</li>
+</ol>
+<h3
+id="指令流生成器instruction-stream-generators">指令流生成器(Instruction
+Stream Generators)</h3>
+<ol type="1">
+<li>Google <a
+target="_blank" rel="noopener" href="https://github.com/chipsalliance/riscv-dv">riscv-dv</a>: 较为稳定
+<ul>
+<li>是一个基于 SV/UVM 的开源指令生成器，用于 RISC-V 处理器验证</li>
+<li>支持的指令集: RV32IMAFDC，RV64IMAFDC</li>
+<li>可以模拟 illegal instruction</li>
+</ul></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openhwgroup/force-riscv">OpenHW Group
+force-riscv</a>: 主要用于 RV64，RV32 支持才开始</li>
+</ol>
+<h3 id="功能覆盖functional-coverage">功能覆盖(Functional Coverage)</h3>
+<blockquote>
+<p>在一定的测试用例上对 DUT 进行测试，并且测试通过，只能说明 DUT
+在这些测试用例上是正确的， 并不能 100%说明 DUT 功能就是正确。 为了
+100%说明 DUT 功能是正确的，需要保证测试 Coverage 通过</p>
+</blockquote>
+<ol type="1">
+<li>SystemVerilog covergroups and coverpoints</li>
+<li>Imperas build-in instruction coverage</li>
+</ol>
+<h3 id="参考模型reference-model">参考模型(reference model)</h3>
+<ol type="1">
+<li>spike</li>
+<li>qeum</li>
+<li>riscvOVPsim</li>
+</ol>
+<h3 id="总结">总结</h3>
+<ol type="1">
+<li><p>如果知识对 DUT 进行基本功能测试，可以选择某个 test suite
+进行测试，如果通过了测试，可以在一定程度上保证 DUT 功能的正确性.</p>
+<blockquote>
+<p>you can never have enough tests</p>
+</blockquote></li>
+<li><p>如果需要 100%保证 DUT 功能正确，需要</p>
+<ul>
+<li>采用 asycn step and compare</li>
+<li>保证 Coverage Report 中 100%覆盖了 check point</li>
+</ul></li>
+</ol>
+<h2 id="soc-后续测试">SoC 后续测试</h2>
+<h3 id="功能性验证">功能性验证</h3>
+<blockquote>
+<p>利用<em>功能性 C
+代码</em>来测试具体的功能，如：内部看门狗复位请求、UART 收发</p>
+<ol type="1">
+<li>利用编译器生成的指令码进行验证，非常符合实际的行为</li>
+<li>但验证手段复杂，不适合一开始系统不稳定时候的验证</li>
+</ol>
+</blockquote>
+<ol type="1">
+<li>初始化文件：
+<ul>
+<li>由汇编编写，系统上电复位之后执行的第一段程序</li>
+<li>堆栈初始化、中断向量标及中断函数定义等</li>
+<li>系统复位后进入 main 函数</li>
+</ul></li>
+<li>编写需要测试的 C 文件</li>
+<li>对 C 文件调用工具链进行编译、从可执行文件中得到机器码、在 testbench
+中通过系统函数<span class="math inline">\(readmenh\)</span>加载到
+I-Memory</li>
+</ol>
+<h3 id="板级验证">板级验证</h3>
+<blockquote>
+<p>FPGA 完全由用户通过行配置和编写并且可以反复擦写，非常适合用于嵌入式
+SoC 系统芯片的原型验证</p>
+</blockquote>
+<ol type="1">
+<li>设计的全部 RTL 代码进行下板, 进行板级验证</li>
+<li>可以发现隐藏的时序问题</li>
+<li>debug: 支持在 host 上对 MCU 进行远程调试</li>
+</ol>
+<h3 id="时序面积功耗">时序、面积、功耗</h3>
+<p>使用 DC(Design Compiler) 综合工具将处理器的设计代码进行综合，以验
+证本文时序、面积、功耗的设计要求</p>
+<ol type="1">
+<li>转换：将 RTL 转化成没有优化的门电路，对于 DC 综合工具来说，使用的是
+gtech.db 库中的门级单元</li>
+<li>优化：对初始化电路分析，去掉冗余单元、对不满足限制条件的路径进行优化</li>
+<li>映射：将优化后的电路映射到制造商提供的工艺库上</li>
+</ol>
+<p>通过 DC 工具综合后可以得到 MCU 在时序、面积、功耗的报告</p>
+<h2 id="riscv-tests-环境搭建">riscv-tests 环境搭建</h2>
+<ol type="1">
+<li><p>验证目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">├── rtl</span><br><span class="line">│   ├── top.v</span><br><span class="line">│   ├── ...</span><br><span class="line">│   ├── ...</span><br><span class="line">│   ├── top_tb.v</span><br><span class="line">└── verification</span><br><span class="line">    ├── Makefile</span><br><span class="line">    ├── asm</span><br><span class="line">    └── rtl</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li>目前所有的源文件都在项目的<code>src</code>文件下</li>
+<li><code>src/rtl</code>存档 MCU 的 verilog 代码</li>
+<li><code>src/verification</code>是使用 riscv-tests 对 rtl
+代码进行验证的目录
+<ol type="1">
+<li><code>asm</code>：存放所有的 riscv-tests 的汇编测试文件</li>
+<li><code>rtl</code>：存放所有的带测试的 verilog 源文件</li>
+<li><code>Makefile</code>：存放所有验证时需要的一些命令，如“编译
+verilog”、“编译汇编文件”、“仿真”等</li>
+</ol></li>
+</ol></li>
+<li><p>Makefile 内容</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">.DEFAULT_GOAL := wave</span><br><span class="line"><span class="comment"># compile asm source file to get test cases for MCU</span></span><br><span class="line"><span class="section">asmCode:</span></span><br><span class="line">	@(cd asm &amp;&amp; ./clean.sh &amp;&amp; ./regen.sh &amp;&amp; cd ..)</span><br><span class="line"><span class="comment"># copy source file before compile</span></span><br><span class="line"><span class="section">copy:</span></span><br><span class="line">	@(rm -rf rtl/*.v &amp;&amp; cp ../rtl/*.v rtl)</span><br><span class="line"><span class="comment"># simulate DUT, you&#x27;d better `make asmCode` first to generated machine code</span></span><br><span class="line"><span class="section">sim:</span></span><br><span class="line">	@(cd rtl &amp;&amp; make sim)</span><br><span class="line"><span class="comment"># show waveform</span></span><br><span class="line"><span class="section">wave:</span></span><br><span class="line">	@(cd rtl &amp;&amp; make waveform)</span><br><span class="line"></span><br><span class="line"><span class="comment"># regression test</span></span><br><span class="line"><span class="comment"># <span class="doctag">TODO:</span> implement in the future.</span></span><br><span class="line"><span class="comment"># Because MCU can&#x27;t pass even one test file in riscv-tests now!</span></span><br><span class="line"><span class="comment"># So we don&#x27;t need to test the whole riscv-tests now.</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	@(cd asm &amp;&amp; ./clean.sh &amp;&amp; cd ../rtl/ &amp;&amp; make clean)</span><br><span class="line"><span class="comment"># declare phone target</span></span><br><span class="line"><span class="section">PHONY: clean wave sim copy asmCode</span></span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li>asmCode: 会进入到 asm
+文件夹，并且调用脚本<code>regen.sh</code>编译所有的 riscv-tests
+文件，并且得到机器码;<br />
+testbench 会从得到的机器码文件中，加载指令到 I-Memory 中</li>
+<li>copy：用<code>src/rtl</code>下复制所有的<code>.v</code>文件替换<code>verification/rtl</code>目录下的所有<code>.v</code>文件</li>
+<li>sim：会进入<code>verification/rtl</code>目录下，并且使用 make sim
+命令， 该命令会编译 rtl 文件，再执行 rtl 仿真</li>
+<li>wave：使用 gtkWave 查看仿真生成的波形</li>
+<li>regression test: 使用所有的 riscv-tests 测试用例测试 MCU，
+如果都通过了则说明 MCU 通过了 riscv-tests 测试;<br />
+但是现在的 MCU 一个测试都无法通过，所以目前暂时不支持 regression
+test.</li>
+</ol></li>
+<li><p>仿真结果 riscv-tests 汇编文件，默认测试通过的时候，x3 的值为
+1，所以每一轮仿真结束之后，我们在 testbench 里检查 x3
+的值就可以判断测试是否通过</p>
+<figure>
+<img src="https://s2.loli.net/2023/05/25/TcrkZPS9DbLeV8h.png"
+alt="sim fail" />
+<figcaption aria-hidden="true">sim fail</figcaption>
+</figure></li>
+</ol>
+<h2 id="用-verilog-编写的-risc-v-处理器接入到-difftest-框架">用 Verilog
+编写的 RISC-V 处理器接入到 Difftest 框架</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />接入 Difftest 框架</label>
+<ul class="task-list">
+<li><label><input type="checkbox" />Difftest 框架使用了 AXI 和 UART
+模块，如何忽略到这些模块</label></li>
+<li><label><input type="checkbox" />如何在 MCU_core 中例化 Difftest
+模块，只关心通用寄存器的数值是否匹配</label></li>
+<li><label><input type="checkbox" />如何比较 MCU_core 跟 NEMU 中的
+PC？因为采用了指令预取技术，MCU_core 并没有使用传统意义的
+PC</label></li>
+<li><label><input type="checkbox" />如何解决 Difftest
+要求的时序问题</label></li>
+<li><label><input type="checkbox" />如何具体测试 load/store
+指令</label></li>
+</ul></li>
+<li><label><input type="checkbox" />使用 Difftest 框架进行测试</label>
+<ul class="task-list">
+<li><label><input type="checkbox" />如何根据 riscv-tests
+生成测试用力加载到 MCU_core 以及 golden-model，NEMU 采用的是 1-bank,
+MCU_core 采用的是 2bank I-Memory</label></li>
+<li><label><input type="checkbox" />测试通过的 riscv-tests</label></li>
+<li><label><input type="checkbox" />测试发现的 bug、修改的
+bug</label></li>
+</ul></li>
+</ul>
+<ol type="1">
+<li><p>项目的框架如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DifftestFramework</span><br><span class="line">├── bin</span><br><span class="line">├── nemu</span><br><span class="line">└── NOOP</span><br><span class="line">    ├── difftest</span><br><span class="line">    └── CPU</span><br><span class="line">       ├── Core.v</span><br><span class="line">       ├── Decode.v</span><br><span class="line">       ├── Execution.v</span><br><span class="line">       ├── InstFetch.v</span><br><span class="line">       ├── Instructions.v</span><br><span class="line">       ├── Ram.v</span><br><span class="line">       ├── RegFile.v</span><br><span class="line">       └── SimTop.v</span><br></pre></td></tr></table></figure>
+<ul>
+<li>bin: 测试文件</li>
+<li>nemu: 指令集模拟器，用于作为比较的 golden model</li>
+<li>difftest: 香山团队提供的 difftest 框架</li>
+<li>CPU: 存放 MCU_core 实现及 SimTop
+<ul>
+<li>Core.v: MCU_core
+文件，该文件里例化了各个流水线部件、<strong>difftest
+里的组件</strong>(将对应的信号传递给 difftest)</li>
+<li>SimTop.v：difftest 框架默认的顶层文件，在这个文件里需要例化
+MCU_core</li>
+</ul></li>
+</ul></li>
+<li><p>测试流程：</p>
+<ul>
+<li>在系统环境里指明<code>NEMU_HOME</code>跟<code>NOOP_HOME</code>，二者分别应该被设置为<code>NEMU</code>跟<code>NOOP</code>的绝对路径，如上表所示</li>
+<li>克隆 difftest 需要用到的子模块，difftest 是从 GitHub
+上克隆的仓库，其本身包含了一些其他的仓库，具体如下所示： 进入到 difftest
+目录下，使用命令<code>git submodule update --init recursive</code>来克隆所有需要的子仓库
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[submodule <span class="string">&quot;rocket-chip&quot;</span>]</span><br><span class="line">    path = rocket-chip</span><br><span class="line">    url = https://github.com/RISCVERS/rocket-chip.git</span><br><span class="line">[submodule <span class="string">&quot;block-inclusivecache-sifive&quot;</span>]</span><br><span class="line">    path = block-inclusivecache-sifive</span><br><span class="line">    url = https://github.com/RISCVERS/block-inclusivecache-sifive.git</span><br><span class="line">[submodule <span class="string">&quot;chiseltest&quot;</span>]</span><br><span class="line">    path = chiseltest</span><br><span class="line">    url = https://github.com/ucb-bar/chisel-testers2.git</span><br><span class="line">[submodule <span class="string">&quot;api-config-chipsalliance&quot;</span>]</span><br><span class="line">    path = api-config-chipsalliance</span><br><span class="line">    url = https://github.com/chipsalliance/api-config-chipsalliance</span><br><span class="line">[submodule <span class="string">&quot;berkeley-hardfloat&quot;</span>]</span><br><span class="line">    path = berkeley-hardfloat</span><br><span class="line">    url = https://github.com/RISCVERS/berkeley-hardfloat.git</span><br><span class="line">[submodule <span class="string">&quot;timingScripts&quot;</span>]</span><br><span class="line">    path = timingScripts</span><br><span class="line">    url = https://github.com/RISCVERS/timingScripts.git</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>在 SimTop.v 文件中，例化 MCU_core</p></li>
+<li><p>在 NOOP
+目录下，使用指令<code>make -C difftest emu</code>来编译所有的 Verilog 跟
+Scala 文件，得到可运行的仿真程序。 该仿真程序就是<strong>支持将 MCU 跟
+NEMU 进行比较的程序</strong>。</p>
+<blockquote>
+<p>PS: 编译仿真程序至少需要 32G 的内存，否则会报错说内存不够;
+在服务器上编译了 68 分钟.</p>
+</blockquote></li>
+<li><p>编译测试文件：使用 riscv-tools
+编译测试文件，得到二进制程序</p></li>
+<li><p>用测试二进制程序作为输入，进行
+difftest。仿真程序会在匹配失败的时候，报错并且给出报错的信息。</p></li>
+</ol>
+<h2 id="references">References</h2>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/232088281">RISC-V 及 RISC-V
+core compliance test 简析</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/lowRISC/riscv-compliance/blob/master/doc/README.adocintroduction">RISC-V
+Compliance Tests</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/riscv-ovpsim/imperas-riscv-tests">Imperas Test
+Suit</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/riscv-non-isa/riscv-arch-test">riscv-arch-test</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://alvinalexander.com/scala/mill-build-tool/step-1-hello-world/">mill
+配置教程</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://inst.eecs.berkeley.edu/~cs250/sp17/handouts/chisel-tutorial.pdf">chisel3
+基础知识</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://inst.eecs.berkeley.edu/~cs250/sp17/handouts/advanced-chisel.pdf">chisel3
+高级语法</a></li>
+<li><a
+target="_blank" rel="noopener" href="http://www.icfgblog.com/index.php/software/341.html#comment-61">🌟Difftest
+踩坑笔记(二)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/OSCPU/ysyx/issues/9">🌟Verilog
+代码接入到 Difftest</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/OSCPU/ysyx/issues/8">🌟Chisel 接入
+difftest 的几个主要步骤</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/difftest/blob/master/doc/usage.md">🌟Difftest
+使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/OSCPU/ysyx/issues/10">difftest
+访存踩坑分享</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/OSCPU/ysyx/issues/13">Difftest 和 NEMU
+的版本对应关系</a></li>
+<li><a target="_blank" rel="noopener" href="https://chiplab.readthedocs.io/zh/latest/">🌟chiplab's
+documentation</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/15/interview-notes/" rel="prev" title="面试笔记">
+                  <i class="fa fa-chevron-left"></i> 面试笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/16/memory-notes/" rel="next" title="计算机内存">
+                  计算机内存 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">330k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:01</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISCV 总线设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V总线">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/04/06/RISCV-bus/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISCV 总线设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/04/10/I7sfhHlEuwZcPaW.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230419180938348.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230419184200401.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/image-20230419184454014.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/Intro_to_AXI_AXI_channels.webp">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/axi_write.svg">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/axi_read.svg">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/axi-interconnects_stm_aac_image3.webp">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/axi_align.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/bus/bus_interface_arch.svg">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/Intro_to_AXI_Read_address_read_data_global_signals_2.webp">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/Intro_to_AXI_Write_address_data_response_signals_2.webp">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/Introduction_to_AMBA_fig03.webp">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/Introduction_to_AMBA_fig04.webp">
+<meta property="article:published_time" content="2023-04-06T07:45:24.000Z">
+<meta property="article:modified_time" content="2023-06-18T09:37:50.843Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/04/10/I7sfhHlEuwZcPaW.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/04/06/RISCV-bus/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/04/06/RISCV-bus/","path":"2023/04/06/RISCV-bus/","title":"RISC-V总线"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V总线 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%B5%81%E6%80%BB%E7%BA%BFahb-apb-axi"><span class="nav-number">1.</span> <span class="nav-text">主流总线：AHB, APB, AXI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ahbadvanced-high-performance-bus"><span class="nav-number">1.1.</span> <span class="nav-text">AHB（Advanced High Performance
+Bus）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apbadvanced-peripheral-performance-bus"><span class="nav-number">1.2.</span> <span class="nav-text">APB（Advanced Peripheral
+Performance Bus）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#axiadvanced-extensible-interface"><span class="nav-number">1.3.</span> <span class="nav-text">AXI（Advanced eXtensible
+Interface）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">总线设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#h-bus-%E8%AE%BE%E8%AE%A1%E8%AF%84%E4%BB%B7"><span class="nav-number">3.</span> <span class="nav-text">H Bus 设计评价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">安稳就是稳定的穷</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/06/RISCV-bus/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="安稳就是稳定的穷">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V总线 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V总线
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-06 15:45:24" itemprop="dateCreated datePublished" datetime="2023-04-06T15:45:24+08:00">2023-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div style="text-align:center">
+<div style="zoom: 15%;">
+<img src="https://s2.loli.net/2023/04/10/I7sfhHlEuwZcPaW.png"/>
+</div>
+</div>
+<p>RISCV 总线设计</p>
+<span id="more"></span>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />TODO: key point is
+<code>Interface(arbiter, mux)</code> and <code>bus</code>
+design</label></li>
+<li><label><input type="checkbox" checked="" />TODO: debug,
+UART</label></li>
+</ul>
+<h2 id="主流总线ahb-apb-axi">主流总线：AHB, APB, AXI</h2>
+<h3 id="ahbadvanced-high-performance-bus">AHB（Advanced High Performance
+Bus）</h3>
+<ol type="1">
+<li><p>工作方式</p>
+<ul>
+<li><p>重要部件：主设备(master), 从设备(slave), 译码器(decoder),
+终裁器(arbiter), 复用器(mux)</p></li>
+<li><p>数据线: 地址线、数据线、控制线</p></li>
+<li><p>工作过程</p>
+<ol type="1">
+<li>主设备需要占用总线的时候，需要想终裁器发送请求(request)</li>
+<li><strong>终裁器</strong>工具其优先级算法，选择一个主设备授权访问总线，其余的主设备此时不可以访问总线<br />
+<strong>译码器</strong>根据主设备提供的地址，生成从设备的片选信号来选择主设备想要访问的从设备</li>
+<li>主设备发送地址和控制信号给从设备，从设备最快再下一个周期后返回传输成功的<code>HREADY</code>信号</li>
+<li>从设备如 Busy 则会将 ready 信号拉低，表示信号传输没有完成</li>
+<li>若主设备收不到从设备对上一次控制信号的 ready
+信号，则主设备需要将当前的地址和控制信号延迟到下一拍</li>
+</ol>
+<p><img src="/Users/fujie/Pictures/typora/image-20230419180938348.png" alt="image-20230419180938348" style="zoom: 33%;" /></p></li>
+</ul></li>
+<li><p>优点</p>
+<ul>
+<li>高性能低功耗：是目前最为广泛的高性能低功耗总线，例如 ARM Cortex-M
+就大多采用 AHB 总线(M3, M4, M55)</li>
+</ul></li>
+<li><p>缺点</p>
+<ul>
+<li>AHB 内部采用<u>shared-bus</u>的架构，基于复用器(mux-based)实现.
+缺点在于：当主从设备变多事，AHB
+的架构同一时刻只有一对主从设备可以通信，效率太低</li>
+<li>没有采用 valid-ready 方式的握手信号</li>
+<li>无法支持多个滞外传输(Multiple outstanding transaction)</li>
+</ul></li>
+</ol>
+<p>The AHB is the backbone of the system and is designed specifically
+for high performance, high-frequency components. This includes the
+connections of processors, on-chip memories, and memory interfaces among
+others.</p>
+<h3 id="apbadvanced-peripheral-performance-bus">APB（Advanced Peripheral
+Performance Bus）</h3>
+<p><img src="/Users/fujie/Pictures/typora/image-20230419184200401.png" alt="image-20230419184200401" style="zoom:33%;" /></p>
+<ol type="1">
+<li>优点
+<ul>
+<li>控制简单: 传输都有时钟上升沿同步，控制线数量少</li>
+<li>硬件实现简单(只有一个 master：APB
+bridge，作为高速总线和低速设备之间的接口)</li>
+<li>连接一些低速设备，如 UART, low-frequency GPIO, and timers</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>性能不好，带宽低</li>
+</ul></li>
+</ol>
+<p><img src="/Users/fujie/Pictures/typora/image-20230419184454014.png" alt="image-20230419184454014" style="zoom: 33%;" /></p>
+<p>The APB is a simplified interface designed for low bandwidth
+peripherals that do not require the high performance of the AHB or the
+ASB.</p>
+<h3 id="axiadvanced-extensible-interface">AXI（Advanced eXtensible
+Interface）</h3>
+<ol type="1">
+<li><p>工作方式</p>
+<ul>
+<li><p>在 AHB 的基础上的改进</p>
+<ol type="1">
+<li><p>五个通道来处理器数据的发送和接收: Read address channel, Read data
+channel, Write address channel , Write data channel, Write response
+channel</p>
+<center>
+<p><img src="/Users/fujie/Pictures/typora/Intro_to_AXI_AXI_channels.webp" alt="Intro_to_AXI_AXI_channels" style="zoom: 33%;" /></p>
+</center></li>
+<li><p><em>支持乱序数据传输</em>: <u>5 个通道都是对应的 ID
+信号</u>，传输的时候会给 Transaction 带上 ID，同一个 ID 的 Transaction
+必须保证彼此之间的顺序；不同 ID 的 Transaction
+不用保证顺序。因此可以让：快速的 Transaction 快速的完成，不用等待慢的
+Transaction
+完成了再完成快的。适合<u><strong>高性能、低时延</strong></u>的设计。<br />
+AXI 中必须顺序完成的传输，需要满足以下关系：</p>
+<ul>
+<li>来自<u>同一个 master</u>, 有同样的 M_ID</li>
+<li>有着<u>同样读写类型</u>, 有同样的 r/w_ID</li>
+<li>有着<u>同样传输 ID</u> 的传输，有同样的 AXI4_ID
+<div style="text-align:center">
+<div style="zoom: 20%;">
+<img src="/Users/fujie/Pictures/typora/axi_write.svg"/>
+</div>
+</div>
+<div style="text-align:center">
+<div style="zoom: 20%;">
+<img src="/Users/fujie/Pictures/typora/axi_read.svg"/>
+</div>
+<div></li>
+</ul></li>
+<li><p>通过 valid-ready 实现握手，valid 和 ready
+信号彼此之间没有依赖性，可以自行拉高，从而避免了死锁。下图中橙色的是
+master 的输出信号、蓝色的是 slave 的输出信号</p></li>
+<li><p>single-request burst: 传输只需要给出首地址</p>
+<blockquote>
+<p>突发传输(burst
+transactions)允许对具有特定地址关系的多个传输进行分组</p>
+</blockquote>
+<ul>
+<li>AXLEN[3:0]: 一次 burst 传输中，数据传输的次数（一次数据传输称为一个
+beat）</li>
+<li>AXSIZE[2:0]: 一个 beat 的位宽，位宽不能超过总线的位宽</li>
+<li>AXBURST[1:0]: burst 传输的类型，固定模式、增量模式、循环模式
+<center>
+<img src="/Users/fujie/Pictures/typora/axi-interconnects_stm_aac_image3.webp" alt="axi-interconnects_stm_aac_image3" style="zoom: 67%;" />
+</center></li>
+</ul></li>
+<li><p>支持非对齐的地址: 非对齐的 burst 传输，只有第一个 beat
+是非对齐的，后续的都是对齐的，下图展示了当传输宽度为
+16bits、且开始地址从 0x03 开始的传输</p>
+<div style="text-align:center">
+<div style="zoom: 50%;">
+<img src="/Users/fujie/Pictures/typora/axi_align.png"/>
+</div>
+</div></li>
+</ol></li>
+</ul></li>
+<li><p>优点</p>
+<ul>
+<li><strong>性能好</strong>: 目前应用最广泛的高性能总线</li>
+<li>控制更加灵活: <strong>AXI
+只定义了主设备和从设备之间的接口(interface), 本质上不是
+Bus</strong>，而没有定义二者如何连接（AHB
+实际是定义了总线内部架构的），而是由实现者自己定义。<br />
+例如：如果读写通道使用独立的译码器和终裁器，则可以实现:
+<code>mater1 --write--&gt; slave1, master2 --read--&gt; slave1</code>
+同时发生</li>
+</ul></li>
+<li><p>缺点</p>
+<ul>
+<li>复杂：控制复杂（控制信号多，在 SoC
+中集成不当容易死锁）、硬件实现复杂</li>
+<li>功耗：在低功耗 SoC 中，AXI 功耗显得过高</li>
+</ul></li>
+</ol>
+<h2 id="总线设计">总线设计</h2>
+<p>总线的设计主要包括两个重要的部分：</p>
+<ol type="1">
+<li><p>接口设计(interface):
+接口设计主要定义<u>相关信号线的功能、时序等信息，以及总线数据传输的特点</u>，例如</p>
+<ul>
+<li><p>命令通道</p>
+<table>
+<thead>
+<tr class="header">
+<th>信号名</th>
+<th>方向</th>
+<th>宽度</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sReady</td>
+<td>input</td>
+<td>1</td>
+<td>从设备就绪</td>
+</tr>
+<tr class="even">
+<td>mValid</td>
+<td>output</td>
+<td>1</td>
+<td>主设备信号有效</td>
+</tr>
+<tr class="odd">
+<td>read</td>
+<td>output</td>
+<td>1</td>
+<td>写或读</td>
+</tr>
+<tr class="even">
+<td>addr</td>
+<td>output</td>
+<td>DW</td>
+<td>地址</td>
+</tr>
+<tr class="odd">
+<td>wData</td>
+<td>output</td>
+<td>DW</td>
+<td>写数据</td>
+</tr>
+<tr class="even">
+<td>wMask</td>
+<td>output</td>
+<td>DW/8</td>
+<td>写 Mask</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>反馈通道</p>
+<table>
+<thead>
+<tr class="header">
+<th>信号名</th>
+<th>方向</th>
+<th>宽度</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mReady</td>
+<td>output</td>
+<td>1</td>
+<td>主设备就绪</td>
+</tr>
+<tr class="even">
+<td>sValid</td>
+<td>input</td>
+<td>1</td>
+<td>从设备信号有效</td>
+</tr>
+<tr class="odd">
+<td>rError</td>
+<td>input</td>
+<td>1</td>
+<td>从设备读数据错误</td>
+</tr>
+<tr class="even">
+<td>rData</td>
+<td>input</td>
+<td>DW</td>
+<td>从设备读数据</td>
+</tr>
+</tbody>
+</table></li>
+</ul></li>
+<li><p>内部总线架构设计(bus internal architecture):</p>
+<ul>
+<li>总线的内部组件：终裁器、译码器、复用器等</li>
+<li>主设备和从设备的连接方式：一对多、多对多等</li>
+</ul></li>
+</ol>
+<div style="text-align:center">
+<img src="/Users/fujie/Pictures/typora/bus/bus_interface_arch.svg" />
+</div>
+<h2 id="h-bus-设计评价">H Bus 设计评价</h2>
+<ol type="1">
+<li>采用 shared-bus 的结构：
+<ul>
+<li>Master 在下发任务的时候，采用 FIFO 机制，FIFO 最前面的 master
+授权总线，缺点如下：
+<ol type="1">
+<li>shared-bus 结构，master 需要竞争总线，导致实时性降低</li>
+<li>采用 FIFO 结构，无法控制 master 的优先级</li>
+<li>如果 FIFO 头部的 master
+占用总线的时间最长，则整体总线等待的时间也会最长</li>
+</ol></li>
+<li>Slave 在返回数据的时候，采用轮询机制，缺点如下：
+<ol type="1">
+<li>shared-bus 结构，slave 需要竞争总线，导致实时性降低</li>
+<li>由<u>DSP 软件控制</u>轮询加速器的状态：根据软件地址
+，查询对应加速器的状态寄存器;
+软件查询状态、控制加速器的效率都很低（软件控制需要设计到函数调用、保存上下文、函数返回、甚至是处理器优先级的切换）</li>
+</ol></li>
+</ul></li>
+</ol>
+<blockquote>
+<p>🌟 如果可以设计好 MCU 和 co-processor 的交互接口、采用硬件的方式实现
+co-processor 的“状态查询”和“控制”，则效率相比于软件会高很多；将
+shared-bus 结构的总线改为 point-to-point 结构的
+bus，则总线架构也会优化很多。 配置信息的下发从文档中看主要靠 DMA 和
+load/store，如果可以优化 laod/store 指令，则 mcu 调度 co-processor
+能力应该会增加</p>
+</blockquote>
+<h2 id="附录">附录</h2>
+<ol type="1">
+<li>AXI 读通道信号
+<center>
+<img src="/Users/fujie/Pictures/typora/Intro_to_AXI_Read_address_read_data_global_signals_2.webp" alt="Intro_to_AXI_Read_address_read_data_global_signals_2" style="zoom:33%;" />
+</center></li>
+<li>AXI 写通道信号
+<center>
+<img src="/Users/fujie/Pictures/typora/Intro_to_AXI_Write_address_data_response_signals_2.webp" alt="Intro_to_AXI_Write_address_data_response_signals_2" style="zoom:33%;" />
+</center></li>
+<li>AHB 通道信号
+<center>
+<img src="/Users/fujie/Pictures/typora/Introduction_to_AMBA_fig03.webp" alt="Introduction_to_AMBA_fig03" style="zoom:50%;" />
+</center></li>
+<li>APB 通道信号
+<center>
+<img src="/Users/fujie/Pictures/typora/Introduction_to_AMBA_fig04.webp" alt="Introduction_to_AMBA_fig04" style="zoom:50%;" />
+</center></li>
+</ol>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.allaboutcircuits.com/technical-articles/introduction-to-the-advanced-microcontroller-bus-architecture/#:~:text=The%20AHB%20decoder%20receives%20the,each%20with%20a%20unique%20purpose.">AHB</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.allaboutcircuits.com/technical-articles/introduction-to-the-advanced-extensible-interface-axi/">AXI
+介绍</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.allaboutcircuits.com/technical-articles/what-are-axi-interconnects-tutorial-master-slave-digital-logic/">AXI
+interconnect</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://developer.arm.com/documentation/102202/0300/Transfer-behavior-and-transaction-ordering#:~:text=The%20AXI%20protocol%20supports%20out,of%20transactions%20with%20different%20IDs.">An
+introduction to AMBA AXI by ARM</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mikewolf2002/p/10335422.html">AHB
+总线协议</a></li>
+<li><a target="_blank" rel="noopener" href="https://verificationforall.wordpress.com/apb-protocol/">APB
+总线协议</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/06/essayNotes/" rel="prev" title="优秀博士毕业论文阅读笔记">
+                  <i class="fa fa-chevron-left"></i> 优秀博士毕业论文阅读笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/10/RISCV-compressISA/" rel="next" title="RISC-V压缩指令集">
+                  RISC-V压缩指令集 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">330k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:01</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

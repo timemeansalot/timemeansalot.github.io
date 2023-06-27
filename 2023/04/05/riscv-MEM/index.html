@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISCV MEM Stage 设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V 访存级">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/04/05/riscv-MEM/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISCV MEM Stage 设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/04/10/kOp5QAIJYuU6q91.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/30/Y4i5UHZsV3umnOR.png">
+<meta property="article:published_time" content="2023-04-05T03:59:22.000Z">
+<meta property="article:modified_time" content="2023-06-18T09:37:50.846Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/04/10/kOp5QAIJYuU6q91.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/04/05/riscv-MEM/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/04/05/riscv-MEM/","path":"2023/04/05/riscv-MEM/","title":"RISC-V 访存级"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V 访存级 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#data-memorydm"><span class="nav-number">1.</span> <span class="nav-text">Data Memory(DM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-memory-input-controldmic"><span class="nav-number">2.</span> <span class="nav-text">Data Memory Input
+Control(DMIC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-memory-output-controldmoc"><span class="nav-number">3.</span> <span class="nav-text">Data Memory Output
+Control(DMOC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E5%AD%98%E7%BA%A7-loadstore-%E6%8C%87%E4%BB%A4%E8%AE%BE%E8%AE%A1"><span class="nav-number"></span> <span class="nav-text">访存级 Load&#x2F;Store 指令设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">信号定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E5%AD%98%E9%80%BB%E8%BE%91"><span class="nav-number">2.</span> <span class="nav-text">访存逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#load-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">Load 指令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">非访存指令</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">安稳就是稳定的穷</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/05/riscv-MEM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="安稳就是稳定的穷">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V 访存级 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V 访存级
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-05 11:59:22" itemprop="dateCreated datePublished" datetime="2023-04-05T11:59:22+08:00">2023-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2023/04/10/kOp5QAIJYuU6q91.png"
+alt="memory" /> RISCV MEM Stage 设计</p>
+<span id="more"></span>
+<h3 id="data-memorydm">Data Memory(DM)</h3>
+<blockquote>
+<p>DM 采用 DTCM，其访问的数据类型必须按照对应的地址对齐，否则就是
+misaligned data address。例如 LW，SW，其地址最低两位必须是 00.</p>
+</blockquote>
+<ol type="1">
+<li><p>输入端口</p>
+<table>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>addr[DMEMLEN:0]</td>
+<td>aluResult</td>
+<td>dMemory 输入地址</td>
+</tr>
+<tr class="even">
+<td>dMemInput[31:0]</td>
+<td>DMIC</td>
+<td>寄存器 rs2 读出的数据</td>
+</tr>
+<tr class="odd">
+<td>dMemWrEn</td>
+<td>EXE/MEM pipeline</td>
+<td>dMemory 写入使能</td>
+</tr>
+<tr class="even">
+<td>byteMask[3:0]</td>
+<td>DMIC</td>
+<td>dMemory byteMask</td>
+</tr>
+<tr class="odd">
+<td>mvalid</td>
+<td>DMIC</td>
+<td>DMIC 输入数据有效</td>
+</tr>
+<tr class="even">
+<td>mready</td>
+<td>DMOC</td>
+<td>DMOC 空闲，可以输出数据</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出端口</p>
+<table>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dMemOutput[31:0]</td>
+<td>DMOC</td>
+<td>输出到 WB stage 的 Mux</td>
+</tr>
+<tr class="even">
+<td>svalid</td>
+<td>DMOC</td>
+<td>MEM 数据有效</td>
+</tr>
+<tr class="odd">
+<td>sready</td>
+<td>DMIC</td>
+<td>MEM 空闲，可以进行读写操作</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h3 id="data-memory-input-controldmic">Data Memory Input
+Control(DMIC)</h3>
+<p>根据指令的格式，生成输入到 Data Memory 的 32bits 数据</p>
+<ol type="1">
+<li><p>输入端口</p>
+<table>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dMemType[3:0]</td>
+<td>EXE/MEM pipeline</td>
+<td>访存指令的格式</td>
+</tr>
+<tr class="even">
+<td>RD2[31:0]</td>
+<td>EXE/MEM pipeline</td>
+<td>寄存器 rs2 读出的数据</td>
+</tr>
+<tr class="odd">
+<td>aluResult[31:0]</td>
+<td>EXE ALU</td>
+<td>alu 计算得到的 dMemory 地址｜</td>
+</tr>
+<tr class="even">
+<td>ready</td>
+<td>DM</td>
+<td>Dta Memory 空闲</td>
+</tr>
+</tbody>
+</table>
+<p><code>byte_addr=aluResult[1:0]</code></p></li>
+<li><p>输出端口</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 9%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Target</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dMemInput[31:0]</td>
+<td>DM</td>
+<td>根据 dmemtype 生成的 32bitsdata，输出到 DM</td>
+</tr>
+<tr class="even">
+<td>byteMask[3:0]</td>
+<td>DM</td>
+<td>dMemory write byteMask</td>
+</tr>
+</tbody>
+</table>
+<p><code>byteMask=aluResult[1:0]</code></p>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 13%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>dMemType</th>
+<th>byte_addr</th>
+<th>dMemInput</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MEM_LB</td>
+<td>00<br/>01<br/>10<br/>11<br/></td>
+<td><code>dMemInput=&#123;24&#123;1'b0&#125;,RD2[7:0]&#125;</code><br/><code>dMemInput=&#123;16&#123;1'b0&#125;,RD2[15:8],8&#123;1'b0&#125;&#125;</code><br/><code>dMemInput=&#123;8&#123;1'b0&#125;,RD2[23:16],16&#123;1'b0&#125;&#125;</code><br/><code>dMemInput=&#123;RD2[31:24], 24&#123;1'b0&#125;&#125;</code><br/></td>
+</tr>
+<tr class="even">
+<td>MEM_LH</td>
+<td>00<br/>10</td>
+<td><code>dMemInput=&#123;16&#123;1'b0&#125;,RD2[15:0]&#125;</code><br/><code>dMemInput=&#123;RD2[31:16], 16&#123;1'b0&#125;&#125;</code></td>
+</tr>
+<tr class="odd">
+<td>MEM_LW</td>
+<td></td>
+<td><code>dMemInput=RD2[31:0]</code></td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h3 id="data-memory-output-controldmoc">Data Memory Output
+Control(DMOC)</h3>
+<p>接收 DM 的输出数据，并且根据指令格式产生对应的数据，输入给 WB
+Stage</p>
+<ol type="1">
+<li><p>输入端口</p>
+<table>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dMemType[3:0]</td>
+<td>EXE/MEM pipeline</td>
+<td>访存指令的格式</td>
+</tr>
+<tr class="even">
+<td>dMemOutput[31:0]</td>
+<td>DM</td>
+<td>从 DM 中读入的 32bits 数据</td>
+</tr>
+<tr class="odd">
+<td>aluResult[31:0]</td>
+<td>EXE ALU</td>
+<td>alu 计算得到的 dMemory 地址｜</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出端口</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 9%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dMemReadData[31:0]</td>
+<td>WB stage</td>
+<td>根据 dMemType 选择 DM 输入的数据，生成 32bits 的读出数据</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 10%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>dMemType</th>
+<th>byte_addr</th>
+<th>dMemReadData</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MEM_LB</td>
+<td>00<br/>01<br/>10<br/>11<br/></td>
+<td><code>dMemReadData=&#123;24&#123;dMemOutput[7]&#125;, dMemOutput[7:0]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;dMemOutput[15]&#125;, dMemOutput[15:8]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;dMemOutput[23]&#125;, dMemOutput[23:16]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;dMemOutput[31]&#125;, dMemOutput[31:24]&#125;</code></td>
+</tr>
+<tr class="even">
+<td>MEM_LH</td>
+<td>00<br/>10</td>
+<td><code>dMemReadData=&#123;16&#123;dMemOutput[15]&#125;, dMemOutput[15:0]&#125;</code><br/><code>dMemReadData=&#123;16&#123;dMemOutput[31]&#125;, dMemOutput[31:16]&#125;</code></td>
+</tr>
+<tr class="odd">
+<td>MEM_LW</td>
+<td></td>
+<td><code>dMemReadData=dMemOutput[31:0]</code></td>
+</tr>
+<tr class="even">
+<td>MEM_LBU</td>
+<td>00<br/>01<br/>10<br/>11<br/></td>
+<td><code>dMemReadData=&#123;24&#123;1'b0&#125;, dMemOutput[7:0]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;1'b0&#125;, dMemOutput[15:8]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;1'b0&#125;, dMemOutput[23:16]&#125;</code><br/>
+<code>dMemReadData=&#123;24&#123;1'b0&#125;, dMemOutput[31:24]&#125;</code></td>
+</tr>
+<tr class="odd">
+<td>MEM_LHU</td>
+<td>00<br/>10</td>
+<td><code>dMemReadData=&#123;16&#123;1b'0&#125;, dMemOutput[15:0]&#125;</code><br/><code>dMemReadData=&#123;16&#123;1'b0&#125;, dMemOutput[31:16]&#125;</code></td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<blockquote>
+<p>MEM 和 EXE 需要 resetn 信号，否则系统 reset 之后，MEM Stage
+输出的<code>reg_wb_en</code>会是 x，传输给 ID Stage
+之后，会导致第一次读取 RF 时读出的也是 x</p>
+</blockquote>
+<h2 id="访存级-loadstore-指令设计">访存级 Load/Store 指令设计</h2>
+<h3 id="信号定义">信号定义</h3>
+<ol type="1">
+<li><p>输入到 D-Memory 的信号</p>
+<table>
+<thead>
+<tr class="header">
+<th>信号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dmem_addr[31:0]</td>
+<td>D-Memory 访存地址</td>
+</tr>
+<tr class="even">
+<td>dmem_write_data[31:0]</td>
+<td>D-Memory 写入的数据</td>
+</tr>
+<tr class="odd">
+<td>dmem_write_mask[3:0]</td>
+<td>D-Memory 写入时的掩码</td>
+</tr>
+<tr class="even">
+<td>dmem_rw</td>
+<td>读写选择，0:读，1:写</td>
+</tr>
+<tr class="odd">
+<td>valid/ready</td>
+<td>握手信号</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<p><em>如果指令不需要访问 D-Memory，可以令 RW=1,
+dmem_write_mask=0000</em></p>
+<blockquote>
+<p>Q: D-Memory 是否需要 reset
+信号？有一些项目里有这个信号、有些项目里没有</p>
+</blockquote>
+<ol start="2" type="1">
+<li><p>来自 D-Memory 的信号</p>
+<ol type="1">
+<li>dmem_read_data[31:0]: data read from D-Memory, this data may need be
+future modified</li>
+<li>valid/ready: valid when memory is ready to get address and contorl,
+ready when memory response data is ready</li>
+<li>error: memory access error</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th>信号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dmem_read_data[31:0]</td>
+<td>D-Memory 读出的数据</td>
+</tr>
+<tr class="even">
+<td>valid/ready</td>
+<td>握手信号</td>
+</tr>
+<tr class="odd">
+<td>error</td>
+<td>访存失败时的反馈信号</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<blockquote>
+<p>访存失败的时候，需要告知 EXE Stage 的 CSR
+进入访存失败的异常处理程序</p>
+</blockquote>
+<p><strong>由于当前设计的 D-Memory 只是 MEM Stage 的一块内存，因此
+valid, ready, error 信号都没有启用</strong></p>
+<ol start="3" type="1">
+<li><p>来自 EXE Stage 的流水线输入</p>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>信号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rs1_e_i[31:0]</td>
+<td>D-Memory 的写入数据(wire)</td>
+</tr>
+<tr class="even">
+<td>dmem_type_e_i[3:0]</td>
+<td>D-Memory 的访存类型(wire)</td>
+</tr>
+<tr class="odd">
+<td>alu_result_e_i[31:0]</td>
+<td>ALU 计算的结果(wire)</td>
+</tr>
+<tr class="even">
+<td>extended_imm_e_i[31:0]</td>
+<td>拓展为 32bits 的立即数部分，LUI 指令的写回数据</td>
+</tr>
+<tr class="odd">
+<td>pc_plus_e_i[31:0]</td>
+<td>next pc 的数据，JAL, JALR 指令的写回数据</td>
+</tr>
+<tr class="even">
+<td>result_src_e_i[1:0]</td>
+<td>寄存器写回数据来源选择信号</td>
+</tr>
+<tr class="odd">
+<td>rd_idx_e_i[4:0]</td>
+<td>被写回的寄存器的下标</td>
+</tr>
+<tr class="even">
+<td>reg_write_en_e_i</td>
+<td>寄存器写回使能</td>
+</tr>
+</tbody>
+</table>
+<p><strong>由于 D-Memory 访存有一个 cycle 延迟，所以 alu_result_e_i,
+dmem_type_e_i 都是 wire 类型</strong></p></li>
+<li><p>到 WB stage 的流水线输出</p>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>信号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>alu_result_m_o[31:0]</td>
+<td>ALU 计算的结果(wire), alu_result_e_i 寄存 2 拍的结果</td>
+</tr>
+<tr class="even">
+<td>extended_imm_m_o[31:0]</td>
+<td>拓展为 32bits 的立即数部分，LUI 指令的写回数据</td>
+</tr>
+<tr class="odd">
+<td>pc_plus_m_o[31:0]</td>
+<td>next pc 的数据，JAL, JALR 指令的写回数据</td>
+</tr>
+<tr class="even">
+<td>🌟mem_read_data_m_o[31:0]</td>
+<td>从 D-Memory 中读出的数据，Load 指令的写回数据</td>
+</tr>
+<tr class="odd">
+<td>result_src_m_o[1:0]</td>
+<td>寄存器写回数据来源选择信号</td>
+</tr>
+<tr class="even">
+<td>rd_idx_m_o[4:0]</td>
+<td>被写回的寄存器的下标</td>
+</tr>
+<tr class="odd">
+<td>reg_write_en_m_o</td>
+<td>寄存器写回使能</td>
+</tr>
+</tbody>
+</table>
+<p><strong>alu_result_e_i
+作为写回数据的时候，需要多暂存一拍以跟其他写回信号同步</strong></p></li>
+</ol>
+<h3 id="访存逻辑">访存逻辑</h3>
+<p>本部分主要介绍 Load/Store 指令在 MEM Stage 具体的实现逻辑。</p>
+<blockquote>
+<p>由于 CSR 模块放到 MEM Stage 会导致流水线刷新逻辑涉及到更多一个
+Stage，导致刷新逻辑变得复杂， 因此考虑将 CSR 模块放到 EXE Stage，并且在
+EXE Stage 对访存指令地址不对齐的情况触发 exception</p>
+</blockquote>
+<ol type="1">
+<li>LB, LBU, SB 指令由于其操作的是 1B 的数据，因此不会出现 address
+misaligned exception</li>
+<li>LH, LHU, SH 指令，<code>addr[0]!=0</code>时，会出现 address
+misaligned exception</li>
+<li>LW, SW 指令，<code>addr[1:0]!=00</code>时，会出现 address misaligned
+exception</li>
+</ol>
+<h4 id="load-指令">Load 指令</h4>
+<ol type="1">
+<li><p>涉及到的指令：<code>LB, LBU, LH, LHU, LW</code></p></li>
+<li><p>D-Memory 写入地址：dmem_addr = alu_result_e_i;</p></li>
+<li><p>读写类型：dmem_rw = 1'b0;</p></li>
+<li><p>从 D-Memory 读出的数据 <code>dmem_read_data</code> 跟输出到 WB
+Stage 数据 <code>mem_read_data_m_o</code> 的关系</p>
+<blockquote>
+<p>根据 Load 指令的类型及访存地址最后两位的地址，扩展 D-Memory
+的输出数据，如下表所示：</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 75%" />
+<col style="width: 11%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>mem_read_data_m_o</th>
+<th>mem_type</th>
+<th>addr[1:0]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&#123;&#123;24&#123;dmem_read_data[7]&#125;&#125;, dmem_read_data[7:0]&#125;</code></td>
+<td>MEM_LB</td>
+<td>00</td>
+</tr>
+<tr class="even">
+<td><code>&#123;&#123;24&#123;dmem_read_data[15]&#125;&#125;,dmem_read_data[15:8]&#125;</code></td>
+<td>MEM_LB</td>
+<td>01</td>
+</tr>
+<tr class="odd">
+<td><code>&#123;&#123;24&#123;dmem_read_data[23]&#125;&#125;,dmem_read_data[23:16]&#125;</code></td>
+<td>MEM_LB</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td><code>&#123;&#123;24&#123;dmem_read_data[31]&#125;&#125;,dmem_read_data[31:24]&#125;</code></td>
+<td>MEM_LB</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td><code>&#123;&#123;24&#123;1'b0&#125; ,dmem_read_data[7:0]&#125;`                  | MEM_LBU  | 00        |
+    | `&#123;&#123;24&#123;1'b0&#125; ,dmem_read_data[15:8]&#125;`                 | MEM_LBU  | 01        |
+    | `&#123;&#123;24&#123;1'b0&#125; ,dmem_read_data[23:16]&#125;`                | MEM_LBU  | 10        |
+    | `&#123;&#123;24&#123;1'b0&#125; ,dmem_read_data[31:24]&#125;`                | MEM_LBU  | 11        |
+    | `&#123;&#123;16&#123;dmem_read_data[15]&#125;&#125;, dmem_read_data[15: 0]&#125;</code></td>
+<td>MEM_LH</td>
+<td>00</td>
+</tr>
+<tr class="even">
+<td><code>&#123;&#123;16&#123;dmem_read_data[31]&#125;&#125;, dmem_read_data[31:16]&#125;</code></td>
+<td>MEM_LH</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td><code>&#123;&#123;16&#123;1'b0&#125;, dmem_read_data[15:0]&#125;`                 | MEM_LHU  | 00        |
+    | `&#123;&#123;16&#123;1'b0&#125;, dmem_read_data[31:16]&#125;`                | MEM_LHU  | 10        |
+    | dmem_read_data                                      | MEM_LW   | 00        |
+
+#### Store 指令
+
+1. 涉及到的指令：`SB, SH, SW`
+2. D-Memory 写入地址：dmem_addr = alu_result_e_i;
+3. 读写类型：dmem_rw = 1'b1;
+4. 写入掩码: dmem_write_mask
+
+   > 写入掩码主要根据 Load 指令类型和访存地址，来控制写入到 D-Memory 的哪些 byte。
+   > D-Memory 需要支持掩码操作。
+
+   | dmem_write_mask | mem_type        | addr[1:0] |
+   | --------------- | --------------- | --------- |
+   | 0001            | MEM_SB, MEM_SBU | 00        |
+   | 0010            | MEM_SB, MEM_SBU | 01        |
+   | 0100            | MEM_SB, MEM_SBU | 10        |
+   | 1000            | MEM_SB, MEM_SBU | 11        |
+   | 0011            | MEM_SH, MEM_SHU | 0x        |
+   | 1100            | MEM_SH, MEM_SHU | 1x        |
+   | 1111            | MEM_SW          | xx        |
+
+5. 写入到 D-Memory 的数据：dmem_write_data
+
+   `dmem_write_data[31:0]`是写入到 D-Memory 中的数据, `rs1_e_i` 是 EXE Stage 输入的代写入到 D-Memory 的数据
+
+   | dmem_write_data                         | mem_type | addr[1:0] |
+   | --------------------------------------- | -------- | --------- |
+   | `&#123;&#123;24&#123;1'b0&#125;&#125;, rs1_e_i[7:0]&#125;</code></td>
+<td>MEM_SB</td>
+<td>00</td>
+</tr>
+<tr class="even">
+<td><code>&#123;&#123;16&#123;1'b0&#125;&#125;, rs1_e_i[7:0], &#123;8&#123;1'b0&#125;&#125;&#125;</code></td>
+<td>MEM_SB</td>
+<td>01</td>
+</tr>
+<tr class="odd">
+<td><code>&#123;&#123;8&#123;1'b0&#125;&#125;, rs1_e_i[7:0], &#123;16&#123;1'b0&#125;&#125;&#125;</code></td>
+<td>MEM_SB</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td><code>&#123;rs1_e_i[7:0], &#123;24&#123;1'b0&#125;&#125;&#125;</code></td>
+<td>MEM_SB</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td><code>&#123;&#123;16&#123;1'b0&#125;&#125;, rs1_e_i[15:0]&#125;</code></td>
+<td>MEM_SH</td>
+<td>0x</td>
+</tr>
+<tr class="even">
+<td><code>&#123;rs1_e_i[15:0], &#123;16&#123;1'b0&#125;&#125;&#125;</code></td>
+<td>MEM_SH</td>
+<td>1x</td>
+</tr>
+<tr class="odd">
+<td>rs1_e_i</td>
+<td>MEM_SW</td>
+<td>xx</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h4 id="非访存指令">非访存指令</h4>
+<ol type="1">
+<li>读写类型：dmem_rw = 1'b1;</li>
+<li>写入掩码: dmem_write_mask=4'b0000;</li>
+</ol>
+<figure>
+<img src="https://s2.loli.net/2023/05/30/Y4i5UHZsV3umnOR.png"
+alt="simluation" />
+<figcaption aria-hidden="true">simluation</figcaption>
+</figure>
+<p>测试的情况有：</p>
+<ol type="1">
+<li>LW, SW: 4B 对齐时写入和读出</li>
+<li>SH, LH, LHU: 2B 对齐时写入、读出</li>
+<li>SB, LB, LBU: 1B 对齐时写入、读出</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/04/riscv-EXE/" rel="prev" title="RISC-V执行级设计">
+                  <i class="fa fa-chevron-left"></i> RISC-V执行级设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/06/essayNotes/" rel="next" title="优秀博士毕业论文阅读笔记">
+                  优秀博士毕业论文阅读笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">330k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:01</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

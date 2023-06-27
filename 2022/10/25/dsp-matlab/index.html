@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Matlab 笔记 学习DSP时记录的笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DSP用Matlab学习的笔记">
+<meta property="og:url" content="http://timemeansalot.github.io/2022/10/25/dsp-matlab/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="Matlab 笔记 学习DSP时记录的笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-25T02:24:45.000Z">
+<meta property="article:modified_time" content="2023-06-18T09:37:50.844Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="DSP">
+<meta property="article:tag" content="Matlab">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2022/10/25/dsp-matlab/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2022/10/25/dsp-matlab/","path":"2022/10/25/dsp-matlab/","title":"DSP用Matlab学习的笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DSP用Matlab学习的笔记 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#matlab-%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">Matlab 笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#matlab%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.1.</span> <span class="nav-text">Matlab中的常用信号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-2-%E6%97%B6%E5%BA%8F%E7%9A%84%E4%BF%A1%E5%8F%B7%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">Chapter 2: 时序的信号分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E8%BE%93%E5%85%A5%E5%93%8D%E5%BA%94"><span class="nav-number">2.1.</span> <span class="nav-text">零输入响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E7%8A%B6%E6%80%81%E5%93%8D%E5%BA%94"><span class="nav-number">2.2.</span> <span class="nav-text">零状态响应</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dsolve%E6%B1%82%E9%9B%B6%E7%8A%B6%E6%80%81%E5%93%8D%E5%BA%94"><span class="nav-number">2.2.1.</span> <span class="nav-text">dsolve求零状态响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lsim%E5%92%8Ctf%E6%B1%82%E9%9B%B6%E7%8A%B6%E6%80%81%E5%93%8D%E5%BA%94"><span class="nav-number">2.2.2.</span> <span class="nav-text">lsim和tf求零状态响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8D%B7%E7%A7%AF%E6%B1%82%E9%9B%B6%E7%8A%B6%E6%80%81%E5%93%8D%E5%BA%94"><span class="nav-number">2.2.3.</span> <span class="nav-text">使用卷积求零状态响应</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">安稳就是稳定的穷</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/10/25/dsp-matlab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="安稳就是稳定的穷">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DSP用Matlab学习的笔记 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DSP用Matlab学习的笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-25 10:24:45" itemprop="dateCreated datePublished" datetime="2022-10-25T10:24:45+08:00">2022-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="matlab-笔记">Matlab 笔记</h1>
+<p>学习DSP时记录的笔记</p>
+<span id="more"></span>
+<h2 id="matlab中的常用信号">Matlab中的常用信号</h2>
+<ol type="1">
+<li><p><strong>sin, cos, sinc, exp</strong></p></li>
+<li><p><strong>heaviside(unit step function), diract(delta
+function)</strong></p></li>
+<li><p>dsolve(eqn, conditions): 解微分方程,
+simpify(func)：化简函数表达式func</p></li>
+<li><p>lsim(sys, f,t), tf(b,a)</p>
+<p>lsim: t is the time axis. f is the input signal. sys is the model of
+the LTI system</p>
+<p>For the differential equation:</p>
+<p><span
+class="math display">\[a_3y&#39;&#39;&#39;(t)+a_2y&#39;&#39;(t)+a_1y&#39;(t)+a_0=b_3f&#39;&#39;&#39;(5)+b_2f&#39;&#39;(t)+b_1f&#39;(t)+b_0f(t)\]</span>
+the value of a and b is: <span class="math display">\[
+\begin{matrix}a=[a_3,a_2,a_1,a_0]\\b=[b_3,b_2,b_1,b_0]\end{matrix}
+\]</span> $$<br />
+</p></li>
+<li><p>impluse(sys, t) , step(sys, t) ：脉冲响应， 阶跃响应</p></li>
+<li><p>tripuls(t, width, center): 三角波</p></li>
+<li><p>sawtooth(t, center): 锯齿波</p></li>
+<li><p>rectangle(t, center)：单个矩形波</p></li>
+<li><p>square(t, range)：连续的方波，range表示高电平占周期的比例 ##
+微分&amp;积分</p></li>
+<li><p>微分diff</p>
+<ul>
+<li>symbolic: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">syms x</span><br><span class="line">y1 = heaviside(x);</span><br><span class="line">y2 = diff(y1,x);</span><br></pre></td></tr></table></figure></li>
+<li>numerical, 记得除以dt <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">t = <span class="number">-5</span>:dt:<span class="number">5</span>;</span><br><span class="line">f1 = heaviside(t);</span><br><span class="line">f2 = diff(f1)/dt; <span class="comment">% diff 用于计算离散序列的差分，默认元素间的间隔为 1</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>不定积分int, cumtrapz。定积分int加上区间、trapz</p>
+<ul>
+<li>symbolic <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syms x</span><br><span class="line">c = <span class="number">0</span>;</span><br><span class="line">y1 = heaviside(x);</span><br><span class="line">y2 = int(y1,x)+c;</span><br><span class="line"><span class="comment">% 定积分</span></span><br><span class="line">syms t1</span><br><span class="line">int(heaviside(t1),<span class="number">-1</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure></li>
+<li>numerical <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dt = <span class="number">0.01</span>;</span><br><span class="line">t = <span class="number">-5</span>:dt:<span class="number">5</span>;</span><br><span class="line">f1 = heaviside(t);</span><br><span class="line">f2 = cumtrapz(t, f1)+c;</span><br><span class="line"><span class="comment">% 定积分</span></span><br><span class="line">t2 = <span class="number">-1</span>:<span class="number">0.01</span>:<span class="number">2</span>;</span><br><span class="line">trapz(t2,heaviside(t2))</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ol>
+<h1 id="chapter-2-时序的信号分析">Chapter 2: 时序的信号分析</h1>
+<p><span class="math display">\[
+y(t)=y_{zi}(t)+y_{zs}(t)
+\]</span></p>
+<p>其中<span
+class="math inline">\(y_{zi}(t)\)</span>是零输入响应，输入为0；<span
+class="math inline">\(y_{zs}(t)\)</span>是零状态响应，初始条件为0</p>
+<h2 id="零输入响应">零输入响应</h2>
+<p>𝑦𝑦′′(𝑡𝑡) + 4𝑦𝑦(𝑡𝑡) = 0, 𝑦𝑦(0-) = 1, 𝑦𝑦′(0-) = 1, find the zero_input
+response</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">clear;</span><br><span class="line">close all;</span><br><span class="line">clf;</span><br><span class="line">syms y(t)</span><br><span class="line">D2y = diff(y,t,<span class="number">2</span>);</span><br><span class="line">Dy = diff(y,t);</span><br><span class="line">eqn = D2y+<span class="number">4</span>*y==<span class="number">0</span>; <span class="comment">% zero input response 右边的输入是0</span></span><br><span class="line">conds = [y(<span class="number">0</span>)==<span class="number">1</span>, Dy(<span class="number">0</span>)==<span class="number">1</span>];</span><br><span class="line">ysol = dsolve(eqn,conds);</span><br><span class="line">yzi = simplify(ysol);	</span><br></pre></td></tr></table></figure>
+<h2 id="零状态响应">零状态响应</h2>
+<h3 id="dsolve求零状态响应">dsolve求零状态响应</h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">clear;</span><br><span class="line">close all;</span><br><span class="line">clf;</span><br><span class="line"></span><br><span class="line">syms y(t)</span><br><span class="line">D2y=diff(y,t,<span class="number">2</span>);</span><br><span class="line">Dy=diff(y,t);</span><br><span class="line">eqn=D2y<span class="number">-5</span>*Dy+<span class="number">6</span>*y==<span class="built_in">exp</span>(<span class="number">-2</span>*t)*heaviside(t); <span class="comment">% 零状态响应右边输入不是零</span></span><br><span class="line">conds=[y(<span class="number">0</span>)==<span class="number">0</span>, Dy(<span class="number">0</span>)==<span class="number">0</span>];                <span class="comment">% 零状态响应的状态是0</span></span><br><span class="line">ysol=dsolve(eqn,conds);</span><br><span class="line">yzs=simplify(ysol)</span><br></pre></td></tr></table></figure>
+<h3 id="lsim和tf求零状态响应">lsim和tf求零状态响应</h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">clear;</span><br><span class="line">close all;</span><br><span class="line">clf;</span><br><span class="line"></span><br><span class="line">sys = tf([<span class="number">1</span>],[<span class="number">1</span>,<span class="number">-5</span>,<span class="number">6</span>]);</span><br><span class="line">t = <span class="number">0</span>:<span class="number">0.01</span>:<span class="number">5</span>;</span><br><span class="line">f = <span class="built_in">exp</span>(<span class="number">-2</span>*t).*heaviside(t);</span><br><span class="line">y = lsim(sys,f,t);</span><br><span class="line"><span class="built_in">plot</span>(t,y);</span><br><span class="line">xlabel(<span class="string">&#x27;t&#x27;</span>);ylabel(<span class="string">&#x27;y(t)&#x27;</span>);title(<span class="string">&#x27;Zero-State Response&#x27;</span>),grid on;</span><br></pre></td></tr></table></figure>
+<h3 id="使用卷积求零状态响应">使用卷积求零状态响应</h3>
+<blockquote>
+<p>step response和impulse response可以反映系统的特性，</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DSP/" rel="tag"># DSP</a>
+              <a href="/tags/Matlab/" rel="tag"># Matlab</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/11/git-notes/" rel="prev" title="Git使用过程中的笔记">
+                  <i class="fa fa-chevron-left"></i> Git使用过程中的笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/06/computer-architecture/" rel="next" title="计算机体系结构学习的笔记">
+                  计算机体系结构学习的笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">330k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:01</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
