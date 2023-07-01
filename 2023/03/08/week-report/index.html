@@ -22,34 +22,30 @@
 
     <meta name="description" content="[TOC]">
 <meta property="og:type" content="article">
-<meta property="og:title" content="周报-20230610">
+<meta property="og:title" content="付杰周报-20230701">
 <meta property="og:url" content="http://timemeansalot.github.io/2023/03/08/week-report/index.html">
 <meta property="og:site_name" content="timemeansalot">
 <meta property="og:description" content="[TOC]">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/Uum3NIOfts6JAbd.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/NltaFxfTmCyzwLS.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/mFVX7jUxn8KPIgY.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/RPvWopz4nrOIJ2V.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/08/ujJQh4XOVsqlGzx.png">
-<meta property="og:image" content="https://s2.loli.net/2023/06/07/7Q1t9b4iwvMhZBl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/5cs8iLybhG2EkKN.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/8Nzq52hxLsHiEPG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/01/7wnKtoasHJedq6G.png">
 <meta property="article:published_time" content="2023-03-08T06:45:34.000Z">
-<meta property="article:modified_time" content="2023-06-18T09:37:50.848Z">
+<meta property="article:modified_time" content="2023-07-01T00:38:55.661Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/07/01/5cs8iLybhG2EkKN.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/03/08/week-report/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/08/week-report/","path":"2023/03/08/week-report/","title":"周报-20230610"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/08/week-report/","path":"2023/03/08/week-report/","title":"付杰周报-20230701"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>周报-20230610 | timemeansalot</title>
+<title>付杰周报-20230701 | timemeansalot</title>
   
 
 
@@ -152,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E7%90%86%E8%AE%BAdebug-theory"><span class="nav-number">1.</span> <span class="nav-text">调试理论(debug theory)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E7%9A%84%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">专业的调试方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#difftset"><span class="nav-number">2.</span> <span class="nav-text">Difftset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5-difftest-%E6%A1%86%E6%9E%B6"><span class="nav-number">3.</span> <span class="nav-text">接入 Difftest 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E6%83%85%E5%86%B5"><span class="nav-number">3.1.</span> <span class="nav-text">目前测试环境搭建情况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%90%E5%8A%9F%E6%8E%A5%E5%85%A5%E5%88%B0-difftest%E7%BC%96%E8%AF%91%E9%80%9A%E8%BF%87"><span class="nav-number">1.</span> <span class="nav-text">成功接入到 Difftest，编译通过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-%E6%8E%A5%E5%85%A5-difftest-%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.1.</span> <span class="nav-text">MCU 接入 Difftest 步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E4%B8%8D%E9%80%9A%E8%BF%87%E7%A8%8B%E5%BA%8F-abort"><span class="nav-number">2.</span> <span class="nav-text">运行不通过，程序 abort</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E5%91%A8%E8%AE%A1%E5%88%92"><span class="nav-number">3.</span> <span class="nav-text">下周计划</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -161,13 +157,13 @@
     <img class="site-author-image" itemprop="image" alt="FuJie"
       src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
   <p class="site-author-name" itemprop="name">FuJie</p>
-  <div class="site-description" itemprop="description">安稳就是稳定的穷</div>
+  <div class="site-description" itemprop="description">摆烂太久是会被收走天赋的</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -229,16 +225,16 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="安稳就是稳定的穷">
+      <meta itemprop="description" content="摆烂太久是会被收走天赋的">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="周报-20230610 | timemeansalot">
+      <meta itemprop="name" content="付杰周报-20230701 | timemeansalot">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          周报-20230610
+          付杰周报-20230701
         </h1>
 
         <div class="post-meta-container">
@@ -256,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+      <time title="修改时间：2023-07-01 08:38:55" itemprop="dateModified" datetime="2023-07-01T08:38:55+08:00">2023-07-01</time>
     </span>
 
   
@@ -266,7 +262,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>4k</span>
+      <span>4.9k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -286,256 +282,161 @@
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
 <span id="more"></span>
-<h1 id="调试理论debug-theory">调试理论(debug theory)</h1>
-<ol type="1">
-<li><p>需求 -&gt; 设计 -&gt;<u> 代码 -&gt; Fault -&gt; Error -&gt;
-Failure</u></p></li>
-<li><p>两类 Bug</p>
-<ol type="1">
-<li>第一类
-bug，实现跟需求不符合：解决的唯一办法是“仔细多次阅读需求”，保证需求理解正确<br />
-少看几句话，可能需要调试好几天</li>
-<li>第二类 bug，代码实现跟需求不一致</li>
-</ol></li>
-<li><p>第二类 bug 中相关的三种“错误”</p>
-<ol type="1">
-<li>Fault - 有 bug 的代码, 例如数组访问越界</li>
-<li>Error - 程序运行时刻的非预期状态, 如某些内存的值被错误改写</li>
-<li>Failure - 可观测的致命结果, 如输出乱码/assert 失败/段错误</li>
-</ol>
+<h1 id="成功接入到-difftest编译通过">成功接入到 Difftest，编译通过</h1>
 <blockquote>
-<p>调试：从 Failure 回溯到 Fault 的过程，距离越远调试越困难</p>
-</blockquote></li>
-</ol>
-<h2 id="专业的调试方法">专业的调试方法</h2>
+<p>DIFFTEST 的比对对象是两个核，一个是用户设计的核，一个是参考核。
+比对原理是设计核在每提交一条指令的同时使参考核执行相同的指令，之后比对所有的通用寄存器和
+csr 寄存器的值，如果完全相同则认为设计核执行正确</p>
+</blockquote>
+<h2 id="mcu-接入-difftest-步骤">MCU 接入 Difftest 步骤</h2>
 <ol type="1">
-<li><p>添加断言(assert), <u><strong>把 Error 转变成
-Failure</strong></u>：尽可能通过 assert 让 Error 变成可以观测到的
-Failure</p>
+<li><p><strong><u>编译 NEMU 作为参考对象</u></strong>，即 Golden
+Model。NEMU 是一个功能完备的模拟器，支持 x86/mips32/riscv32/riscv64 等
+ISA</p>
 <ul>
-<li>把需求(specification)直接写出来, 运行时检查</li>
-<li>断言背后就是一个 if 语句，关键是条件</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!cond) &#123;</span><br><span class="line">    <span class="comment">// observable failure</span></span><br><span class="line">    <span class="built_in">report_and_exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>进行测试, <u><strong>把 Fault 转变成
-Error</strong></u>：尽可能地运行到 Fault 所在的代码</p>
-<ul>
-<li>单元测试(例如测试
-decoder)，与具体模块相关，一般自行编写单元测试</li>
-<li>集成测试(例如测试 mcu core)，一些测试用例、<u>🌟<a
-target="_blank" rel="noopener" href="https://github.com/riscv-software-src/riscv-tests">riscv-tests</a></u></li>
-<li>随机测试：随机产生测试用例
-<ul>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/ucb-bar/riscv-torture">riscv-torture</a></li>
-<li>好处：不用自己编写测试用例（编写测试用例很累）</li>
-<li>坏处：对于边界条件的覆盖不是很好，需要添加一些规则进行测试用例生成时的指导</li>
+<li>克隆 NEMU 的 GitHub 仓库到本地</li>
+<li>在编译 NEMU 之前需要指定想要模拟的 ISA（因为 NEMU 支持多种
+ISA）：<code>make menuconfig</code> <img
+src="https://s2.loli.net/2023/06/29/JiOsqDT7Gh8opdf.png" /></li>
+<li>在 NEMU 目录下使用<code>make</code>命令进行编译，得到
+nemu-interpreter-so 动态链接文件， 该文件会在 Difftest 编译时被引用</li>
 </ul></li>
-<li>🌟<a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest">Difftest</a>，<u>属于最高级的"step
-and compare"类型的验证方法</u></li>
-</ul></li>
-<li><p>用 lint 工具检查代码, <u><strong>暴露
-Fault</strong></u>：使用编译工具在对代码做静态分析，暴露一些可能存在的
-Fault</p>
-<ul>
-<li>-Wall, -Werror</li>
-<li>gcc，verilator，综合工具都可以对代码进行检测，报告 warning</li>
-<li>规范的芯片设计流程一定要清除工具报告的所有 warning</li>
-</ul></li>
-<li><p>编写可读, 可维护, 易验证的代码(不言自明,
-不言自证)：<u><strong>防御性编程，采用不容易出 Fault
-的编程方式</strong></u></p>
-<ul>
-<li>从源头消灭 bug</li>
-<li>相比于手动编写 rtl，使用工具生成 rtl 会更加避免错误的产生</li>
-</ul>
-<figure>
-<img src="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png"
-alt="defensive programming" />
-<figcaption aria-hidden="true">defensive programming</figcaption>
-</figure></li>
-</ol>
-<h1 id="difftset">Difftset</h1>
-<figure>
-<img src="https://s2.loli.net/2023/06/07/Uum3NIOfts6JAbd.png"
-alt="Difftest basic verification frame" />
-<figcaption aria-hidden="true">Difftest basic verification
-frame</figcaption>
-</figure>
+<li><p>在 <u><strong>MCU Core 中例化 Difftest 模块</strong></u></p>
 <ol type="1">
-<li><p>对 CPU 进行调试，可能的 Failure：结果错误、卡死</p></li>
-<li><p>对 CPU 进行调试的难点：</p>
-<ol type="1">
-<li><p>如何定位到<strong>第一条</strong>出错的指令、地方</p></li>
-<li><p>如果不能定位到第一条出错的指令，则：</p>
+<li><p>为 Difftest 测试创建如下的目录结构 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DifftestFramework</span><br><span class="line">├── bin</span><br><span class="line">├── nemu</span><br><span class="line">└── NOOP</span><br><span class="line">    ├── difftest</span><br><span class="line">    └── CPU</span><br><span class="line">       ├── Core.v</span><br><span class="line">       ├── Decode.v</span><br><span class="line">       ├── Execution.v</span><br><span class="line">       ├── InstFetch.v</span><br><span class="line">       ├── Instructions.v</span><br><span class="line">       ├── Ram.v</span><br><span class="line">       ├── RegFile.v</span><br><span class="line">       └── SimTop.v</span><br></pre></td></tr></table></figure></p>
 <ul>
-<li>最开始的 Failure 可能发生扩散，导致后续更大的 Failure</li>
-<li>最后反推第一条 Failure 十分困难</li>
-</ul>
+<li>bin: 测试文件</li>
+<li>nemu: 指令集模拟器，用于作为比较的 golden model</li>
+<li>difftest: 香山团队提供的 difftest 框架</li>
+<li>CPU: 存放 MCU_core 实现及 SimTop
+<ul>
+<li>Core.v: MCU_core
+文件，该文件里例化了各个流水线部件、<strong>difftest
+里的组件</strong>(将对应的信号传递给 difftest)</li>
+<li>SimTop.v：difftest 框架默认的顶层文件，在这个文件里需要例化
+MCU_core</li>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>在 MCU_core 里例化各级流水线模块以及 Difftest 模块</p>
 <blockquote>
-<p>思考：能否在每一条指令后面增加一个 assert，这样任何一条指令如果产生了
-Error， 都可以在第一时间被暴露为 failure，从而可以捕捉到第一条导致
-Failure 的指令</p>
-</blockquote></li>
-</ol></li>
-<li><p>assert 时应该检查什么？ 电路视角的计算机 = 组合逻辑电路 +
-时序逻辑电路 = 一个巨大状态机</p>
+<p>数据流传递方向可简单地认为是
+<code>MCU_core.v</code>-&gt;<code>difftest.v</code>-&gt;<code>interface.h</code>-&gt;<code>difftest.cpp</code></p>
+</blockquote>
+<ul>
+<li>difftest.v 中定义了所有 dpic 相关的 verilog module 信息， 这些
+module 中会调用 c 函数用来传输信号。这些 module
+会被设计核实例化用来传输信号。</li>
+<li>mycpu_top.v 中实例化了 difftest.v 中定义的 module。</li>
+<li>interface.h 是 c 函数的实现，c 函数将设计核的信号赋值给 difftest
+中的变量。</li>
+</ul>
+<p><u>有两种方法可以将以 verilog 编写的 MCU_core 链接入 Difftest
+框架</u>：</p>
 <ol type="1">
-<li>我们可以检查计算机的状态!</li>
-<li>状态 = 时序逻辑电路 = <strong><u>寄存器 + PC +
-内存</u></strong></li>
-</ol></li>
-<li><p>如何知道 CPU 正确的状态？</p>
-<ol type="1">
-<li>借鉴软件工程中 Difftest(differential testing)的思想</li>
-<li>核心思想: 对于根据同一规范的两种实现, 给定相同的有定义的输入,
-它们的行为应当一致</li>
-<li>回到处理器设计: 对于根据 riscv 手册的两种实现, 给定相同的正确程序,
-它们的状态变化应当一致</li>
-<li>其中一种实现是我们设计的
-CPU、另一种实现选择一种<strong>简单的模拟机</strong>就可以了</li>
-</ol></li>
-<li><p>与模拟器进行 Difftest</p>
-<ol type="1">
-<li>选择一个模拟器作为参考(REF): QEMU, Spike, NEMU</li>
-<li>为模拟器添加如下的 API： <img
-src="https://s2.loli.net/2023/06/07/QOnc4MG1vqJNLi3.png"
-alt="simulator API" /></li>
-<li>让仿真框架可以获得 CPU 的状态：寄存器 + PC + 内存 + 提交的指令数
-<img src="https://s2.loli.net/2023/06/07/NltaFxfTmCyzwLS.png"
-alt="Difftest process" /></li>
-<li>对模拟器的状态跟 CPU 状态进行比较</li>
-</ol></li>
-<li><p>验证普通指令</p>
-<ol type="1">
-<li>处理器将提交指令数、寄存器堆状态、PC 提交给 Difftest</li>
-<li>模拟器执行相同数量的指令</li>
-<li>比较处理器和模拟器的寄存器堆状态、PC</li>
+<li>参考龙芯团队<a
+target="_blank" rel="noopener" href="https://chiplab.readthedocs.io/zh/latest/Simulation/difftest.html">chiplab
+开源项目中接入 Difftest</a> 的文档。
+<ul>
+<li>龙芯团队采用的是 verilog 来编写其 SoC</li>
+<li>处理器支持的指令集其 longarch，因此他们重构了 NEMU 以支持 longarch
+ISA</li>
+<li>他们接入 difftest 时直接有现成的 difftest.v 文件可以例化</li>
+<li>其给出的 Difftest Demo 可以在服务器上克隆下来并且跑通</li>
+</ul></li>
+<li>参考一生一芯团队给出的 Difftest 相关教程、NEMU 相关教程
+<ul>
+<li>YSYX 团队最先提出在处理器设计中引入 Difftest 框架</li>
+<li>YXYS 团队给出了 NEMU、以及 Difftest 的<a
+target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/0.6.html#git-usage">源码解析</a></li>
+<li>目前 YSYX 团队文档多以 Chisel 来写 Difftest 以及 SoC，其接入 YSYX
+框架的原理是： 先在 Chisel 语言下将处理器核跟 Difftest 模块链接，再将
+Chisel 编译成 Verilog， 在 Verilog 里直接就实现了 Difftest
+模块的例化。</li>
+<li>若需要在 YSYX 的基础上进行，我们可以先得到其 Verilog 文件，<br />
+再接入 MCU_core:
+<code>mill playground.runMain CPU.rv64_1stage.u_simtop</code></li>
+</ul></li>
 </ol>
 <p><img
-src="https://s2.loli.net/2023/06/07/AlNCBKkZj1Y8wOT.png" /></p></li>
-<li><p>验证特殊情况下的指令</p>
+src="https://s2.loli.net/2023/06/29/JTnzN795uOwBWvQ.png" /></p></li>
+<li><p>在 <strong><u>SimTop.v 里例化 MCU_core</u></strong>，然后通过
+Difftest 的 Makefile 文件编译整个工程，可以得到 emu 可执行文件</p>
 <ol type="1">
-<li>模拟器无法仅靠自己在一些行为上与正确的处理器<u><strong>对齐</strong></u></li>
-<li>无法依靠模拟器直接验证处理器的行为，需要做额外的处理(手动对齐)</li>
-<li>MMIO(memory mapped IO)：
-<ul>
-<li>模拟器不能模拟所有的外部设备，模拟器无法得知这些 load 指令的正确结果
-<img src="https://s2.loli.net/2023/06/07/mFVX7jUxn8KPIgY.png" /></li>
-<li>解决方法：处理器识别出这样的访存指令、将其结果复制到模拟器中、跳过该指令的比较
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (dut.commit[i].skip) &#123;</span><br><span class="line">   proxy-&gt;get_regs(ref_regs_ptr);</span><br><span class="line">   ref.csr.this_pc += dut.commit[i].isRVC ? <span class="number">2</span> : <span class="number">4</span>;</span><br><span class="line">   <span class="keyword">if</span> (dut.commit[i].wen &amp;&amp; dut.commit[i].wdest != <span class="number">0</span>) &#123;</span><br><span class="line">       ref_regs_ptr[dut.commit[i].wdest] = dut.commit[i].wdata;</span><br><span class="line">   &#125;</span><br><span class="line">   proxy-&gt;set_regs(ref_regs_ptr); <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li>中断处理: 处理器检测到中断、处理器传出中断信息,
-模拟器进入相同的处理流程 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (dut.event.interrupt) &#123;</span><br><span class="line">    dut.csr.this_pc = dut.event.exceptionPC; do_interrupt();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(dut.event.exception) &#123;</span><br><span class="line">    dut.csr.this_pc = dut.event.exceptionPC; do_exception();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 正常的处理流程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Difftest 框架规定必须在 <strong>SimTop</strong> 文件里例化
+MCU_core，因为 Difftest 的 Makefile 里写死了</li>
+<li>Difftest 的 Makefile 编译会首先将 SimTop.v
+编译成<code>VSimTop.h</code>, <code>VSimTop.cpp</code>等文件，
+供后续编译 C++文件调用</li>
+<li>Difftest 编译 emu 文件的时候，会引用 VSimTop 等文件以及
+nemu-interpreter-so 文件、也会载入 bin 文件以初始化 I-Memory.</li>
 </ol></li>
-<li><p>Difftest 的优点</p>
-<ol type="1">
-<li>本质：在线指令级验证方法
-<ul>
-<li>在线：边跑程序边验证</li>
-<li>指令级：对每一条指令功能进行验证</li>
-</ul></li>
-<li>支持把任意程序转化为<em>指令级别的测试</em></li>
-<li>支持<em>不会结束的程序</em></li>
-<li>不用提前知道程序运行的结果：对比的是指令执行的行为,
-而不是程序的语义</li>
-<li>riscv-torture 是离线验证，基于比较 signature，没有上述 Difftest
-的优点</li>
-</ol></li>
-<li><p>为什么不自行维护模拟器，而是使用通用的模拟器？</p>
-<ol type="1">
-<li>现如今，处理器设计时更新迭代十分的迅速，在这种情况下要维护每一版处理器微架构对应的模拟器，
-一方面代码工作量很大、另一方面不满足敏捷开发的需求。</li>
-<li>因此，如果要求处理器设计满足 riscv
-手册的规范，我们只需要保证处理器跟模拟器在指令级层面的一致性即可，
-具体表现就是每一条指令执行之后，对应的“RF, CSR, PC 和内存”都一致。</li>
-</ol></li>
-<li><p>为什么采用 NEME 作为模拟器</p>
-<ol type="1">
-<li>代码复杂度：<code>NEMU &lt; Spike &lt;&lt; QEMU</code></li>
-<li>运行速度快 <img
-src="https://s2.loli.net/2023/06/07/EOIRelTfqA2MtWQ.png" /></li>
-<li>接口 API 提供</li>
-</ol></li>
-<li><p>Difftest 验证通过的标志</p>
-<ol type="1">
-<li>通过 Difftest 框架，能够运行结束指定的程序，不报错</li>
-<li>通过 Difftest
-框架，执行相当数量的随机指令流（几亿条）、或者执行不会结束的程序一段足够长的时间</li>
 </ol></li>
 </ol>
-<h1 id="接入-difftest-框架">接入 Difftest 框架</h1>
-<ol type="1">
-<li><p>为 Difftest 提供如下的目录结构： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line"> ├── build</span><br><span class="line"> │   └── SimTop.v // 处理器 verilog 源代码</span><br><span class="line"> ├── Difftest // Difftest 仓库, 可以作为 submodule 引入</span><br><span class="line"> └── ......</span><br></pre></td></tr></table></figure></p></li>
-<li><p>配置 NEMU_HOME，Difftest 默认使用 NEMU 作为对比的模拟器</p></li>
-<li><p>在设计中将关键信号传递给 Difftest 框架</p>
-<ol type="1">
-<li>Difftest 采用 DPI-C 来将仿真中的信号传递到
-Difftest，框架中在仿真程序执行的过程中会调用 DPI-C 函数, 将 Difftest
-感兴趣的信号写入到对应的结构体中.</li>
-<li>需要传递的信息的最小子集包括: instrCommit, IntRegState,
-CSRState</li>
-</ol>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Difftest</span>._</span><br><span class="line"> <span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">WBU</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (!env.<span class="type">FPGAPlatform</span>) &#123; <span class="comment">// 只有在仿真时才需要 Difftest 的 module</span></span><br><span class="line">     <span class="keyword">val</span> <span class="type">Difftest</span> = <span class="type">Module</span>(<span class="keyword">new</span> <span class="type">DifftestArchEvent</span>)</span><br><span class="line">     <span class="type">Difftest</span>.io.clock := clock</span><br><span class="line">     <span class="comment">// ......</span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>注意：乱序处理器在 commit 的时候、顺序处理器在 write back
-的时候将信息传递给 Difftest 框架 <img
-src="https://s2.loli.net/2023/06/07/l1hs4mLfeiYN5IJ.png"
-alt="transfer data to Difftest at WB" /></li>
-<li>运行仿真，在线验证:
-<code>./build/emu -b 0 -e 0 -i ./ready-to-run/coremark-2-iteration.bin</code>
-<img src="https://s2.loli.net/2023/06/07/RPvWopz4nrOIJ2V.png" /></li>
-</ol></li>
-</ol>
-<h2 id="目前测试环境搭建情况">目前测试环境搭建情况</h2>
-<ol type="1">
-<li>riscv-tests: 基本完成了 riscv-tests 的测试环境搭建
-<ul>
-<li>克隆了官方的测试仓库，得到了对应的测试汇编代码</li>
-<li>能够选择官方的测试文件、自己写的测试文件，进行编译得到机器码、反汇编文件</li>
-<li>对流水线中跟压缩指令相关的模块进行了更改，在 top.v
-中对更改后的流水线进行了连线、测试通过(目前流水线支持压缩指令)</li>
-<li>top_tb 里面已经配置好了读入机器码的接口，可以直接加载到 IF 的
-I-Memory 中</li>
-<li>可以由 Makefile 完成汇编文件的编译、rtl
-文件的编译、仿真、波形的展示</li>
-</ul></li>
-<li>difftest：主要完成了相关原理的调研，具体如何使用还没有掌握
-<ul>
-<li>verilator：difftest 使用 verilator 作为编译仿真的工具，其 testbench
-不是 verilog 文件，而是 C++文件</li>
-<li>nemu：difftest 使用的模拟器是南大提供的
-nemu，目前对于其如何使用、其开放的 API 还不懂</li>
-<li>difftest 框架：官方文档里说了 difftest 可以支持 Chisel 和 Verilog
-语言，但是在其 GitHub 里，只找到 Chisel 相关的源码</li>
-</ul></li>
-</ol>
+<h1 id="运行不通过程序-abort">运行不通过，程序 abort</h1>
 <figure>
-<img src="https://s2.loli.net/2023/06/08/ujJQh4XOVsqlGzx.png"
-alt="Ask the senior questions" />
-<figcaption aria-hidden="true">Ask the senior questions</figcaption>
+<img src="https://s2.loli.net/2023/07/01/5cs8iLybhG2EkKN.png"
+alt="image-20230701082440062" />
+<figcaption aria-hidden="true">image-20230701082440062</figcaption>
 </figure>
-<h1 id="参考资料">参考资料</h1>
+<p>过去一周按照 YSYX 的 Difftest 测试框架，首先编译 Chisel 文件得到了
+Verilog 文件，然后在 VSimTop.v 文件里，接入了我们的 MCU_core；
+然后成功编译出了 emu 可执行文件，但是<strong>在执行该 emu
+文件的时候，程序并不能正确运行</strong></p>
+<p>经过分析觉得可能的原因有如下两点：</p>
 <ol type="1">
-<li><a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/usage.md">Difftest:
-detailed usage (Chinese)</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/example-xiangshan.md">Example:
-Difftest in XiangShan project (Chinese)</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/example-nutshell.md">Example:
-Difftest in NutShell project (Chinese)</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/crvf2019/crvf2019.github.io">crvf2019:
-The First China RISC-V Forum</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/XiangShan-doc">香山的官方文档仓库</a></li>
+<li><p>SoC Core 结构不同，我们的 I-Memory 是放在 IF 内部的， Difftest
+demo 里的 SoC 其 I-Memory 是放在 Core 外面，通过 bus 读取指令的 <img
+src="https://s2.loli.net/2023/06/30/RE5kzTPf7BGt2iO.png" /></p></li>
+<li><p>I-Memory 架构不同，我们是 2Bank，demo 是 1-bank， 因此加载 bin
+文件的逻辑不同（NEMU 通过 xx 函数载入 bin 文件到其内存中）</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/01/8Nzq52hxLsHiEPG.png"
+alt="image-20230701083353042" />
+<figcaption aria-hidden="true">image-20230701083353042</figcaption>
+</figure>
+<p>NEMU 加载镜像的过程如下：</p>
+<ul>
+<li><p>NMEU 从<code>init_monitor</code>这个函数启动，在该函数内部：
+初始化一些 Log 信息，调调用 <code>init_mem</code> 函数、用
+<code>init_isa</code> 函数、调用 <code>load_img</code> 函数</p></li>
+<li><p>init_mem 函数主要负责加载默认的镜像文件到 I-Memory NEMU 的
+I-Memory 有一块数组来表示，init_mem
+函数主要的功能是给该数组赋值随机数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// paddr.c</span></span><br><span class="line"><span class="type">static</span> <span class="type">uint8_t</span> pmem[CONFIG_MSIZE] PG_ALIGN = &#123;&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_mem</span><span class="params">()</span> &#123;</span><br><span class="line">     </span><br><span class="line">...</span><br><span class="line">  srand(time(<span class="number">0</span>));</span><br><span class="line">  <span class="type">uint32_t</span> *p = (<span class="type">uint32_t</span> *)pmem;</span><br><span class="line">  <span class="type">int</span> i;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; (<span class="type">int</span>) (MEMORY_SIZE / <span class="keyword">sizeof</span>(p[<span class="number">0</span>])); i ++) &#123;</span><br><span class="line">    p[i] = rand();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>init_isa 函数主要负责载入默认镜像文件到 NEMU，并且初始化 pc 跟 x0
+寄存器 <img
+src="https://s2.loli.net/2023/06/29/WeSfnj91rPyiZXu.png" /></p></li>
+<li><p>load_img 函数的主要功能是将镜像文件载入到 I-Memory 启示位置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// image_laoder.c</span></span><br><span class="line"><span class="type">long</span> <span class="title function_">load_img</span><span class="params">(<span class="type">char</span>* img_name, <span class="type">char</span> *which_img, <span class="type">uint64_t</span> load_start, <span class="type">size_t</span> img_size)</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    FILE *fp = fopen(loading_img, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    Assert(fp, <span class="string">&quot;Can not open &#x27;%s&#x27;&quot;</span>, loading_img);</span><br><span class="line"></span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_END);</span><br><span class="line">    size = ftell(fp);</span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">    <span class="keyword">if</span> (img_size != <span class="number">0</span> &amp;&amp; (size &gt; img_size)) &#123;</span><br><span class="line">     Log(<span class="string">&quot;Warning: size is larger than img_size(upper limit), please check if code is missing. size:%lx img_size:%lx&quot;</span>, size, img_size);</span><br><span class="line">     size = img_size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ret = fread(guest_to_host(load_start), size, <span class="number">1</span>, fp);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// emu.cpp</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(img + (<span class="built_in">strlen</span>(img) - <span class="number">4</span>), <span class="string">&quot;.bin&quot;</span>)) &#123;  <span class="comment">// file extension: .bin</span></span><br><span class="line">      FILE *fp = fopen(img, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">&quot;Can not open &#x27;%s&#x27;\n&quot;</span>, img);</span><br><span class="line">          assert(<span class="number">0</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      fseek(fp, <span class="number">0</span>, SEEK_END);</span><br><span class="line">      img_size = ftell(fp);</span><br><span class="line">      <span class="keyword">if</span> (img_size &gt; EMU_RAM_SIZE) &#123;</span><br><span class="line">          img_size = EMU_RAM_SIZE;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      fseek(fp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">      ret = fread(ram, img_size, <span class="number">1</span>, fp);</span><br><span class="line"></span><br><span class="line">      assert(ret == <span class="number">1</span>);</span><br><span class="line">      fclose(fp);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>DUT 加载镜像的过程如下：</p>
+<ul>
+<li><p>Emulator 构造函数会调用<code>init_mem</code>函数</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/01/7wnKtoasHJedq6G.png"
+alt="image-20230630175159241" />
+<figcaption aria-hidden="true">image-20230630175159241</figcaption>
+</figure></li>
+<li><p><code>init_ram</code>函数会把 image bin
+文件内容拷贝到<code>ram</code>这个指针所指代的地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ram.cpp</span></span><br><span class="line"><span class="type">static</span> <span class="type">uint64_t</span> *ram;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_ram</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *img)</span> &#123;</span><br><span class="line">  assert(img != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;The image is %s\n&quot;</span>, img);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialize memory using Linux mmap</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Using simulated %luMB RAM\n&quot;</span>, EMU_RAM_SIZE / (<span class="number">1024</span> * <span class="number">1024</span>));</span><br><span class="line">  ram = (<span class="type">uint64_t</span> *)mmap(<span class="literal">NULL</span>, EMU_RAM_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">if</span> (ram == (<span class="type">uint64_t</span> *)MAP_FAILED) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Cound not mmap 0x%lx bytes\n&quot;</span>, EMU_RAM_SIZE);</span><br><span class="line">    assert(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>ram.v 文件会通过 DPI-C 函数在访问 ram
+指针所指的这块地址，实现<code>dut</code>读取指令</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ram.v</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> <span class="keyword">void</span> ram_write_helper</span><br><span class="line">(</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">longint</span>    wIdx,</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">longint</span>    wdata,</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">longint</span>    wmask,</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">bit</span>        wen</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> <span class="keyword">longint</span> ram_read_helper</span><br><span class="line">(</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">bit</span>        en,</span><br><span class="line">  <span class="keyword">input</span>  <span class="keyword">longint</span>    rIdx</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> RAMHelper(</span><br><span class="line">  <span class="keyword">input</span>         clk,</span><br><span class="line">  <span class="keyword">input</span>         en,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">63</span>:<span class="number">0</span>] rIdx,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">63</span>:<span class="number">0</span>] rdata,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">63</span>:<span class="number">0</span>] wIdx,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">63</span>:<span class="number">0</span>] wdata,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">63</span>:<span class="number">0</span>] wmask,</span><br><span class="line">  <span class="keyword">input</span>         wen</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">assign</span> rdata = ram_read_helper(en, rIdx); <span class="comment">// 通过DPI-C读取指令</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">    ram_write_helper(wIdx, wdata, wmask, wen &amp;&amp; en); <span class="comment">// 通过DPI-C写出指令</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>如果需要完成 MCU_core 的 I-Memory 初始化工作，需要“在 IF Stage 的
+I-Memory 模块中添加 DPI-C 接口”，“更改 ram.cpp 文件里面的 init_mem
+函数，以支持 2-bank ITCM”</p>
+</blockquote></li>
 </ol>
-<div style="page-break-after: always;">
-
-</div>
-<p><img src="https://s2.loli.net/2023/06/07/7Q1t9b4iwvMhZBl.png" /></p>
+<h1 id="下周计划">下周计划</h1>
+<ol type="1">
+<li>按照上述问题原因，修改<code>ram.cpp</code>里加载指令到I-Memory里面的函数<code>init_ram</code></li>
+<li>跑通difftest测试框架</li>
+<li>使用difftest框架测试riscv-tests指令集</li>
+</ol>
 
     </div>
 
@@ -591,13 +492,13 @@ target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/XiangShan-
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">332k</span>
+    <span title="站点总字数">337k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:02</span>
+    <span title="站点阅读时长">5:06</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
