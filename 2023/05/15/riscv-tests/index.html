@@ -32,8 +32,13 @@
 <meta property="og:image" content="https://s2.loli.net/2023/07/01/5cs8iLybhG2EkKN.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/01/8Nzq52hxLsHiEPG.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/01/7wnKtoasHJedq6G.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/typora/image-20230707211721928.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/adIbS1DR5uxBA4r.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/hjYRv8Ps32GOZTV.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/QD8nlf1BTNMxYGo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/nmXbVy69HxjOtwJ.png">
 <meta property="article:published_time" content="2023-05-15T07:30:47.000Z">
-<meta property="article:modified_time" content="2023-07-01T00:40:42.923Z">
+<meta property="article:modified_time" content="2023-07-15T01:24:15.394Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -152,7 +157,7 @@
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E9%AA%8C%E8%AF%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">处理器核验证的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#self-check"><span class="nav-number">1.1.</span> <span class="nav-text">Self Check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signature-comparison"><span class="nav-number">1.2.</span> <span class="nav-text">Signature Comparison</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trace-log-comparison"><span class="nav-number">1.3.</span> <span class="nav-text">Trace Log Comparison</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syncasync-step-and-compare"><span class="nav-number">1.4.</span> <span class="nav-text">Sync&#x2F;Async Step and Compare</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#risc-v-%E5%A4%84%E7%90%86%E5%99%A8%E9%AA%8C%E8%AF%81%E7%BB%84%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">RISC-V 处理器验证组建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8Btest-case-suite"><span class="nav-number">2.1.</span> <span class="nav-text">测试用例(Test Case Suite)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-tests"><span class="nav-number">2.1.1.</span> <span class="nav-text">riscv-tests</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-compliance"><span class="nav-number">2.1.2.</span> <span class="nav-text">riscv-compliance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#riscv-arch-test"><span class="nav-number">2.1.3.</span> <span class="nav-text">riscv-arch-test</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#imperas-test-suite"><span class="nav-number">2.1.4.</span> <span class="nav-text">🌟🌟🌟🌟imperas test suite</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%B5%81%E7%94%9F%E6%88%90%E5%99%A8instruction-stream-generators"><span class="nav-number">2.2.</span> <span class="nav-text">指令流生成器(Instruction
 Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E8%A6%86%E7%9B%96functional-coverage"><span class="nav-number">2.3.</span> <span class="nav-text">功能覆盖(Functional Coverage)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8Breference-model"><span class="nav-number">2.4.</span> <span class="nav-text">参考模型(reference model)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#soc-%E5%90%8E%E7%BB%AD%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">SoC 后续测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%80%A7%E9%AA%8C%E8%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">功能性验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%BF%E7%BA%A7%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">板级验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E9%9D%A2%E7%A7%AF%E5%8A%9F%E8%80%97"><span class="nav-number">3.3.</span> <span class="nav-text">时序、面积、功耗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#riscv-tests-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">4.</span> <span class="nav-text">riscv-tests 环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-verilog-%E7%BC%96%E5%86%99%E7%9A%84-risc-v-%E5%A4%84%E7%90%86%E5%99%A8%E6%8E%A5%E5%85%A5%E5%88%B0-difftest-%E6%A1%86%E6%9E%B6"><span class="nav-number">5.</span> <span class="nav-text">用 Verilog
-编写的 RISC-V 处理器接入到 Difftest 框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#difftest-%E6%8E%A5%E5%85%A5%E8%BF%87%E7%A8%8B%E5%AE%9E%E6%93%8D%E8%AE%B0%E5%BD%95"><span class="nav-number"></span> <span class="nav-text">Difftest 接入过程实操记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-%E6%8E%A5%E5%85%A5-difftest-%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.</span> <span class="nav-text">MCU 接入 Difftest 步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E4%B8%8D%E9%80%9A%E8%BF%87%E7%A8%8B%E5%BA%8F-abort"><span class="nav-number"></span> <span class="nav-text">运行不通过，程序 abort</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">1.</span> <span class="nav-text">References</span></a></li></ol></div>
+编写的 RISC-V 处理器接入到 Difftest 框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#difftest-%E6%8E%A5%E5%85%A5%E8%BF%87%E7%A8%8B%E5%AE%9E%E6%93%8D%E8%AE%B0%E5%BD%95"><span class="nav-number"></span> <span class="nav-text">Difftest 接入过程实操记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-%E6%8E%A5%E5%85%A5-difftest-%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.</span> <span class="nav-text">MCU 接入 Difftest 步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E4%B8%8D%E9%80%9A%E8%BF%87%E7%A8%8B%E5%BA%8F-abort"><span class="nav-number"></span> <span class="nav-text">运行不通过，程序 abort</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86mcu_core%E4%BB%8B%E5%85%A5difftest%E5%81%9A%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number"></span> <span class="nav-text">将MCU_Core介入Difftest做的修改</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BE%E5%BC%83%E4%BD%BF%E7%94%A8%E9%A6%99%E5%B1%B1%E5%AE%98%E6%96%B9%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%80%E6%96%B0%E7%9A%84difftest%E7%89%88%E6%9C%AC"><span class="nav-number">1.</span> <span class="nav-text">放弃使用香山官方提供的最新的Difftest版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5difftest%E6%A1%86%E6%9E%B6%E5%81%9A%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">接入Difftest框架做的修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu_core%E6%8E%A5%E5%85%A5difftest%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">MCU_Core接入Difftest结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">4.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -161,19 +166,19 @@ Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav
     <img class="site-author-image" itemprop="image" alt="FuJie"
       src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
   <p class="site-author-name" itemprop="name">FuJie</p>
-  <div class="site-description" itemprop="description">摆烂太久是会被收走天赋的</div>
+  <div class="site-description" itemprop="description">天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗</div>
 </div>
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -229,7 +234,7 @@ Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="摆烂太久是会被收走天赋的">
+      <meta itemprop="description" content="天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -256,7 +261,7 @@ Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-01 08:40:42" itemprop="dateModified" datetime="2023-07-01T08:40:42+08:00">2023-07-01</time>
+      <time title="修改时间：2023-07-15 09:24:15" itemprop="dateModified" datetime="2023-07-15T09:24:15+08:00">2023-07-15</time>
     </span>
 
   
@@ -266,14 +271,14 @@ Stream Generators)</span></a></li><li class="nav-item nav-level-3"><a class="nav
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>18k</span>
+      <span>22k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>17 分钟</span>
+      <span>20 分钟</span>
     </span>
 </div>
 
@@ -821,6 +826,96 @@ I-Memory 模块中添加 DPI-C 接口”，“更改 ram.cpp 文件里面的 ini
 函数，以支持 2-bank ITCM”</p>
 </blockquote></li>
 </ol>
+<h1
+id="将mcu_core介入difftest做的修改">将MCU_Core介入Difftest做的修改</h1>
+<h2
+id="放弃使用香山官方提供的最新的difftest版本">放弃使用香山官方提供的最新的Difftest版本</h2>
+<p>放弃使用最新版本Difftest的原因如下：</p>
+<ol type="1">
+<li>香山最新版本的Github仓库里Difftest只有Scala的版本，无法直接在Verilog中引用</li>
+<li>目前最新版本的Difftest<strong>过于复杂</strong>：它支持多核、Cache、Uart、Trap等模块，导致移植MCU_Core到最新版本的Difftest时，需要保证这些模块都真确连线，十分复杂。
+一开始尝试接入最新版本的Difftest，结果调试了一两天还是报错无法看到<em>有进展的结果</em>，因此预测将MCU_Core接入到最新版本的Difftest框架中将消耗很久的时间</li>
+<li>目前由于没有CSR模块，其实我们的MCU_Core的状态仅有<strong>“PC+Register”</strong>表征，因此Difftest框架只需要在指令提交之后比较PC跟Register即可。
+<u>Difftest核心思想：MCU_Core执行一条指令-&gt;Reference
+Model执行一条指令-&gt;比较二者的状态(PC + Register)</u></li>
+</ol>
+<blockquote>
+<p>因此选择了“石峰提供的Difftest”版本，这是他之前做YSYX时接入的Difftest，其实现的效果是：将他设计的单周期RISC-V处理器接入到Difftest框架中，比较其每次提交指令后，Register是否跟Reference
+Model相同，比较符合我们目前的测试需求，接入的难度相当于接入最新版本的Difftest也更加可控。</p>
+</blockquote>
+<h2 id="接入difftest框架做的修改">接入Difftest框架做的修改</h2>
+<figure>
+<img src="../../../../../../Pictures/typora/image-20230707211721928.png"
+alt="image-20230707211721928" />
+<figcaption aria-hidden="true">image-20230707211721928</figcaption>
+</figure>
+<p>为了将MCU_Core接入到Difftest框架，主要做了如下修改：</p>
+<ol type="1">
+<li><p>修改Verilog代码接入Difftest框架之后的Warning，主要包括代码中的“隐式变量声明、信号位宽不匹配、模块重定义”等Warning。因为Verilator相较于Iverilog对于语法检查更加严格一些。</p></li>
+<li><p>在top.v中增加接口，因为：</p>
+<ul>
+<li>Difftest框架需要知道MCU_Core的一些内部信号，如pc, instruction</li>
+<li>将一些重要的信号从top引出来，可以在Difftest的时候进行打印，方便判断</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mcu_core/top.v</span></span><br><span class="line"><span class="keyword">module</span> top(</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>        clk,</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>        resetn,</span><br><span class="line">    <span class="comment">// signals used by difftest</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] pc,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] instr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>        wb_en,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [ <span class="number">4</span>:<span class="number">0</span>] wb_idx,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] wb_data,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] id_instr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">20</span>:<span class="number">0</span>] op_code,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] src1,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] src2,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [ <span class="number">3</span>:<span class="number">0</span>] wb_src,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] alu_result</span><br><span class="line">    <span class="comment">// signals used by difftest</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// difftest/csrc/cpu_exec.c</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">execute</span><span class="params">(<span class="type">uint64_t</span> n)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (;n &gt; <span class="number">0</span>; n --) &#123;</span><br><span class="line">    g_nr_guest_inst ++;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Top: instr = 0x%x\n&quot;</span>, top-&gt;instr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ID Stage: id_instr=0x%x, opcode = %d, src1 = 0x%x, src2 = 0x%x, wb_src= %d\n&quot;</span>, top-&gt;id_instr, top-&gt;op_code, top-&gt;src1, top-&gt;src2, top-&gt;wb_src);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;EXE stage: alu_result = 0x%x\n&quot;</span>, top-&gt;alu_result);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;WB Stage: wb_en=%d, idx=%d, data=%x\n&quot;</span>, top-&gt;wb_en,</span><br><span class="line">           top-&gt;wb_idx, top-&gt;wb_data);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Difftest仿真输出</span></span><br><span class="line">Top: instr = 0x413</span><br><span class="line">ID Stage: id_instr=0x413, opcode = 1, src1 = 0x0, src2 = 0x0, wb_src= 1</span><br><span class="line">EXE stage: alu_result = 0x0</span><br><span class="line">WB Stage: wb_en=0, idx=0, data=0</span><br><span class="line">npc <span class="built_in">read</span> instr</span><br><span class="line">Read I-Memory: addr = 0x80000004, ins= 0x00009117</span><br><span class="line">NO.2-&gt; pc: 0x80000004, instr: 0x9117, asm: auipc        sp, 9</span><br><span class="line">NO.2-&gt; pc: 0x80000004, instr: 0x9117, asm: auipc        sp, 9</span><br><span class="line">C-&gt; pmem_read 80000000: 0x0</span><br><span class="line">Read I-Memory: addr = 0x80000000, ins= 0x00000413</span><br><span class="line">pmem_read_rtl: raddr = 0x80000000, rdata= 413</span><br></pre></td></tr></table></figure>
+<p>如上所示，我们在top的接口中定义了一些信号，我们在Difftest框架中就可以打印相应的信号值</p></li>
+<li><p>确定MCU_Core提交到difftest 的时机</p>
+<ul>
+<li>由于Reference
+Model是单周期的处理器，其每个Cycle就会提交一条指令；我们的MCU_Core是5级流水线处理器，第一条指令必须等到5个Cycle之后其结果才会写入到Register</li>
+<li>我们的MCU由于分支预测器的存在，可能会取一条指令，但是这条指令会被冲刷，因此其不会写入到Register</li>
+</ul>
+<p>可见<strong>MCU_Core中的指令，并不是每一个Cycle都会写入到Register，但是Reference
+Model一旦执行一条指令，则会在一个Cycle写入到Register</strong>，因此：</p>
+<ul>
+<li>MCU_Core必须告诉Difftest框架，其在某时刻写入到了Register</li>
+<li>Difftest框架在收到该信号之后，令Reference
+Model执行一步，并且将其结果写入到Register</li>
+</ul>
+<p>经过分析发现，我们的MCU_Core不论指令流是何种情况，其在写入Register的时候，都会有wb_en信号为高，因此<strong>我们在top中加入该信号，并且在Difftest中根据该信号来控制Reference
+Model执行和Difftest比较</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// difftest/csrc/cpu_exec.c</span></span><br><span class="line"><span class="comment">/* difftest begin */</span></span><br><span class="line">cpu.pc = top-&gt;pc; <span class="comment">// pc存入cpu结构体</span></span><br><span class="line">dump_gpr(); <span class="comment">// 寄存器值存入cpu结构体</span></span><br><span class="line"><span class="keyword">if</span>(top-&gt;wb_en)&#123; <span class="comment">// &lt;- 判断指令提交再进入Difftest</span></span><br><span class="line">    difftest_step(top-&gt;pc);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* difftest end */</span></span><br></pre></td></tr></table></figure></li>
+<li><p>在I-Memory中增加DPI-C函数实现I-Memory初始化</p>
+<ul>
+<li>不同于用verilog写的testbench，Difftest框架里初始化都是通过c函数来将编译好的二进制文件读入内存的。
+<ul>
+<li>在Difftest代码里，定义了一块内存<code>pmem</code>用于存储MCU_Core的指令</li>
+<li>通过load_img函数来初始化pmem，实现I-Memory的初始化；在verilog写的testbench中，我们是通过readmemh函数来读入二进制文件到内存的</li>
+<li>在verilog文件中，<strong>指令的读取是通过DPI-C函数，读取<code>pmem</code>对应地址的值</strong>；在verilog写的testbench中，指令的读取是直接通过<code>assign instr = i-memory[addr];</code>来实现的</li>
+</ul></li>
+</ul>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/adIbS1DR5uxBA4r.png"
+alt="image-20230707211024214" />
+<figcaption aria-hidden="true">image-20230707211024214</figcaption>
+</figure></li>
+<li><p>在Register中增加DPI-C函数将CPU的register传递给Difftest模块</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> <span class="keyword">void</span> set_gpr_ptr(<span class="keyword">input</span> <span class="keyword">logic</span> [<span class="number">63</span>:<span class="number">0</span>] a []); <span class="comment">// add DPI-C function</span></span><br><span class="line"><span class="keyword">module</span> regfile</span><br><span class="line">    (</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>                              clk_i,</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>                              resetn_i,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>    [REG_DATA_WIDTH-<span class="number">1</span> :<span class="number">0</span>]     rs1_data_o, <span class="comment">// rd1</span></span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">    );</span><br><span class="line">	<span class="comment">//.....</span></span><br><span class="line">    <span class="comment">// regfile其余部分均保持不变即可</span></span><br><span class="line">    <span class="comment">//.....</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> set_gpr_ptr(regfile_data); <span class="comment">// &lt;- 使用该DPI-C函数将mcu_core的register状态传递给Difftest模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/hjYRv8Ps32GOZTV.png"
+alt="image-20230707210809687" />
+<figcaption aria-hidden="true">image-20230707210809687</figcaption>
+</figure></li>
+</ol>
+<h2 id="mcu_core接入difftest结果">MCU_Core接入Difftest结果</h2>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/QD8nlf1BTNMxYGo.png"
+alt="image-20230707210706875" />
+<figcaption aria-hidden="true">image-20230707210706875</figcaption>
+</figure>
+<p>目前MCU_Core已经接入到了Difftest框架，Difftest检测到MCU_Core运行的结果跟Reference
+Model的结果不同，会报错，并且给出报错的信息，如上图所示。</p>
+<ol type="1">
+<li><p>后续会陆续根据Difftest的提示，陆续修改MCU_Core中的bug，直到通过所有的测试，达到如下图所示效果，出现<code>HIT GOOD TRAP</code>字样：</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/nmXbVy69HxjOtwJ.png"
+alt="image-20230707210602556" />
+<figcaption aria-hidden="true">image-20230707210602556</figcaption>
+</figure></li>
+<li><p>也会预先研究如何在Difftest中测试一些复杂事件的比较，例如Trap、CSR比较</p></li>
+</ol>
 <h2 id="references">References</h2>
 <ol type="1">
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/232088281">RISC-V 及 RISC-V
@@ -914,13 +1009,13 @@ documentation</a></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">337k</span>
+    <span title="站点总字数">356k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:06</span>
+    <span title="站点阅读时长">5:24</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
