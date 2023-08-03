@@ -39,12 +39,14 @@
 <meta property="og:image" content="https://s2.loli.net/2023/07/12/vE7Z2KzFRsWgcAL.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/27/2y8uST9NoA4f3CJ.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/27/ayvf7q5Zsjb24WB.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/XtVMlsZwGNq6Juj.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/uQ1PjDWF38kH6Ic.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/21/R5YbuGZrDVf6cgj.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/21/QPRkNrMflacEoAj.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/21/VCwrtB6vZhkdTNR.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/26/SfJrbcljPNHFBTR.png">
-<meta property="og:image" content="https://s2.loli.net/2023/07/26/oLqO8IsVh2ztwNT.png">
-<meta property="og:image" content="https://s2.loli.net/2023/07/26/yQ1WlAGuoBMskS7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/JwRvtHl2V1dYMZo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/xVch8pouNJ6RsCf.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/27/6r1gowdD5TSCKZ7.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/21/W8MKySYt6eAOnI1.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/25/PMqymGolJQxSETR.png">
@@ -54,7 +56,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/07/25/YszPN56nKEIgFdv.png">
 <meta property="og:image" content="https://s2.loli.net/2023/07/27/uc3dSQDjxvnhGAO.png">
 <meta property="article:published_time" content="2023-07-27T07:31:31.000Z">
-<meta property="article:modified_time" content="2023-07-28T09:12:45.766Z">
+<meta property="article:modified_time" content="2023-08-02T09:52:24.425Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="DIFFTEST">
@@ -176,7 +178,8 @@
 Difftest 版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5-difftest-%E6%A1%86%E6%9E%B6%E5%81%9A%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">接入 Difftest 框架做的修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu_core-%E6%8E%A5%E5%85%A5-difftest-%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">MCU_Core 接入 Difftest 结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E7%8E%B0%E5%92%8C%E4%BF%AE%E5%A4%8D%E7%9A%84-bug"><span class="nav-number">4.</span> <span class="nav-text">发现和修复的 bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9A%E8%BF%87%E7%9A%84-riscv-tests"><span class="nav-number">4.1.</span> <span class="nav-text">测试通过的 riscv-tests</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9A%E8%BF%87%E6%88%AA%E5%9B%BE"><span class="nav-number">4.1.1.</span> <span class="nav-text">测试通过截图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#immdiate-type"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">Immdiate-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#register-type"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">Register-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#branch-type"><span class="nav-number">4.1.1.3.</span> <span class="nav-text">Branch-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#memory-type"><span class="nav-number">4.1.1.4.</span> <span class="nav-text">Memory-Type</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132-bits%E7%9A%84reference-model"><span class="nav-number">5.</span> <span class="nav-text">编译32 bits的reference model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#q-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%8132-bits%E7%9A%84reference-model"><span class="nav-number">5.1.</span> <span class="nav-text">Q: 为什么需要32
 bits的reference model?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132bits-reference-model%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">编译32bits reference
 model遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%97reference-model%E5%AF%BC%E8%87%B4%E6%B5%8B%E8%AF%95%E4%B8%8D%E9%80%9A%E8%BF%87%E7%9A%84%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-number">5.3.</span> <span class="nav-text">受reference
-model导致测试不通过的测试集</span></a></li></ol></li></ol></div>
+model导致测试不通过的测试集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132%E7%89%88%E6%9C%AC%E7%9A%84spike%E4%BD%9C%E4%B8%BAreference-model"><span class="nav-number">5.4.</span> <span class="nav-text">编译32版本的spike作为reference
+model</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -280,7 +283,7 @@ model导致测试不通过的测试集</span></a></li></ol></li></ol></div>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-28 17:12:45" itemprop="dateModified" datetime="2023-07-28T17:12:45+08:00">2023-07-28</time>
+      <time title="修改时间：2023-08-02 17:52:24" itemprop="dateModified" datetime="2023-08-02T17:52:24+08:00">2023-08-02</time>
     </span>
 
   
@@ -290,7 +293,7 @@ model导致测试不通过的测试集</span></a></li></ol></li></ol></div>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>13k</span>
+      <span>14k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -632,14 +635,14 @@ alt="lw" /></li>
 <li>Immdiate Type
 <ul class="task-list">
 <li><label><input type="checkbox" checked="" />ADDI</label></li>
-<li><label><input type="checkbox" />SLTI</label></li>
-<li><label><input type="checkbox" />SLTIU</label></li>
+<li><label><input type="checkbox" checked="" />SLTI</label></li>
+<li><label><input type="checkbox" checked="" />SLTIU</label></li>
 <li><label><input type="checkbox" checked="" />XORI</label></li>
 <li><label><input type="checkbox" checked="" />ORI</label></li>
 <li><label><input type="checkbox" checked="" />ANDI</label></li>
 <li><label><input type="checkbox" checked="" />SLLI</label></li>
-<li><label><input type="checkbox" />SRLI</label></li>
-<li><label><input type="checkbox" />SRAI</label></li>
+<li><label><input type="checkbox" checked="" />SRLI</label></li>
+<li><label><input type="checkbox" checked="" />SRAI</label></li>
 <li><label><input type="checkbox" checked="" />AUIPC</label></li>
 <li><label><input type="checkbox" checked="" />LUI</label></li>
 </ul></li>
@@ -684,8 +687,10 @@ alt="lw" /></li>
 <ol type="1">
 <li>ADDI <img src="https://s2.loli.net/2023/07/27/ayvf7q5Zsjb24WB.png"
 alt="ADDI" /></li>
-<li>SLTI</li>
-<li>SLTIU</li>
+<li>SLTI <img src="https://s2.loli.net/2023/08/02/XtVMlsZwGNq6Juj.png"
+alt="SLTI" /></li>
+<li>SLTIU <img src="https://s2.loli.net/2023/08/02/uQ1PjDWF38kH6Ic.png"
+alt="SLTIU" /></li>
 <li>XORI <img src="https://s2.loli.net/2023/07/21/R5YbuGZrDVf6cgj.png"
 alt="XORI" /></li>
 <li>ORI <img src="https://s2.loli.net/2023/07/21/QPRkNrMflacEoAj.png"
@@ -694,9 +699,9 @@ alt="ORI" /></li>
 alt="ANDI" /></li>
 <li>SLLI <img src="https://s2.loli.net/2023/07/26/SfJrbcljPNHFBTR.png"
 alt="SLLI" /></li>
-<li>SRLI <img src="https://s2.loli.net/2023/07/26/oLqO8IsVh2ztwNT.png"
+<li>SRLI <img src="https://s2.loli.net/2023/08/02/JwRvtHl2V1dYMZo.png"
 alt="SRLI" /></li>
-<li>SRAI <img src="https://s2.loli.net/2023/07/26/yQ1WlAGuoBMskS7.png"
+<li>SRAI <img src="https://s2.loli.net/2023/08/02/xVch8pouNJ6RsCf.png"
 alt="SRAI" /></li>
 <li>AUIPC <img src="https://s2.loli.net/2023/07/27/6r1gowdD5TSCKZ7.png"
 alt="AUIPC" /></li>
@@ -808,6 +813,15 @@ model导致测试不通过的测试集</h2>
 <li>其他未测试过的指令集，也有可能受reference
 model原因导致测试不通过</li>
 </ol>
+<h2
+id="编译32版本的spike作为reference-model">编译32版本的spike作为reference
+model</h2>
+<p>参考了<a
+target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/2.4.html#differential-testing">一生一心第六期的讲义</a>里的makefile，通过<code>make -nB</code>可以看到每<code>make</code>执行的每一条指令；<br />
+回到之前的difftest
+框架中，参考上述的<code>make</code>指令即可编译出32bits的spike作为reference
+model</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nemu/tools/spike-diff</span><br><span class="line">make -s GUEST_ISA=riscv32 SHARE=1 ENGINE=interpreter <span class="comment"># set to build 32 bits version</span></span><br><span class="line"><span class="built_in">mkdir</span> -p repo/build</span><br><span class="line"><span class="built_in">cd</span> repo/build &amp;&amp; ../configure</span><br><span class="line">sed -i -e <span class="string">&#x27;s/-g -O2/-O2/&#x27;</span> repo/build/Makefile</span><br><span class="line">CFLAGS=<span class="string">&quot;-fvisibility=hidden&quot;</span> CXXFLAGS=<span class="string">&quot;-fvisibility=hidden&quot;</span></span><br><span class="line"><span class="built_in">cd</span> spike-diff &amp;&amp; make</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -864,13 +878,13 @@ model原因导致测试不通过</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">375k</span>
+    <span title="站点总字数">376k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:41</span>
+    <span title="站点阅读时长">5:42</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
