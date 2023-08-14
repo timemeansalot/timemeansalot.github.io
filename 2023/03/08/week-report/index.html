@@ -28,7 +28,7 @@
 <meta property="og:description" content="[TOC] 测试通过的 riscv-tests 本周通过的测试  jalr jal beq bne blt bge bltu bgeu mul  所有通过的测试  Immdiate Type  ADDI SLTI SLTIU XORI ORI ANDI SLLI SRLI SRAI AUIPC LUI  Register-Type  ADD SUB SLT SLTU XOR OR AND SLL">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-08T06:45:34.000Z">
-<meta property="article:modified_time" content="2023-08-10T15:31:48.516Z">
+<meta property="article:modified_time" content="2023-08-11T04:30:06.928Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -248,7 +248,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-10 23:31:48" itemprop="dateModified" datetime="2023-08-10T23:31:48+08:00">2023-08-10</time>
+      <time title="修改时间：2023-08-11 12:30:06" itemprop="dateModified" datetime="2023-08-11T12:30:06+08:00">2023-08-11</time>
     </span>
 
   
@@ -258,7 +258,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.3k</span>
+      <span>2.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -393,11 +393,9 @@
 <li><code>c</code>可以执行所有指令，直到所有指令执行完毕、或者出现错误</li>
 </ul></li>
 <li><p>回归测试（测试所有测试集）： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test_all</span><br></pre></td></tr></table></figure>
-所有测试集通过的情况会记录在<code>result.log</code>文件中</p>
-<blockquote>
-<p>PS:
-<u>测试一个测试集</u>跟<u>测试所有测试集</u>，需要编译的difftest有些许不同，因此在切换测试模式之前，需要先<code>make clean</code></p>
-</blockquote></li>
+所有测试集通过的情况会记录在<code>result.log</code>文件中 &gt; PS:
+<u>测试一个测试集</u>跟<u>测试所有测试集</u>，需要编译的difftest有些许不同，因此在切换测试模式之前，需要先<code>make clean</code></p></li>
+<li><p>查看波形：<code>make waveform</code>，即可通过gtkwave打开仿真生成的波形</p></li>
 </ol>
 <h1 id="本周发现和修复的-bug">本周发现和修复的 bug</h1>
 <ol type="1">
@@ -433,7 +431,7 @@ unit的代码里，通过<code>is_m</code>跟<code>fin</code>来判断乘法执�
 src="https://s2.loli.net/2023/08/10/SeQXcm3iGvxhZlP.png" /></li>
 <li>bug
 修复：将判断条件从<code>11</code>变成<code>10</code>，这样每个乘法都是4个周期
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(aluOperation_o [<span class="number">10</span>]|aluOperation_o [<span class="number">11</span>]|aluOperation_o [<span class="number">12</span>]|aluOperation_o [<span class="number">13</span>])</span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">      mul_state&lt;=mul_next_state; </span><br><span class="line">      <span class="keyword">if</span>(mul_state==<span class="number">2&#x27;b10</span>) <span class="comment">// bug fix</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(aluOperation_o [<span class="number">10</span>]|aluOperation_o [<span class="number">11</span>]|aluOperation_o [<span class="number">12</span>]|aluOperation_o [<span class="number">13</span>])</span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">      mul_state&lt;=mul_next_state;</span><br><span class="line">      <span class="keyword">if</span>(mul_state==<span class="number">2&#x27;b10</span>) <span class="comment">// bug fix</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
 </ul></li>
 </ol>
 
@@ -491,13 +489,13 @@ src="https://s2.loli.net/2023/08/10/SeQXcm3iGvxhZlP.png" /></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">393k</span>
+    <span title="站点总字数">394k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:57</span>
+    <span title="站点阅读时长">5:58</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
