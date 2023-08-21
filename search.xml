@@ -1017,6 +1017,163 @@ model</p>
 <u>测试一个测试集</u>跟<u>测试所有测试集</u>，需要编译的difftest有些许不同，因此在切换测试模式之前，需要先<code>make clean</code></li>
 <li>查看波形：<code>make waveform</code>，即可通过gtkwave打开仿真生成的波形</li>
 </ol>
+<h2 id="语法测试">语法测试</h2>
+<h3 id="spyglass检查语法错误">Spyglass检查语法错误</h3>
+<ol type="1">
+<li>Top文件里，变量先使用后定义导致的错误 <img
+src="https://s2.loli.net/2023/08/21/4yrnpiKZPGIfAov.png" /></li>
+<li>Difftest函数导致的报错 <img
+src="https://s2.loli.net/2023/08/21/hx7tBJq1vgPDcHu.png" /></li>
+<li>最终的测试报告 <img
+src="https://s2.loli.net/2023/08/21/XouUBkwxZa1f3MV.png" /></li>
+</ol>
+<h3 id="verilator检查语法错误">Verilator检查语法错误</h3>
+<ol type="1">
+<li><p>发现的语法错误</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">verilator --lint-only -Wall --top-module top top.</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://s2.loli.net/2023/08/21/bnEXsfLKIQ3taZz.png" /></p></li>
+<li><p>修复完top的<strong>变量名重定义</strong>之后，再次检测语法错误，报错的情况如下：</p>
+<ul>
+<li><p>文件名跟模块名不一致：1个，已解决</p></li>
+<li><p>pin没有连接：1个，已解决</p></li>
+<li><p>信号没有驱动：1个，已解决</p></li>
+<li><p>信号未被使用、信号某些比特未被使用：23个</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 8%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>相关信号名</th>
+<th>所属文件</th>
+<th>已解决</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instr</td>
+<td>top</td>
+<td>✅</td>
+<td>difftest相关信号、忽略</td>
+</tr>
+<tr class="even">
+<td>fin_d_o</td>
+<td>hazard</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>instrIllegal_e_o</td>
+<td>pipelineID</td>
+<td>✅</td>
+<td>预留给CSR Unit、忽略</td>
+</tr>
+<tr class="even">
+<td>sram_addr</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>I-memory只有1k，忽略</td>
+</tr>
+<tr class="odd">
+<td>ceb</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>web</td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>flush_delay</td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>alu_calculation_e_i</td>
+<td>pipelineMEM_withloadstore</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>clk</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># top name not match</span></span><br><span class="line">%Warning-DECLFILENAME: CSA32.v:5:8: Filename <span class="string">&#x27;CSA32&#x27;</span> does not match MODULE name: <span class="string">&#x27;CSA35&#x27;</span></span><br><span class="line">    5 | module CSA35(ain,bin,cin,sout,cout);</span><br><span class="line">      |        ^~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.014</span><br><span class="line">                       ... Use <span class="string">&quot;/* verilator lint_off DECLFILENAME */&quot;</span> and lint_on around <span class="built_in">source</span> to <span class="built_in">disable</span> this message.</span><br><span class="line"></span><br><span class="line"><span class="comment"># pin empty</span></span><br><span class="line">%Warning-PINCONNECTEMPTY: top.v:358:10: Cell pin connected by name with empty reference: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">  358 |         .mw_st                  (),</span><br><span class="line">      |          ^~~~~</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not driven</span></span><br><span class="line">%Warning-UNDRIVEN: hazard.v:26:26: Signal is not driven: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">                                 : ... In instance top.hu</span><br><span class="line">   26 | output fd_st,de_st,em_st,mw_st;</span><br><span class="line">      |                          ^~~~~</span><br><span class="line">                   pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Error: Exiting due to 26 warning(s)</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not used</span></span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:28:24: Bits of signal are not used: <span class="string">&#x27;instr&#x27;</span>[63:32]</span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   28 |     input  wire [63:0] instr,</span><br><span class="line">      |                        ^~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:87:13: Signal is not used: <span class="string">&#x27;fin_d_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   87 |     wire    fin_d_o;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:99:11: Signal is not used: <span class="string">&#x27;instrIllegal_e_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   99 |     wire  instrIllegal_e_o;</span><br><span class="line">      |           ^~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:32:16: Signal is not used: <span class="string">&#x27;sram_addr&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   32 |     wire [9:0] sram_addr;</span><br><span class="line">      |                ^~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:10: Signal is not used: <span class="string">&#x27;ceb&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |          ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:15: Signal is not used: <span class="string">&#x27;web&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |               ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:44:17: Signal is not used: <span class="string">&#x27;flush_delay&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   44 |     reg         flush_delay;</span><br><span class="line">      |                 ^~~~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineMEM_withloadstore.v:20:23: Bits of signal are not used: <span class="string">&#x27;alu_calculation_e_i&#x27;</span>[31:12]</span><br><span class="line">                                                        : ... In instance top.u_pipelineMEM_withloadstore</span><br><span class="line">   20 |     input wire [31:0] alu_calculation_e_i,</span><br><span class="line">      |                       ^~~~~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:14:23: Signal is not used: <span class="string">&#x27;clk&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   14 |     input wire        clk,</span><br><span class="line">      |                       ^~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:15:23: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   15 |     input wire        resetn,</span><br><span class="line">      |                       ^~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:33:13: Signal is not used: <span class="string">&#x27;ld_dst2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   33 | reg ld_dst1,ld_dst2;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:9: Signal is not used: <span class="string">&#x27;jd2&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |         ^~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:25: Signal is not used: <span class="string">&#x27;jd_b3&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |                         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:9: Signal is not used: <span class="string">&#x27;bptrt&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:21: Signal is not used: <span class="string">&#x27;bptnt1&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |                     ^~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:40:14: Signal is not used: <span class="string">&#x27;bnt2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   40 | reg bnt,bnt1,bnt2;</span><br><span class="line">      |              ^~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: extendingUnit.v:27:23: Bits of signal are not used: <span class="string">&#x27;instr_i&#x27;</span>[6:0]</span><br><span class="line">                                            : ... In instance top.u_pipelineID.u_extendingUnit</span><br><span class="line">   27 |     input wire [31:0] instr_i,</span><br><span class="line">      |                       ^~~~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: alu.v:14:11: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                  : ... In instance top.u_pipelineEXE.u_alu</span><br><span class="line">   14 | input clk,resetn;</span><br><span class="line">      |           ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: memory_block.v:9:16: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                          : ... In instance top.u_pipelineMEM_withloadstore.u_dmemory.u_memory_block3</span><br><span class="line">    9 |     input wire resetn,</span><br><span class="line">      |                ^~~~~~</span><br><span class="line">                       imemory.v:4:1: ... note: In file included from imemory.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:14:26: Signal is not used: <span class="string">&#x27;e_last&#x27;</span></span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   14 | input d_init, e_advance, e_last;</span><br><span class="line">      |                          ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:24:22: Bits of signal are not used: <span class="string">&#x27;sub3_pc&#x27;</span>[34]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   24 | wire [34:0] sub3_ps, sub3_pc, rem_sub3;</span><br><span class="line">      |                      ^~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:27:12: Bits of signal are not used: <span class="string">&#x27;rem&#x27;</span>[34:33]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   27 | reg [34:0] rem;</span><br><span class="line">      |            ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: multi16.v:15:69: Bits of signal are not used: <span class="string">&#x27;adder8&#x27;</span>[16]</span><br><span class="line">                                      : ... In instance top.u_pipelineEXE.u_alu.mul.m16</span><br><span class="line">   15 | wire [16:0] adder0,adder1,adder2,adder3,adder4,adder5,adder6,adder7,adder8;</span><br><span class="line">      |                                                                     ^~~~~~</span><br><span class="line">                       long_div.v:92:1: ... note: In file included from long_div.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br></pre></td></tr></table></figure></li>
+</ol>
 ]]></content>
       <tags>
         <tag>RISC-V</tag>
@@ -8197,6 +8354,156 @@ alt="image-20230318092145531" />
       </tags>
   </entry>
   <entry>
+    <title>付杰周报-20230815</title>
+    <url>/2023/03/08/week-report/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="测试通过的-riscv-tests">测试通过的 riscv-tests</h1>
+<h2 id="本周通过的测试">本周通过的测试</h2>
+<ol type="1">
+<li>mulhsu</li>
+<li>mulhu</li>
+<li>rem</li>
+<li>remu</li>
+<li>div</li>
+<li>divu</li>
+<li>mul</li>
+<li>mulh</li>
+<li>rvc</li>
+</ol>
+<h2 id="所有通过的测试">所有通过的测试</h2>
+<ol type="1">
+<li>Immdiate Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />ADDI</label></li>
+<li><label><input type="checkbox" checked="" />SLTI</label></li>
+<li><label><input type="checkbox" checked="" />SLTIU</label></li>
+<li><label><input type="checkbox" checked="" />XORI</label></li>
+<li><label><input type="checkbox" checked="" />ORI</label></li>
+<li><label><input type="checkbox" checked="" />ANDI</label></li>
+<li><label><input type="checkbox" checked="" />SLLI</label></li>
+<li><label><input type="checkbox" checked="" />SRLI</label></li>
+<li><label><input type="checkbox" checked="" />SRAI</label></li>
+<li><label><input type="checkbox" checked="" />AUIPC</label></li>
+<li><label><input type="checkbox" checked="" />LUI</label></li>
+</ul></li>
+<li>Register-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />ADD</label></li>
+<li><label><input type="checkbox" checked="" />SUB</label></li>
+<li><label><input type="checkbox" checked="" />SLT</label></li>
+<li><label><input type="checkbox" checked="" />SLTU</label></li>
+<li><label><input type="checkbox" checked="" />XOR</label></li>
+<li><label><input type="checkbox" checked="" />OR</label></li>
+<li><label><input type="checkbox" checked="" />AND</label></li>
+<li><label><input type="checkbox" checked="" />SLL</label></li>
+<li><label><input type="checkbox" checked="" />SRL</label></li>
+<li><label><input type="checkbox" checked="" />SRA</label></li>
+</ul></li>
+<li>Branch-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />JALR</label></li>
+<li><label><input type="checkbox" checked="" />JAL</label></li>
+<li><label><input type="checkbox" checked="" />BEQ</label></li>
+<li><label><input type="checkbox" checked="" />BNE</label></li>
+<li><label><input type="checkbox" checked="" />BLT</label></li>
+<li><label><input type="checkbox" checked="" />BGE</label></li>
+<li><label><input type="checkbox" checked="" />BLTU</label></li>
+<li><label><input type="checkbox" checked="" />BGEU</label></li>
+</ul></li>
+<li>Memory-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />LB</label></li>
+<li><label><input type="checkbox" checked="" />LH</label></li>
+<li><label><input type="checkbox" checked="" />LW</label></li>
+<li><label><input type="checkbox" checked="" />LBU</label></li>
+<li><label><input type="checkbox" checked="" />LHU</label></li>
+<li><label><input type="checkbox" checked="" />SB</label></li>
+<li><label><input type="checkbox" checked="" />SH</label></li>
+<li><label><input type="checkbox" checked="" />SW</label></li>
+</ul></li>
+<li>Multiple
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />DIV</label></li>
+<li><label><input type="checkbox" checked="" />DIVU</label></li>
+<li><label><input type="checkbox" checked="" />MUL</label></li>
+<li><label><input type="checkbox" checked="" />MULH</label></li>
+<li><label><input type="checkbox" checked="" />MULHSU</label></li>
+<li><label><input type="checkbox" checked="" />MULHU</label></li>
+<li><label><input type="checkbox" checked="" />REM</label></li>
+<li><label><input type="checkbox" checked="" />REMU</label></li>
+</ul></li>
+<li>Compressed
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />RVC</label></li>
+</ul></li>
+</ol>
+<h1 id="本周发现和修复的-bug">本周发现和修复的 bug</h1>
+<ol type="1">
+<li><p>乘法运算<code>mulh</code>错误，错误选择了低32bits结果</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：alu错误地选择了乘法器的结果，应该选择高32bits，但是选择了低32bits
+<img src="https://s2.loli.net/2023/08/11/51tApYiDzWBdG2b.png" /></li>
+<li>bug 修复：对于<code>mulh</code>,<code>mulhu</code>,
+<code>mulhsu</code>指令，需要选择乘法器高32bits结果 <figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="comment">// alu.v</span></span><br><span class="line"> <span class="keyword">assign</span> ALUout=  (&#123;<span class="number">32</span>&#123;sub_op|add_op&#125;&#125;&amp;add_ans[<span class="number">31</span>:<span class="number">0</span>])|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;rem_op|remu_op&#125;&#125;&amp;rem_ans)|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;div_op|divu_op&#125;&#125;&amp;div_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mul_op&#125;&#125;&amp;mul_low) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mulh_op|mulhsu_op|mulhu_op&#125;&#125;&amp;mul_high) | <span class="comment">// bug fix: choose msb, not lsb</span></span><br><span class="line">         (&#123;<span class="number">32</span>&#123;or_op|and_op|xor_op&#125;&#125;&amp;log_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sll_op|srl_op|sra_op&#125;&#125;&amp;sft_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sltu_op|slt_op&#125;&#125;&amp;&#123;<span class="number">31&#x27;b0</span>,add_ans[<span class="number">32</span>]&#125;);</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>alu判断乘法指令类型错误</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：alu错误的判断了<code>mulhu</code>跟<code>mulhsu</code>，把二者搞反了
+<img src="https://s2.loli.net/2023/08/11/J8up1q76ohKHRBf.png" /></li>
+<li>bug 修复：将判断逻辑替换即可 <figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/alu<span class="variable">.v</span> b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> index c86bb04.<span class="variable">.29cd15a</span> <span class="number">100644</span></span><br><span class="line"> --- a/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> +++ b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> @@ -<span class="number">41</span>,<span class="number">8</span> +<span class="number">41</span>,<span class="number">8</span> @@ <span class="keyword">assign</span> slt_op=		ALUop[<span class="number">8</span>];</span><br><span class="line">  <span class="keyword">assign</span> sltu_op= 	ALUop[<span class="number">9</span>];</span><br><span class="line">  <span class="keyword">assign</span> mul_op=		ALUop[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">assign</span> mulh_op= 	ALUop[<span class="number">11</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">13</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">13</span>];</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法多计算了一个周期</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：乘法本来应该在四个周期内计算出结果，但是目前乘法由于其state在ID计算，再通过pipeline
+register传递给EXE stage， 导致乘法实际上需要5个周期才可以得到对应的结果
+<img src="https://s2.loli.net/2023/08/14/kQGqA64f9TXx1tH.png" /></li>
+<li>bug
+修复：修改<code>multi</code>乘法的时序，将结果提前一个周期计算出来
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi<span class="variable">.v</span> b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  index <span class="number">57</span>fa64b.<span class="variable">.ce645f0</span> <span class="number">100644</span></span><br><span class="line">  --- a/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +++ b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +<span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] real_calculation;</span><br><span class="line">  +<span class="keyword">assign</span> real_calculation = (&#123;<span class="number">64</span>&#123;state==<span class="number">2&#x27;b11</span>&#125;&#125; &amp; &#123;ans_temp+&#123;mul16ans,<span class="number">32&#x27;b0</span>&#125;&#125;);</span><br><span class="line">  -<span class="keyword">assign</span> prod=ans_temp;</span><br><span class="line">  +<span class="keyword">assign</span> prod=real_calculation;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>ID Stage write_back_enable 没有考虑stall的情况</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：ID
+Stage在执行乘法指令时，应该只在乘法第四个周期才将write_back_enable拉高；
+但是目前ID Stage在前三个周期都将write_back_enable拉高了；
+这样会导致hazard unit错误地计算bypass信号 <img
+src="https://s2.loli.net/2023/08/14/drBTjoSpCXbWKnz.png" /></li>
+<li>bug 修复：在ID
+Stage计算write_back_enable的时候，需要判断乘法、除法指令的周期，只在最后一个周期拉高
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">diff --git a/src/verification/vsrc/pipelineID<span class="variable">.v</span> b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+    <span class="keyword">wire</span>        wb_en_mul_div;</span><br><span class="line">+    <span class="comment">// write back enable with mul and div operation</span></span><br><span class="line">+    <span class="keyword">assign</span> wb_en_mul_div = (~is_m_d_o &amp; ~is_d_d_o &amp; wb_en_o)|</span><br><span class="line">+                           ( is_m_d_o &amp; (mul_state==<span class="number">2&#x27;b11</span>))|</span><br><span class="line">+                           ( is_m_d_o &amp; div_last);</span><br><span class="line">-            reg_write_en_d_o  &lt;= wb_en_o;</span><br><span class="line">+            reg_write_en_d_o  &lt;= wb_en_mul_div;</span><br><span class="line">-    <span class="keyword">assign</span> dst_en_d_o=wb_en_o;</span><br><span class="line">+    <span class="keyword">assign</span> dst_en_d_o=wb_en_mul_div;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法器计算符号的时候，没有考虑乘数为零的情况</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：乘法器计算的时候，如果有一个乘数为零，其结果的符号位应该为零，
+但是当前乘法器在计算符号位的时候，没有考虑乘数为零的情况，导致符号位计算错误
+<img src="https://s2.loli.net/2023/08/14/TdfOKtmP6jwe18i.png" /></li>
+<li>bug
+修复：在计算符号位的时候，判断乘数，如果有乘数为零，则强制符号位为零
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi16<span class="variable">.v</span> b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">@@ -<span class="number">310</span>,<span class="number">10</span> +<span class="number">310</span>,<span class="number">9</span> @@ half_adder 	ha30_2_0(<span class="variable">.ain</span>(c29_1_0), <span class="variable">.bin</span>(s30_1_0), <span class="variable">.sout</span>(ans1[<span class="number">30</span>]), <span class="variable">.cout</span>(c30_2_</span><br><span class="line">-<span class="keyword">assign</span> sign_out=(ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">+<span class="keyword">assign</span> sign_out = (ain==<span class="number">0</span> | bin ==<span class="number">0</span>) ? <span class="number">0</span> : (ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">        (su&amp;ain[<span class="number">15</span>]) 		|</span><br><span class="line">        (us&amp;bin[<span class="number">15</span>]);</span><br><span class="line"> <span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>除法器bug</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：当前测试版本除法器bug较多，例如不能正确计算触发结果、结果出现负数时会比正确答案小1；</li>
+<li>bug 修复：已经上报给淼鸿、并且已经解决所有bug</li>
+</ul></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>RISC-V</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Unix 环境下，RISC-V 工具链使用笔记</title>
     <url>/2023/03/08/riscv-tools/</url>
     <content><![CDATA[<figure>
@@ -8510,156 +8817,6 @@ Verilog Tutorial</a></li>
 <li><a
 href="https://www.bilibili.com/video/BV1Q5411w7z5?p=5&amp;vd_source=2eb89fc06210190d19c0a6c277925270">循序渐进，学习开发一个
 RISC-V 上的操作系统 - 汪辰</a></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>RISC-V</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>付杰周报-20230815</title>
-    <url>/2023/03/08/week-report/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="测试通过的-riscv-tests">测试通过的 riscv-tests</h1>
-<h2 id="本周通过的测试">本周通过的测试</h2>
-<ol type="1">
-<li>mulhsu</li>
-<li>mulhu</li>
-<li>rem</li>
-<li>remu</li>
-<li>div</li>
-<li>divu</li>
-<li>mul</li>
-<li>mulh</li>
-<li>rvc</li>
-</ol>
-<h2 id="所有通过的测试">所有通过的测试</h2>
-<ol type="1">
-<li>Immdiate Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />ADDI</label></li>
-<li><label><input type="checkbox" checked="" />SLTI</label></li>
-<li><label><input type="checkbox" checked="" />SLTIU</label></li>
-<li><label><input type="checkbox" checked="" />XORI</label></li>
-<li><label><input type="checkbox" checked="" />ORI</label></li>
-<li><label><input type="checkbox" checked="" />ANDI</label></li>
-<li><label><input type="checkbox" checked="" />SLLI</label></li>
-<li><label><input type="checkbox" checked="" />SRLI</label></li>
-<li><label><input type="checkbox" checked="" />SRAI</label></li>
-<li><label><input type="checkbox" checked="" />AUIPC</label></li>
-<li><label><input type="checkbox" checked="" />LUI</label></li>
-</ul></li>
-<li>Register-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />ADD</label></li>
-<li><label><input type="checkbox" checked="" />SUB</label></li>
-<li><label><input type="checkbox" checked="" />SLT</label></li>
-<li><label><input type="checkbox" checked="" />SLTU</label></li>
-<li><label><input type="checkbox" checked="" />XOR</label></li>
-<li><label><input type="checkbox" checked="" />OR</label></li>
-<li><label><input type="checkbox" checked="" />AND</label></li>
-<li><label><input type="checkbox" checked="" />SLL</label></li>
-<li><label><input type="checkbox" checked="" />SRL</label></li>
-<li><label><input type="checkbox" checked="" />SRA</label></li>
-</ul></li>
-<li>Branch-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />JALR</label></li>
-<li><label><input type="checkbox" checked="" />JAL</label></li>
-<li><label><input type="checkbox" checked="" />BEQ</label></li>
-<li><label><input type="checkbox" checked="" />BNE</label></li>
-<li><label><input type="checkbox" checked="" />BLT</label></li>
-<li><label><input type="checkbox" checked="" />BGE</label></li>
-<li><label><input type="checkbox" checked="" />BLTU</label></li>
-<li><label><input type="checkbox" checked="" />BGEU</label></li>
-</ul></li>
-<li>Memory-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />LB</label></li>
-<li><label><input type="checkbox" checked="" />LH</label></li>
-<li><label><input type="checkbox" checked="" />LW</label></li>
-<li><label><input type="checkbox" checked="" />LBU</label></li>
-<li><label><input type="checkbox" checked="" />LHU</label></li>
-<li><label><input type="checkbox" checked="" />SB</label></li>
-<li><label><input type="checkbox" checked="" />SH</label></li>
-<li><label><input type="checkbox" checked="" />SW</label></li>
-</ul></li>
-<li>Multiple
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />DIV</label></li>
-<li><label><input type="checkbox" checked="" />DIVU</label></li>
-<li><label><input type="checkbox" checked="" />MUL</label></li>
-<li><label><input type="checkbox" checked="" />MULH</label></li>
-<li><label><input type="checkbox" checked="" />MULHSU</label></li>
-<li><label><input type="checkbox" checked="" />MULHU</label></li>
-<li><label><input type="checkbox" checked="" />REM</label></li>
-<li><label><input type="checkbox" checked="" />REMU</label></li>
-</ul></li>
-<li>Compressed
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />RVC</label></li>
-</ul></li>
-</ol>
-<h1 id="本周发现和修复的-bug">本周发现和修复的 bug</h1>
-<ol type="1">
-<li><p>乘法运算<code>mulh</code>错误，错误选择了低32bits结果</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：alu错误地选择了乘法器的结果，应该选择高32bits，但是选择了低32bits
-<img src="https://s2.loli.net/2023/08/11/51tApYiDzWBdG2b.png" /></li>
-<li>bug 修复：对于<code>mulh</code>,<code>mulhu</code>,
-<code>mulhsu</code>指令，需要选择乘法器高32bits结果 <figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="comment">// alu.v</span></span><br><span class="line"> <span class="keyword">assign</span> ALUout=  (&#123;<span class="number">32</span>&#123;sub_op|add_op&#125;&#125;&amp;add_ans[<span class="number">31</span>:<span class="number">0</span>])|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;rem_op|remu_op&#125;&#125;&amp;rem_ans)|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;div_op|divu_op&#125;&#125;&amp;div_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mul_op&#125;&#125;&amp;mul_low) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mulh_op|mulhsu_op|mulhu_op&#125;&#125;&amp;mul_high) | <span class="comment">// bug fix: choose msb, not lsb</span></span><br><span class="line">         (&#123;<span class="number">32</span>&#123;or_op|and_op|xor_op&#125;&#125;&amp;log_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sll_op|srl_op|sra_op&#125;&#125;&amp;sft_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sltu_op|slt_op&#125;&#125;&amp;&#123;<span class="number">31&#x27;b0</span>,add_ans[<span class="number">32</span>]&#125;);</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>alu判断乘法指令类型错误</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：alu错误的判断了<code>mulhu</code>跟<code>mulhsu</code>，把二者搞反了
-<img src="https://s2.loli.net/2023/08/11/J8up1q76ohKHRBf.png" /></li>
-<li>bug 修复：将判断逻辑替换即可 <figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/alu<span class="variable">.v</span> b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> index c86bb04.<span class="variable">.29cd15a</span> <span class="number">100644</span></span><br><span class="line"> --- a/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> +++ b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> @@ -<span class="number">41</span>,<span class="number">8</span> +<span class="number">41</span>,<span class="number">8</span> @@ <span class="keyword">assign</span> slt_op=		ALUop[<span class="number">8</span>];</span><br><span class="line">  <span class="keyword">assign</span> sltu_op= 	ALUop[<span class="number">9</span>];</span><br><span class="line">  <span class="keyword">assign</span> mul_op=		ALUop[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">assign</span> mulh_op= 	ALUop[<span class="number">11</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">13</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">13</span>];</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>乘法多计算了一个周期</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：乘法本来应该在四个周期内计算出结果，但是目前乘法由于其state在ID计算，再通过pipeline
-register传递给EXE stage， 导致乘法实际上需要5个周期才可以得到对应的结果
-<img src="https://s2.loli.net/2023/08/14/kQGqA64f9TXx1tH.png" /></li>
-<li>bug
-修复：修改<code>multi</code>乘法的时序，将结果提前一个周期计算出来
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi<span class="variable">.v</span> b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  index <span class="number">57</span>fa64b.<span class="variable">.ce645f0</span> <span class="number">100644</span></span><br><span class="line">  --- a/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +++ b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +<span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] real_calculation;</span><br><span class="line">  +<span class="keyword">assign</span> real_calculation = (&#123;<span class="number">64</span>&#123;state==<span class="number">2&#x27;b11</span>&#125;&#125; &amp; &#123;ans_temp+&#123;mul16ans,<span class="number">32&#x27;b0</span>&#125;&#125;);</span><br><span class="line">  -<span class="keyword">assign</span> prod=ans_temp;</span><br><span class="line">  +<span class="keyword">assign</span> prod=real_calculation;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>ID Stage write_back_enable 没有考虑stall的情况</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug 描述：ID
-Stage在执行乘法指令时，应该只在乘法第四个周期才将write_back_enable拉高；
-但是目前ID Stage在前三个周期都将write_back_enable拉高了；
-这样会导致hazard unit错误地计算bypass信号 <img
-src="https://s2.loli.net/2023/08/14/drBTjoSpCXbWKnz.png" /></li>
-<li>bug 修复：在ID
-Stage计算write_back_enable的时候，需要判断乘法、除法指令的周期，只在最后一个周期拉高
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">diff --git a/src/verification/vsrc/pipelineID<span class="variable">.v</span> b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+    <span class="keyword">wire</span>        wb_en_mul_div;</span><br><span class="line">+    <span class="comment">// write back enable with mul and div operation</span></span><br><span class="line">+    <span class="keyword">assign</span> wb_en_mul_div = (~is_m_d_o &amp; ~is_d_d_o &amp; wb_en_o)|</span><br><span class="line">+                           ( is_m_d_o &amp; (mul_state==<span class="number">2&#x27;b11</span>))|</span><br><span class="line">+                           ( is_m_d_o &amp; div_last);</span><br><span class="line">-            reg_write_en_d_o  &lt;= wb_en_o;</span><br><span class="line">+            reg_write_en_d_o  &lt;= wb_en_mul_div;</span><br><span class="line">-    <span class="keyword">assign</span> dst_en_d_o=wb_en_o;</span><br><span class="line">+    <span class="keyword">assign</span> dst_en_d_o=wb_en_mul_div;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>乘法器计算符号的时候，没有考虑乘数为零的情况</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：乘法器计算的时候，如果有一个乘数为零，其结果的符号位应该为零，
-但是当前乘法器在计算符号位的时候，没有考虑乘数为零的情况，导致符号位计算错误
-<img src="https://s2.loli.net/2023/08/14/TdfOKtmP6jwe18i.png" /></li>
-<li>bug
-修复：在计算符号位的时候，判断乘数，如果有乘数为零，则强制符号位为零
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi16<span class="variable">.v</span> b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">@@ -<span class="number">310</span>,<span class="number">10</span> +<span class="number">310</span>,<span class="number">9</span> @@ half_adder 	ha30_2_0(<span class="variable">.ain</span>(c29_1_0), <span class="variable">.bin</span>(s30_1_0), <span class="variable">.sout</span>(ans1[<span class="number">30</span>]), <span class="variable">.cout</span>(c30_2_</span><br><span class="line">-<span class="keyword">assign</span> sign_out=(ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">+<span class="keyword">assign</span> sign_out = (ain==<span class="number">0</span> | bin ==<span class="number">0</span>) ? <span class="number">0</span> : (ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">        (su&amp;ain[<span class="number">15</span>]) 		|</span><br><span class="line">        (us&amp;bin[<span class="number">15</span>]);</span><br><span class="line"> <span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>除法器bug</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：当前测试版本除法器bug较多，例如不能正确计算触发结果、结果出现负数时会比正确答案小1；</li>
-<li>bug 修复：已经上报给淼鸿、并且已经解决所有bug</li>
-</ul></li>
 </ol>
 ]]></content>
       <tags>

@@ -77,7 +77,7 @@
 <meta property="og:image" content="https://s2.loli.net/2023/08/14/f8kbUcHMoQiCVRz.png">
 <meta property="og:image" content="https://s2.loli.net/2023/08/14/fsXcdFi2QNan6BT.png">
 <meta property="article:published_time" content="2023-07-27T07:31:31.000Z">
-<meta property="article:modified_time" content="2023-08-18T10:23:47.908Z">
+<meta property="article:modified_time" content="2023-08-21T05:40:35.583Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="DIFFTEST">
@@ -200,7 +200,7 @@ Difftest 版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-li
 bits的reference model?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132bits-reference-model%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">编译32bits reference
 model遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%97reference-model%E5%AF%BC%E8%87%B4%E6%B5%8B%E8%AF%95%E4%B8%8D%E9%80%9A%E8%BF%87%E7%9A%84%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-number">5.3.</span> <span class="nav-text">受reference
 model导致测试不通过的测试集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132%E7%89%88%E6%9C%AC%E7%9A%84spike%E4%BD%9C%E4%B8%BAreference-model"><span class="nav-number">5.4.</span> <span class="nav-text">编译32版本的spike作为reference
-model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95"><span class="nav-number">6.</span> <span class="nav-text">回归测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">6.1.</span> <span class="nav-text">目录结构介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%B1%87%E7%BC%96%E6%96%87%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">编译汇编文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">6.3.</span> <span class="nav-text">仿真测试</span></a></li></ol></li></ol></div>
+model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95"><span class="nav-number">6.</span> <span class="nav-text">回归测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">6.1.</span> <span class="nav-text">目录结构介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%B1%87%E7%BC%96%E6%96%87%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">编译汇编文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">6.3.</span> <span class="nav-text">仿真测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E6%B5%8B%E8%AF%95"><span class="nav-number">6.4.</span> <span class="nav-text">语法测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spyglass%E6%A3%80%E6%9F%A5%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF"><span class="nav-number">6.4.1.</span> <span class="nav-text">Spyglass检查语法错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#verilator%E6%A3%80%E6%9F%A5%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF"><span class="nav-number">6.4.2.</span> <span class="nav-text">Verilator检查语法错误</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -304,7 +304,7 @@ model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-li
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-18 18:23:47" itemprop="dateModified" datetime="2023-08-18T18:23:47+08:00">2023-08-18</time>
+      <time title="修改时间：2023-08-21 13:40:35" itemprop="dateModified" datetime="2023-08-21T13:40:35+08:00">2023-08-21</time>
     </span>
 
   
@@ -314,14 +314,14 @@ model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-li
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>22k</span>
+      <span>29k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>20 分钟</span>
+      <span>26 分钟</span>
     </span>
 </div>
 
@@ -1076,6 +1076,163 @@ model</p>
 <u>测试一个测试集</u>跟<u>测试所有测试集</u>，需要编译的difftest有些许不同，因此在切换测试模式之前，需要先<code>make clean</code></li>
 <li>查看波形：<code>make waveform</code>，即可通过gtkwave打开仿真生成的波形</li>
 </ol>
+<h2 id="语法测试">语法测试</h2>
+<h3 id="spyglass检查语法错误">Spyglass检查语法错误</h3>
+<ol type="1">
+<li>Top文件里，变量先使用后定义导致的错误 <img
+src="https://s2.loli.net/2023/08/21/4yrnpiKZPGIfAov.png" /></li>
+<li>Difftest函数导致的报错 <img
+src="https://s2.loli.net/2023/08/21/hx7tBJq1vgPDcHu.png" /></li>
+<li>最终的测试报告 <img
+src="https://s2.loli.net/2023/08/21/XouUBkwxZa1f3MV.png" /></li>
+</ol>
+<h3 id="verilator检查语法错误">Verilator检查语法错误</h3>
+<ol type="1">
+<li><p>发现的语法错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">verilator --lint-only -Wall --top-module top top.</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://s2.loli.net/2023/08/21/bnEXsfLKIQ3taZz.png" /></p></li>
+<li><p>修复完top的<strong>变量名重定义</strong>之后，再次检测语法错误，报错的情况如下：</p>
+<ul>
+<li><p>文件名跟模块名不一致：1个，已解决</p></li>
+<li><p>pin没有连接：1个，已解决</p></li>
+<li><p>信号没有驱动：1个，已解决</p></li>
+<li><p>信号未被使用、信号某些比特未被使用：23个</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 8%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>相关信号名</th>
+<th>所属文件</th>
+<th>已解决</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instr</td>
+<td>top</td>
+<td>✅</td>
+<td>difftest相关信号、忽略</td>
+</tr>
+<tr class="even">
+<td>fin_d_o</td>
+<td>hazard</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>instrIllegal_e_o</td>
+<td>pipelineID</td>
+<td>✅</td>
+<td>预留给CSR Unit、忽略</td>
+</tr>
+<tr class="even">
+<td>sram_addr</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>I-memory只有1k，忽略</td>
+</tr>
+<tr class="odd">
+<td>ceb</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>web</td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>flush_delay</td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>alu_calculation_e_i</td>
+<td>pipelineMEM_withloadstore</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>clk</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>✅</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># top name not match</span></span><br><span class="line">%Warning-DECLFILENAME: CSA32.v:5:8: Filename <span class="string">&#x27;CSA32&#x27;</span> does not match MODULE name: <span class="string">&#x27;CSA35&#x27;</span></span><br><span class="line">    5 | module CSA35(ain,bin,cin,sout,cout);</span><br><span class="line">      |        ^~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.014</span><br><span class="line">                       ... Use <span class="string">&quot;/* verilator lint_off DECLFILENAME */&quot;</span> and lint_on around <span class="built_in">source</span> to <span class="built_in">disable</span> this message.</span><br><span class="line"></span><br><span class="line"><span class="comment"># pin empty</span></span><br><span class="line">%Warning-PINCONNECTEMPTY: top.v:358:10: Cell pin connected by name with empty reference: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">  358 |         .mw_st                  (),</span><br><span class="line">      |          ^~~~~</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not driven</span></span><br><span class="line">%Warning-UNDRIVEN: hazard.v:26:26: Signal is not driven: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">                                 : ... In instance top.hu</span><br><span class="line">   26 | output fd_st,de_st,em_st,mw_st;</span><br><span class="line">      |                          ^~~~~</span><br><span class="line">                   pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Error: Exiting due to 26 warning(s)</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not used</span></span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:28:24: Bits of signal are not used: <span class="string">&#x27;instr&#x27;</span>[63:32]</span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   28 |     input  wire [63:0] instr,</span><br><span class="line">      |                        ^~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:87:13: Signal is not used: <span class="string">&#x27;fin_d_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   87 |     wire    fin_d_o;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:99:11: Signal is not used: <span class="string">&#x27;instrIllegal_e_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   99 |     wire  instrIllegal_e_o;</span><br><span class="line">      |           ^~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:32:16: Signal is not used: <span class="string">&#x27;sram_addr&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   32 |     wire [9:0] sram_addr;</span><br><span class="line">      |                ^~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:10: Signal is not used: <span class="string">&#x27;ceb&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |          ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:15: Signal is not used: <span class="string">&#x27;web&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |               ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:44:17: Signal is not used: <span class="string">&#x27;flush_delay&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   44 |     reg         flush_delay;</span><br><span class="line">      |                 ^~~~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineMEM_withloadstore.v:20:23: Bits of signal are not used: <span class="string">&#x27;alu_calculation_e_i&#x27;</span>[31:12]</span><br><span class="line">                                                        : ... In instance top.u_pipelineMEM_withloadstore</span><br><span class="line">   20 |     input wire [31:0] alu_calculation_e_i,</span><br><span class="line">      |                       ^~~~~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:14:23: Signal is not used: <span class="string">&#x27;clk&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   14 |     input wire        clk,</span><br><span class="line">      |                       ^~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:15:23: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   15 |     input wire        resetn,</span><br><span class="line">      |                       ^~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:33:13: Signal is not used: <span class="string">&#x27;ld_dst2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   33 | reg ld_dst1,ld_dst2;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:9: Signal is not used: <span class="string">&#x27;jd2&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |         ^~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:25: Signal is not used: <span class="string">&#x27;jd_b3&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |                         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:9: Signal is not used: <span class="string">&#x27;bptrt&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:21: Signal is not used: <span class="string">&#x27;bptnt1&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |                     ^~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:40:14: Signal is not used: <span class="string">&#x27;bnt2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   40 | reg bnt,bnt1,bnt2;</span><br><span class="line">      |              ^~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: extendingUnit.v:27:23: Bits of signal are not used: <span class="string">&#x27;instr_i&#x27;</span>[6:0]</span><br><span class="line">                                            : ... In instance top.u_pipelineID.u_extendingUnit</span><br><span class="line">   27 |     input wire [31:0] instr_i,</span><br><span class="line">      |                       ^~~~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: alu.v:14:11: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                  : ... In instance top.u_pipelineEXE.u_alu</span><br><span class="line">   14 | input clk,resetn;</span><br><span class="line">      |           ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: memory_block.v:9:16: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                          : ... In instance top.u_pipelineMEM_withloadstore.u_dmemory.u_memory_block3</span><br><span class="line">    9 |     input wire resetn,</span><br><span class="line">      |                ^~~~~~</span><br><span class="line">                       imemory.v:4:1: ... note: In file included from imemory.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:14:26: Signal is not used: <span class="string">&#x27;e_last&#x27;</span></span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   14 | input d_init, e_advance, e_last;</span><br><span class="line">      |                          ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:24:22: Bits of signal are not used: <span class="string">&#x27;sub3_pc&#x27;</span>[34]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   24 | wire [34:0] sub3_ps, sub3_pc, rem_sub3;</span><br><span class="line">      |                      ^~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:27:12: Bits of signal are not used: <span class="string">&#x27;rem&#x27;</span>[34:33]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   27 | reg [34:0] rem;</span><br><span class="line">      |            ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: multi16.v:15:69: Bits of signal are not used: <span class="string">&#x27;adder8&#x27;</span>[16]</span><br><span class="line">                                      : ... In instance top.u_pipelineEXE.u_alu.mul.m16</span><br><span class="line">   15 | wire [16:0] adder0,adder1,adder2,adder3,adder4,adder5,adder6,adder7,adder8;</span><br><span class="line">      |                                                                     ^~~~~~</span><br><span class="line">                       long_div.v:92:1: ... note: In file included from long_div.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br></pre></td></tr></table></figure></li>
+</ol>
 
     </div>
 
@@ -1132,13 +1289,13 @@ model</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">397k</span>
+    <span title="站点总字数">404k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:01</span>
+    <span title="站点阅读时长">6:07</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
