@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -207,7 +207,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/08/week-report/">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/13/riscv-pipeline/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
@@ -225,7 +225,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/08/week-report/" class="post-title-link" itemprop="url">付杰周报-20230815</a>
+          <a href="/2023/03/13/riscv-pipeline/" class="post-title-link" itemprop="url">RISC-V 32IM处理器流水线设计</a>
         </h2>
 
         <div class="post-meta-container">
@@ -236,14 +236,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-03-08 14:45:34" itemprop="dateCreated datePublished" datetime="2023-03-08T14:45:34+08:00">2023-03-08</time>
+      <time title="创建时间：2023-03-13 16:02:35" itemprop="dateCreated datePublished" datetime="2023-03-13T16:02:35+08:00">2023-03-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-18 18:21:06" itemprop="dateModified" datetime="2023-08-18T18:21:06+08:00">2023-08-18</time>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
     </span>
 
   
@@ -253,14 +253,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.3k</span>
+      <span>1.9k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -271,149 +271,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>[TOC]</p>
-<h1 id="测试通过的-riscv-tests">测试通过的 riscv-tests</h1>
-<h2 id="本周通过的测试">本周通过的测试</h2>
-<ol type="1">
-<li>mulhsu</li>
-<li>mulhu</li>
-<li>rem</li>
-<li>remu</li>
-<li>div</li>
-<li>divu</li>
-<li>mul</li>
-<li>mulh</li>
-<li>rvc</li>
-</ol>
-<h2 id="所有通过的测试">所有通过的测试</h2>
-<ol type="1">
-<li>Immdiate Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />ADDI</label></li>
-<li><label><input type="checkbox" checked="" />SLTI</label></li>
-<li><label><input type="checkbox" checked="" />SLTIU</label></li>
-<li><label><input type="checkbox" checked="" />XORI</label></li>
-<li><label><input type="checkbox" checked="" />ORI</label></li>
-<li><label><input type="checkbox" checked="" />ANDI</label></li>
-<li><label><input type="checkbox" checked="" />SLLI</label></li>
-<li><label><input type="checkbox" checked="" />SRLI</label></li>
-<li><label><input type="checkbox" checked="" />SRAI</label></li>
-<li><label><input type="checkbox" checked="" />AUIPC</label></li>
-<li><label><input type="checkbox" checked="" />LUI</label></li>
-</ul></li>
-<li>Register-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />ADD</label></li>
-<li><label><input type="checkbox" checked="" />SUB</label></li>
-<li><label><input type="checkbox" checked="" />SLT</label></li>
-<li><label><input type="checkbox" checked="" />SLTU</label></li>
-<li><label><input type="checkbox" checked="" />XOR</label></li>
-<li><label><input type="checkbox" checked="" />OR</label></li>
-<li><label><input type="checkbox" checked="" />AND</label></li>
-<li><label><input type="checkbox" checked="" />SLL</label></li>
-<li><label><input type="checkbox" checked="" />SRL</label></li>
-<li><label><input type="checkbox" checked="" />SRA</label></li>
-</ul></li>
-<li>Branch-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />JALR</label></li>
-<li><label><input type="checkbox" checked="" />JAL</label></li>
-<li><label><input type="checkbox" checked="" />BEQ</label></li>
-<li><label><input type="checkbox" checked="" />BNE</label></li>
-<li><label><input type="checkbox" checked="" />BLT</label></li>
-<li><label><input type="checkbox" checked="" />BGE</label></li>
-<li><label><input type="checkbox" checked="" />BLTU</label></li>
-<li><label><input type="checkbox" checked="" />BGEU</label></li>
-</ul></li>
-<li>Memory-Type
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />LB</label></li>
-<li><label><input type="checkbox" checked="" />LH</label></li>
-<li><label><input type="checkbox" checked="" />LW</label></li>
-<li><label><input type="checkbox" checked="" />LBU</label></li>
-<li><label><input type="checkbox" checked="" />LHU</label></li>
-<li><label><input type="checkbox" checked="" />SB</label></li>
-<li><label><input type="checkbox" checked="" />SH</label></li>
-<li><label><input type="checkbox" checked="" />SW</label></li>
-</ul></li>
-<li>Multiple
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />DIV</label></li>
-<li><label><input type="checkbox" checked="" />DIVU</label></li>
-<li><label><input type="checkbox" checked="" />MUL</label></li>
-<li><label><input type="checkbox" checked="" />MULH</label></li>
-<li><label><input type="checkbox" checked="" />MULHSU</label></li>
-<li><label><input type="checkbox" checked="" />MULHU</label></li>
-<li><label><input type="checkbox" checked="" />REM</label></li>
-<li><label><input type="checkbox" checked="" />REMU</label></li>
-</ul></li>
-<li>Compressed
-<ul class="task-list">
-<li><label><input type="checkbox" checked="" />RVC</label></li>
-</ul></li>
-</ol>
-<h1 id="本周发现和修复的-bug">本周发现和修复的 bug</h1>
-<ol type="1">
-<li><p>乘法运算<code>mulh</code>错误，错误选择了低32bits结果</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：alu错误地选择了乘法器的结果，应该选择高32bits，但是选择了低32bits
-<img src="https://s2.loli.net/2023/08/11/51tApYiDzWBdG2b.png" /></li>
-<li>bug 修复：对于<code>mulh</code>,<code>mulhu</code>,
-<code>mulhsu</code>指令，需要选择乘法器高32bits结果 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// alu.v</span></span><br><span class="line"> <span class="keyword">assign</span> ALUout=  (&#123;<span class="number">32</span>&#123;sub_op|add_op&#125;&#125;&amp;add_ans[<span class="number">31</span>:<span class="number">0</span>])|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;rem_op|remu_op&#125;&#125;&amp;rem_ans)|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;div_op|divu_op&#125;&#125;&amp;div_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mul_op&#125;&#125;&amp;mul_low) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mulh_op|mulhsu_op|mulhu_op&#125;&#125;&amp;mul_high) | <span class="comment">// bug fix: choose msb, not lsb</span></span><br><span class="line">         (&#123;<span class="number">32</span>&#123;or_op|and_op|xor_op&#125;&#125;&amp;log_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sll_op|srl_op|sra_op&#125;&#125;&amp;sft_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sltu_op|slt_op&#125;&#125;&amp;&#123;<span class="number">31&#x27;b0</span>,add_ans[<span class="number">32</span>]&#125;);</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>alu判断乘法指令类型错误</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：alu错误的判断了<code>mulhu</code>跟<code>mulhsu</code>，把二者搞反了
-<img src="https://s2.loli.net/2023/08/11/J8up1q76ohKHRBf.png" /></li>
-<li>bug 修复：将判断逻辑替换即可 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/alu<span class="variable">.v</span> b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> index c86bb04.<span class="variable">.29cd15a</span> <span class="number">100644</span></span><br><span class="line"> --- a/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> +++ b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> @@ -<span class="number">41</span>,<span class="number">8</span> +<span class="number">41</span>,<span class="number">8</span> @@ <span class="keyword">assign</span> slt_op=		ALUop[<span class="number">8</span>];</span><br><span class="line">  <span class="keyword">assign</span> sltu_op= 	ALUop[<span class="number">9</span>];</span><br><span class="line">  <span class="keyword">assign</span> mul_op=		ALUop[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">assign</span> mulh_op= 	ALUop[<span class="number">11</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">13</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">13</span>];</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>乘法多计算了一个周期</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：乘法本来应该在四个周期内计算出结果，但是目前乘法由于其state在ID计算，再通过pipeline
-register传递给EXE stage， 导致乘法实际上需要5个周期才可以得到对应的结果
-<img src="https://s2.loli.net/2023/08/14/kQGqA64f9TXx1tH.png" /></li>
-<li>bug
-修复：修改<code>multi</code>乘法的时序，将结果提前一个周期计算出来
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi<span class="variable">.v</span> b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  index <span class="number">57</span>fa64b.<span class="variable">.ce645f0</span> <span class="number">100644</span></span><br><span class="line">  --- a/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +++ b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +<span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] real_calculation;</span><br><span class="line">  +<span class="keyword">assign</span> real_calculation = (&#123;<span class="number">64</span>&#123;state==<span class="number">2&#x27;b11</span>&#125;&#125; &amp; &#123;ans_temp+&#123;mul16ans,<span class="number">32&#x27;b0</span>&#125;&#125;);</span><br><span class="line">  -<span class="keyword">assign</span> prod=ans_temp;</span><br><span class="line">  +<span class="keyword">assign</span> prod=real_calculation;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>ID Stage write_back_enable 没有考虑stall的情况</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug 描述：ID
-Stage在执行乘法指令时，应该只在乘法第四个周期才将write_back_enable拉高；
-但是目前ID Stage在前三个周期都将write_back_enable拉高了；
-这样会导致hazard unit错误地计算bypass信号 <img
-src="https://s2.loli.net/2023/08/14/drBTjoSpCXbWKnz.png" /></li>
-<li>bug 修复：在ID
-Stage计算write_back_enable的时候，需要判断乘法、除法指令的周期，只在最后一个周期拉高
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">diff --git a/src/verification/vsrc/pipelineID<span class="variable">.v</span> b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+    <span class="keyword">wire</span>        wb_en_mul_div;</span><br><span class="line">+    <span class="comment">// write back enable with mul and div operation</span></span><br><span class="line">+    <span class="keyword">assign</span> wb_en_mul_div = (~is_m_d_o &amp; ~is_d_d_o &amp; wb_en_o)|</span><br><span class="line">+                           ( is_m_d_o &amp; (mul_state==<span class="number">2&#x27;b11</span>))|</span><br><span class="line">+                           ( is_m_d_o &amp; div_last);</span><br><span class="line">-            reg_write_en_d_o  &lt;= wb_en_o;</span><br><span class="line">+            reg_write_en_d_o  &lt;= wb_en_mul_div;</span><br><span class="line">-    <span class="keyword">assign</span> dst_en_d_o=wb_en_o;</span><br><span class="line">+    <span class="keyword">assign</span> dst_en_d_o=wb_en_mul_div;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>乘法器计算符号的时候，没有考虑乘数为零的情况</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：乘法器计算的时候，如果有一个乘数为零，其结果的符号位应该为零，
-但是当前乘法器在计算符号位的时候，没有考虑乘数为零的情况，导致符号位计算错误
-<img src="https://s2.loli.net/2023/08/14/TdfOKtmP6jwe18i.png" /></li>
-<li>bug
-修复：在计算符号位的时候，判断乘数，如果有乘数为零，则强制符号位为零
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi16<span class="variable">.v</span> b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">@@ -<span class="number">310</span>,<span class="number">10</span> +<span class="number">310</span>,<span class="number">9</span> @@ half_adder 	ha30_2_0(<span class="variable">.ain</span>(c29_1_0), <span class="variable">.bin</span>(s30_1_0), <span class="variable">.sout</span>(ans1[<span class="number">30</span>]), <span class="variable">.cout</span>(c30_2_</span><br><span class="line">-<span class="keyword">assign</span> sign_out=(ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">+<span class="keyword">assign</span> sign_out = (ain==<span class="number">0</span> | bin ==<span class="number">0</span>) ? <span class="number">0</span> : (ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">        (su&amp;ain[<span class="number">15</span>]) 		|</span><br><span class="line">        (us&amp;bin[<span class="number">15</span>]);</span><br><span class="line"> <span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>除法器bug</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：当前测试版本除法器bug较多，例如不能正确计算触发结果、结果出现负数时会比正确答案小1；</li>
-<li>bug 修复：已经上报给淼鸿、并且已经解决所有bug</li>
-</ul></li>
-</ol>
-
+          <p><img src="https://s2.loli.net/2023/03/13/7GPzH91tmwkxvEC.png"
+alt="Basic five-stage pipeline in a RISC machine" /> RISC-V 5
+级流水线设计，支持 RV-32IM 指令集</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/13/riscv-pipeline/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -526,6 +394,338 @@ C++的 testbench，可以编译成可执行的测试文件</li>
             </div>
           <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/08/week-report/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/03/08/week-report/" class="post-title-link" itemprop="url">付杰周报-20230815</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-08 14:45:34" itemprop="dateCreated datePublished" datetime="2023-03-08T14:45:34+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 09:30:29" itemprop="dateModified" datetime="2023-08-29T09:30:29+08:00">2023-08-29</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>[TOC]</p>
+<h1 id="verilator检查语法错误">Verilator检查语法错误</h1>
+<ol type="1">
+<li><p>发现的语法错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">verilator --lint-only -Wall --top-module top top.</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://s2.loli.net/2023/08/21/bnEXsfLKIQ3taZz.png" /></p></li>
+<li><p>修复完top的<strong>变量名重定义</strong>之后，再次检测语法错误，报错的情况如下：</p>
+<ul>
+<li><p>文件名跟模块名不一致：1个，已解决</p></li>
+<li><p>pin没有连接：1个，已解决</p></li>
+<li><p>信号没有驱动：1个，已解决</p></li>
+<li><p>信号未被使用、信号某些比特未被使用：23个</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 8%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>信号未使用字段</th>
+<th>所属文件</th>
+<th>已解决</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instr</td>
+<td>top</td>
+<td>✅</td>
+<td>difftest相关信号、忽略</td>
+</tr>
+<tr class="even">
+<td>instrIllegal_e_o</td>
+<td>pipelineID</td>
+<td>✅</td>
+<td>预留给CSR Unit、忽略</td>
+</tr>
+<tr class="odd">
+<td>instr_i[6:0]</td>
+<td>extendingUnit</td>
+<td>✅</td>
+<td>只用得到部分bits，忽略</td>
+</tr>
+<tr class="even">
+<td>resetn</td>
+<td>memory_block</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr class="odd">
+<td>sram_addr</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr class="even">
+<td>ceb</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr class="odd">
+<td>web</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr class="even">
+<td>flush_delay</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr class="odd">
+<td>alu_calculation_e_i</td>
+<td>pipelineMEM_withloadstore</td>
+<td>✅</td>
+<td>D-memory只有1k，忽略</td>
+</tr>
+<tr class="even">
+<td>clk</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr class="odd">
+<td>resetn</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr class="even">
+<td>fin_d_o</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ld_dst2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>jd2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>jd_b3</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>bptrt</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>bptnt1</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>bnt2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>resetn</td>
+<td>alu</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>e_last</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>sub3_pc[34]</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>rem[34:33]</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>adder8[16]</td>
+<td>multi16</td>
+<td>✅</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># top name not match</span></span><br><span class="line">%Warning-DECLFILENAME: CSA32.v:5:8: Filename <span class="string">&#x27;CSA32&#x27;</span> does not match MODULE name: <span class="string">&#x27;CSA35&#x27;</span></span><br><span class="line">    5 | module CSA35(ain,bin,cin,sout,cout);</span><br><span class="line">      |        ^~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.014</span><br><span class="line">                       ... Use <span class="string">&quot;/* verilator lint_off DECLFILENAME */&quot;</span> and lint_on around <span class="built_in">source</span> to <span class="built_in">disable</span> this message.</span><br><span class="line">   </span><br><span class="line"><span class="comment"># pin empty</span></span><br><span class="line">%Warning-PINCONNECTEMPTY: top.v:358:10: Cell pin connected by name with empty reference: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">  358 |         .mw_st                  (),</span><br><span class="line">      |          ^~~~~</span><br><span class="line">   </span><br><span class="line"><span class="comment"># signals not driven</span></span><br><span class="line">%Warning-UNDRIVEN: hazard.v:26:26: Signal is not driven: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">                                 : ... In instance top.hu</span><br><span class="line">   26 | output fd_st,de_st,em_st,mw_st;</span><br><span class="line">      |                          ^~~~~</span><br><span class="line">                   pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">   </span><br><span class="line"><span class="comment"># signals not used</span></span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:28:24: Bits of signal are not used: <span class="string">&#x27;instr&#x27;</span>[63:32]</span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   28 |     input  wire [63:0] instr,</span><br><span class="line">      |                        ^~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:87:13: Signal is not used: <span class="string">&#x27;fin_d_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   87 |     wire    fin_d_o;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:99:11: Signal is not used: <span class="string">&#x27;instrIllegal_e_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   99 |     wire  instrIllegal_e_o;</span><br><span class="line">      |           ^~~~~~~~~~~~~~~~</span><br><span class="line">   </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="mcu跑分">MCU跑分</h1>
+<h2 id="目前mcu的测试框架">目前MCU的测试框架</h2>
+<blockquote>
+<p>目前MCU测试主要使用到了riscvtests跟difftest</p>
+</blockquote>
+<ol type="1">
+<li>riscvtests是由Berkeley设计的测试汇编程序，其覆盖了每种指令需要考虑的情况</li>
+<li>difftest是YSYX提供的测试框架，其主要引入了如下三个部分:
+<ul>
+<li>golden model：符合riscv手册规范的参考模型</li>
+<li>difftest框架：MCU每次执行一条指令，若该指令有效，都会让golden
+model指令相同的指令；然后比较二者的pc跟register file</li>
+</ul></li>
+</ol>
+<p><img src="https://s2.loli.net/2023/08/25/EKlSq2HC36XPjOf.png" /></p>
+<blockquote>
+<p>总结：目前MCU只支持<strong>单纯的计算任务</strong></p>
+</blockquote>
+<h2 id="ysyx的测试框架">YSYX的测试框架</h2>
+<blockquote>
+<p>在现有测试框架的基础上，在MCU的testbench里增加了相应的IO输出函数，但是仍然无法实现打印到终端的功能，其原因在于：编译microbench得到的bin文件，其不同于汇编文件编写的程序（只包含指令），还包含一些初始化的全局部变量、堆栈的初始化，因此需要<strong><u>搭建c环境</u></strong>，才能够编译c代码运行在MCU上</p>
+</blockquote>
+<p>不同于riscvtest，microbench等测试程序是由c代码编写的，这些c代码需要调用一些库函数，例如<code>printf</code>。</p>
+<p>假如像microbench这样的应用程序，需要在程序结束之后打印相关的结果到屏幕，则需要MCU提供相应的API支持，
+这样应用程序才可以通过调用这些API的方式来实现打印的功能。</p>
+<p>YSYX根据应用程序的需求，将其API进行分为如下五类，并且整合成一个库称为AM：</p>
+<ul>
+<li>TRM(Turing Machine) - 图灵机, 最简单的运行时环境,
+为程序提供基本的计算能力</li>
+<li>IOE(I/O Extension) - 输入输出扩展, 为程序提供输出输入的能力</li>
+<li>CTE(Context Extension) - 上下文扩展, 为程序提供上下文管理的能力</li>
+<li>VME(Virtual Memory Extension) - 虚存扩展,
+为程序提供虚存管理的能力</li>
+<li>MPE(Multi-Processor Extension) - 多处理器扩展,
+为程序提供多处理器通信的能力</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/08/25/9POAqdpwyQBukrx.png" /></p>
+<p>如果我们的处理器需要支持microbench打印跑分结果，则需要支持IOE扩展，主要分为以下的步骤：</p>
+<ol type="1">
+<li>提供c程序运行所需要的API:
+<ul>
+<li>heap：指定堆栈的起始跟末尾、因为c程序里的函数调用、局部变量都是放在堆栈里的，跟指令是不同的</li>
+<li>putch：输出一个字符</li>
+<li>halt：结束程序的运行（汇编程序的结束是通过ebreak指令结束的，但是c程序需要该API才能够正常退出）</li>
+<li>init：初始化MCU</li>
+</ul></li>
+<li>编译可以在MCU上运行的benchmark
+<ul>
+<li>riscv-gcc对benchmark.c文件进行编译得到目标文件</li>
+<li>riscv-gcc对包含API的c文件进行编译得到目标文件</li>
+<li>编写链接脚本，该脚本需要指明每个节的末尾, 栈顶位置,
+堆区的起始和末尾</li>
+<li>链接器将前面得到的目标文件链接成为可执行文件</li>
+</ul></li>
+<li>MCU支持外设，以IO外设为例子
+<ul>
+<li>c程序本质上通过store指令完成写数据到屏幕的操作，因此MCU需要在MEM
+Stage根据地址，选择写入到Data Memory还是IO端口</li>
+<li>MCU通过DPI-C函数，在MEM
+Stage声明一个DPI-C函数，实现写出到屏幕的功能</li>
+</ul></li>
+<li>拟完成YSYX实验0~实验2内容
+<ul>
+<li>不了解其实现原理，很难移植其相关代码到MCU，仅增加串口耗时较久；</li>
+<li>完成实验2可以得到一个32bits的NEMU，后续可以作为reference model使用，
+Spike目前在测试riscvtest的时候还能够用，后续需要测试外部中断的时候，由于Spike
+内部细节不知道，因此在使用difftest测试中断的时候将会很麻烦（因为不知道Spike内部细节）</li>
+<li>预计耗时2~3周，现在耗费时间掌握相关代码细节及原理，有助于后续MCU的集成测试</li>
+</ul></li>
+</ol>
+
       
     </div>
 
@@ -1237,161 +1437,6 @@ C++的 testbench，可以编译成可执行的测试文件</li>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/09/07/verilog-syntax/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
-      <meta itemprop="name" content="FuJie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | timemeansalot">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/09/07/verilog-syntax/" class="post-title-link" itemprop="url">Verilog语法学习笔记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-09-07 10:22:01" itemprop="dateCreated datePublished" datetime="2022-09-07T10:22:01+08:00">2022-09-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>此文档包含我学习 Verilog 时遇到的问题，对于一些第一次遇到的 Verilog
-关键字进行了记录</p>
-<h1 id="verilog-基础">Verilog 基础</h1>
-<p><a
-target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-codeguide.html">Verilog
-代码规范</a>, <a
-target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-codestyle.html">Verilog
-编码风格</a></p>
-<ol type="1">
-<li><p>verilog
-定义模块的时候，其输入端口只能定义成<code>wire</code>(从模块内部来看，外部输入给它的信号就是一个导线)，其输出端口可以定义成<code>wire</code>，也可以定义成<code>reg</code></p></li>
-<li><p>verilog
-例化模块的时候，模块的输入端口可以链接到<code>wire</code>或者<code>reg</code>，模块的输出只能连接到<code>wire</code>(从模块外部来看，模块输送到外部的信号也只是一个导线)</p></li>
-<li><p>组合逻辑电路：</p>
-<ul>
-<li><p>简单的组合逻辑电路可以用<code>assign</code>语句来实现，例如:</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux (</span><br><span class="line">    <span class="keyword">input</span>            sel ,</span><br><span class="line">    <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p0 ,</span><br><span class="line">    <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p1 ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>]    sout</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">   <span class="keyword">assign</span> sout = (sel==<span class="number">1&#x27;b0</span>) ? p0:p1;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
-<li><p>复杂的组合逻辑电路可以用<code>always@(*)</code>来实现，由于实用了
-always
-语句，输出数据必须被声明为<code>reg</code>类型。但是不用担心它的结果会被锁存一拍，实际上其生成的电路跟<code>assign</code>语句生成的电路是一样的，例如下面的代码跟上面的代码，其生成的电路是一样的：</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux (</span><br><span class="line">  <span class="keyword">input</span>            sel ,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p0 ,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p1 ,</span><br><span class="line">  <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>]    sout</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//assign sout = (sel==1&#x27;b0) ? p0:p1;</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">   <span class="keyword">if</span>(sel==<span class="number">0</span>) <span class="keyword">begin</span></span><br><span class="line">     sout = p0;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">     sout = p1;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>测试文件，一个简单的测试文件包括如下的重要部分：</p>
-<ul>
-<li>信号声明（测试用例里面的信号，输入信号声明为<code>reg</code>，输出信号声明为<code>wire</code>
-<ul>
-<li>基础信号：时钟、复位</li>
-<li>测试用例(dut)涉及到的相关信号</li>
-</ul></li>
-<li>输入信号赋值:
-<ul>
-<li>生成周期时钟</li>
-<li>生成 dut 输入信号</li>
-</ul></li>
-<li>例化 dut</li>
-<li>生成波形</li>
-<li>进阶部分（文件操作&amp;生成内部数组的波形）</li>
-</ul>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux_tb ();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">reg</span> clk,resetn; <span class="comment">// 基本的信号：时钟、复位信号</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 测试模块(dut)涉及到的信号</span></span><br><span class="line">   <span class="keyword">reg</span> sel;</span><br><span class="line">   <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] p0, p1;</span><br><span class="line">   <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] sout;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 控制测试周期&amp;生成波形需要用到的信号</span></span><br><span class="line">   <span class="keyword">integer</span> i, counter;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 生成周期时钟</span></span><br><span class="line">   <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">     clk&lt;=<span class="number">0</span>;</span><br><span class="line">     counter &lt;= <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">forever</span> <span class="keyword">begin</span></span><br><span class="line">       #<span class="number">1</span>; clk&lt;=~clk;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 设置每个周期的输入测试信号</span></span><br><span class="line">   <span class="keyword">always</span>@(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">0</span>)<span class="keyword">begin</span></span><br><span class="line">       resetn &lt;= <span class="number">0</span>;</span><br><span class="line">       p0     &lt;= <span class="number">4&#x27;b110</span>;</span><br><span class="line">       p1     &lt;= <span class="number">4&#x27;b111</span>;</span><br><span class="line">       sel    &lt;= <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">1</span>)<span class="keyword">begin</span></span><br><span class="line">       resetn &lt;= <span class="number">1</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">2</span>)<span class="keyword">begin</span></span><br><span class="line">       sel &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">10</span>)<span class="keyword">begin</span></span><br><span class="line">       <span class="built_in">$finish</span>();</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     counter+=<span class="number">1</span>;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 生成波形文件</span></span><br><span class="line">   <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">     <span class="built_in">$dumpfile</span>(<span class="string">&quot;mux_tb.vcd&quot;</span>);</span><br><span class="line">     <span class="built_in">$dumpvars</span>(<span class="number">0</span>, mux_tb);</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">   <span class="comment">// 例化测试对象</span></span><br><span class="line">   mux muxInstance(</span><br><span class="line">   <span class="variable">.sel</span>(sel),</span><br><span class="line">   <span class="variable">.p0</span>(p0),</span><br><span class="line">   <span class="variable">.p1</span>(p1),</span><br><span class="line">   <span class="variable">.sout</span>(sout)</span><br><span class="line">   );</span><br><span class="line">   <span class="comment">// 进阶1：从文件读取输入数据&amp;输出结果到文件</span></span><br><span class="line">   <span class="comment">// 进阶2：打印波形的时候，打印内部的数组（默认情况下是不会打印dut内部数据数据的</span></span><br><span class="line"> <span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
-<li><p>文件操作：可以直接从文件读取数据来给“dut
-输入信号赋值”，也可以直接通过文件读取数据“来给 dut 内部数组赋值”, <a
-target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-file.html">参考：runoob.com
-Verilog 文件操作</a></p>
-<ul>
-<li>给 dut 输入信号赋值 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">integer</span> fd, err;</span><br><span class="line"><span class="keyword">integer</span> code;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">640</span>:<span class="number">0</span>] str; <span class="comment">// 打开文件错误时，返回值</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] src; <span class="comment">// 寄存器</span></span><br><span class="line"><span class="comment">//string str,str2;</span></span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  fd = <span class="built_in">$fopen</span>(<span class="string">&quot;compressDecoderInput.txt&quot;</span>, <span class="string">&quot;r&quot;</span>); <span class="comment">// 打开一个文件</span></span><br><span class="line">  err = <span class="built_in">$ferror</span>(fd, str); <span class="comment">// 判断该文件是否存在</span></span><br><span class="line">  <span class="keyword">if</span>(!err)<span class="keyword">begin</span> <span class="comment">// 如果文件打开成功</span></span><br><span class="line">   <span class="comment">// code = $fread(src, fd);</span></span><br><span class="line">   code =<span class="built_in">$fscanf</span>(fd, <span class="string">&quot;%d&quot;</span>, src); <span class="comment">// 从文件里读取数据到寄存器里</span></span><br><span class="line">   <span class="built_in">$display</span>(<span class="string">&quot;src is %d&quot;</span>, src);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="built_in">$fclose</span>(fd); <span class="comment">// 关闭文件</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-<li>给 dut 内部数组赋值 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="comment">//格式: readmemh(file, target, start, length)</span></span><br><span class="line">  <span class="built_in">$readmemh</span>(<span class="string">&quot;i-memory.txt&quot;</span>, muxInstance<span class="variable">.sramInstance</span><span class="variable">.m_array</span>,<span class="number">0</span>,<span class="number">15</span>);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li><p>输出 dut 内部数组的波形（verilog 默认情况下只会输出 dut
-内部信号的波形，但是不会输出 dut
-内部的数组的波形），因此需要手动通过一个循环，逐行输出 dut
-的内部数组</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="built_in">$dumpfile</span>(<span class="string">&quot;mux_tb.vcd&quot;</span>);</span><br><span class="line">  <span class="built_in">$dumpvars</span>(<span class="number">0</span>, mux_tb);</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">16</span>;i++) <span class="comment">// 循环输出内部数组每一行的波形</span></span><br><span class="line">    <span class="built_in">$dumpvars</span>(<span class="number">0</span>, muxInstance<span class="variable">.sramInstance</span><span class="variable">.m_array</span>[i]);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-<li><p>Makefile：使用 Makefile
-是为了更方便地编译文件、运行仿真、生成波形</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Makefile</span></span><br><span class="line">src = compressDecoder</span><br><span class="line"><span class="keyword">include</span> iverilog.mk</span><br></pre></td></tr></table></figure>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"># iverilog.mk</span></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean all run waveform</span></span><br><span class="line"></span><br><span class="line">DEFAULT_GOAL:=all</span><br><span class="line"><span class="section">all: $&#123;src&#125;.v $&#123;src&#125;_tb.v</span></span><br><span class="line">    @iverilog -o $&#123;src&#125;_tb.vvp $&#123;src&#125;_tb.v <span class="comment"># @ means don&#x27;t echo this command to terminal, just run it.</span></span><br><span class="line"></span><br><span class="line"><span class="section">run: all</span></span><br><span class="line">    vvp $&#123;src&#125;_tb.vvp</span><br><span class="line"></span><br><span class="line"><span class="section">waveform: run</span></span><br><span class="line">    @gtkwave $&#123;src&#125;_tb.vcd -a gtkwave_setup.gtkw</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    -rm *vcd *vvp</span><br></pre></td></tr></table></figure></li>
-<li><p>打印控制信息:
-<code>$write</code>打印完后自动不换行、<code>$display</code>：打印完后要自动换行</p></li>
-<li><p>逻辑符号：</p>
-<ul>
-<li><code>&amp;&amp;</code>：逻辑与、<code>&amp;</code>：按位与</li>
-<li><code>!</code>: 逻辑取反、<code>~</code>：按位取反</li>
-</ul></li>
-</ol>
-<h1 id="fifo">FIFO</h1>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
@@ -1416,13 +1461,13 @@ Verilog 文件操作</a></p>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">404k</span>
+    <span title="站点总字数">405k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:07</span>
+    <span title="站点阅读时长">6:09</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
