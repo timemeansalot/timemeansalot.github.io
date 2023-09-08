@@ -20,23 +20,18 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] 1 Benchmarks 1.1 什么是基准测试  目的：测试处理器运行的速度，从而评价处理器的性能 影响处理器单位时间内工作的因素有很多，如：编译器性能、访存的时间、应用的种类 基准测试：精心设计的一套程序用于覆盖一些通用的计算场景，如列表操作、矩阵计算等 测试原理：比较处理器完成基准测试的时间，时间越快越好  1.2 CoreMark 网站主页](https:&#x2F;&#x2F;www.eembc">
+    <meta name="description" content="[TOC] 协同仿真 协同仿真的过程 cosim 是怎么工作的呢？模拟器是软件实现的，它原子地执行一条条指令，同时记录下当前的状态，例如寄存器的取值、内存的状态等等。如果可以让 CPU 和模拟器锁步运行，也就是 CPU 执行一条指令，模拟器执行一条指令，然后比对状态，一旦出现不一致，就直接报错。但实际上 CPU 可能会更加复杂，因为它指令的执行拆分成了很多部分，需要针对流水线进行一些修改，使得它可">
 <meta property="og:type" content="article">
 <meta property="og:title" content="付杰周报-20230815">
 <meta property="og:url" content="http://timemeansalot.github.io/2023/03/08/week-report/index.html">
 <meta property="og:site_name" content="timemeansalot">
-<meta property="og:description" content="[TOC] 1 Benchmarks 1.1 什么是基准测试  目的：测试处理器运行的速度，从而评价处理器的性能 影响处理器单位时间内工作的因素有很多，如：编译器性能、访存的时间、应用的种类 基准测试：精心设计的一套程序用于覆盖一些通用的计算场景，如列表操作、矩阵计算等 测试原理：比较处理器完成基准测试的时间，时间越快越好  1.2 CoreMark 网站主页](https:&#x2F;&#x2F;www.eembc">
+<meta property="og:description" content="[TOC] 协同仿真 协同仿真的过程 cosim 是怎么工作的呢？模拟器是软件实现的，它原子地执行一条条指令，同时记录下当前的状态，例如寄存器的取值、内存的状态等等。如果可以让 CPU 和模拟器锁步运行，也就是 CPU 执行一条指令，模拟器执行一条指令，然后比对状态，一旦出现不一致，就直接报错。但实际上 CPU 可能会更加复杂，因为它指令的执行拆分成了很多部分，需要针对流水线进行一些修改，使得它可">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/09/01/PgHoDackpyq5jlU.png">
-<meta property="og:image" content="https://s2.loli.net/2023/09/01/JRcsUmGWtadbI4p.png">
-<meta property="og:image" content="https://s2.loli.net/2023/09/01/wTJSViA4HcXqPD5.png">
-<meta property="og:image" content="https://s2.loli.net/2023/09/02/huytiDNSjUmgw7A.png">
 <meta property="article:published_time" content="2023-03-08T06:45:34.000Z">
-<meta property="article:modified_time" content="2023-09-02T01:38:50.062Z">
+<meta property="article:modified_time" content="2023-09-08T13:36:23.765Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/09/01/PgHoDackpyq5jlU.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/03/08/week-report/">
@@ -149,8 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#benchmarks"><span class="nav-number">1.</span> <span class="nav-text">1 Benchmarks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 什么是基准测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coremark"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 CoreMark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#microbench"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Microbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#source-code"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 Source Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E7%A7%BB%E6%A4%8Dcoremark"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 MCU移植CoreMark：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#benchmark-vs-cpi"><span class="nav-number">2.</span> <span class="nav-text">2 Benchmark vs &#x3D;&#x3D;CPI&#x3D;&#x3D;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%B1%E5%93%8Dbenchmark%E5%BE%97%E5%88%86%E7%9A%84%E5%9B%A0%E7%B4%A0"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 影响Benchmark得分的因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%8A%E8%B7%91%E5%88%86%E7%9A%84%E6%97%B6%E5%80%99%E9%80%9A%E8%BF%87cpi%E6%9B%B4%E8%83%BD%E4%BD%93%E7%8E%B0%E6%80%A7%E8%83%BD"><span class="nav-number">2.2.</span> <span class="nav-text">2.2
-在模拟器上跑分的时候，通过CPI更能体现性能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spyglass-license-failure"><span class="nav-number">3.</span> <span class="nav-text">3 Spyglass License Failure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">4 参考文献</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E4%BB%BF%E7%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">协同仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E4%BB%BF%E7%9C%9F%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">协同仿真的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spike%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%BF%AE%E6%94%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Spike模拟器修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.</span> <span class="nav-text">处理器修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8Ccosim"><span class="nav-number">1.4.</span> <span class="nav-text">执行cosim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5%E5%A4%84%E7%90%86"><span class="nav-number">1.5.</span> <span class="nav-text">特殊情况处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -165,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -254,7 +248,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 09:38:50" itemprop="dateModified" datetime="2023-09-02T09:38:50+08:00">2023-09-02</time>
+      <time title="修改时间：2023-09-08 21:36:23" itemprop="dateModified" datetime="2023-09-08T21:36:23+08:00">2023-09-08</time>
     </span>
 
   
@@ -264,14 +258,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.3k</span>
+      <span>1.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -283,186 +277,102 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1 id="benchmarks">1 Benchmarks</h1>
-<h2 id="什么是基准测试">1.1 什么是基准测试</h2>
+<h1 id="协同仿真">协同仿真</h1>
+<h2 id="协同仿真的过程">协同仿真的过程</h2>
+<p>cosim
+是怎么工作的呢？模拟器是软件实现的，它原子地执行一条条指令，同时记录下当前的状态，例如寄存器的取值、内存的状态等等。如果可以让
+CPU 和模拟器锁步运行，也就是 CPU
+执行一条指令，模拟器执行一条指令，然后比对状态，一旦出现不一致，就直接报错。但实际上
+CPU
+可能会更加复杂，因为它指令的执行拆分成了很多部分，需要针对流水线进行一些修改，使得它可以生成一个匹配模拟器的原子的执行流。</p>
+<p>整体的工作流程如下：</p>
 <ol type="1">
-<li>目的：测试处理器运行的速度，从而评价处理器的性能</li>
-<li>影响处理器单位时间内工作的因素有很多，如：编译器性能、访存的时间、应用的种类</li>
-<li>基准测试：精心设计的一套程序用于覆盖一些通用的计算场景，如列表操作、矩阵计算等</li>
-<li>测试原理：比较处理器完成基准测试的时间，时间越快越好</li>
+<li>选择一个模拟器，自己写或者使用一个现成的。考虑到模拟器实现的功能和
+CPU
+不一定一致，有时候需要修改模拟器的源码，所以可以考虑使用一些现成的开源软件，如果是为了
+cosim 设计的就更好了。</li>
+<li>找到模拟器的单步执行接口，并且让模拟器可以把内部状态暴露出来。这一步可能需要修改源代码。</li>
+<li>修改
+RTL，把指令的提交信息、寄存器堆的内容通过一些方法传递出来。</li>
+<li>修改仿真顶层，每当指令提交的时候，单步执行模拟器，然后比对双方的状态。</li>
 </ol>
-<h2 id="coremark">1.2 CoreMark</h2>
-<p>网站主页](https://www.eembc.org/coremark/)</p>
-<ul>
-<li>CoreMark主要用于测试<strong>嵌入式系统</strong>的MCU跟CPU的性能，
-测试标准是在配置参数的组合下<u>单位时间内运行的CoreMark程序次数（单位：CoreMark/MHz）</u>，该数字值越大则说明测试的性能越好</li>
-<li>诞生于2009年，目的是作为Dhrystone的替代品（Dhrystone其实主要测试的是编译器的性能），
-为了避免编译器优化导致预先计算出结果，基准测试中的每个操作都会派生一个在编译时不可用的值。</li>
-<li>CoreMark由C编写，包含的测试集主要有：==列表处理（列表搜索、排序）、矩阵操作、状态机测试、CRC测试==</li>
-<li>CoreMark支持8 bits到64 bits的微处理器</li>
-</ul>
-<h2 id="microbench">1.3 Microbench</h2>
+<h2 id="spike模拟器修改">Spike模拟器修改</h2>
 <blockquote>
-<p>每个benchmark都记录以<code>REF_CPU</code>为基础测得的运行时间微秒数。每个benchmark的评分是相对于<code>REF_CPU</code>的运行速度，与基准处理器一样快的得分为<code>REF_SCORE=100000</code>。
-所有benchmark的平均得分是整体得分。</p>
+<p>spike 实现了比较完整的 RISC-V 指令集，并且以库的形式提供了它的
+API，但还需要一些修改，让它更加适合协同仿真:</p>
 </blockquote>
 <ol type="1">
-<li><p>需要实现==TRM==和==IOE==的API。</p></li>
-<li><p>在IOE的全部实现均留空的情况下仍可运行。如果有正确实现的<code>AM_TIMER_UPTIME</code>，可以输出正确的统计时间。若这个功能没有实现(返回<code>0</code>)，仍可进行正确性测试。</p></li>
-<li><p>使用<code>putch(ch)</code>输出。</p></li>
-<li><p>堆区<code>heap</code>必须初始化(堆区可为空)。如果<code>heap.start == heap.end</code>，即分配了空的堆区，只能运行不使用堆区的测试程序。每个基准程序会预先指定堆区的大小，堆区不足的基准程序将被忽略。</p></li>
-<li><p>主要包含的测试程序：</p>
-<table>
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 60%" />
-<col style="width: 15%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>名称</th>
-<th>描述</th>
-<th>ref堆区使用</th>
-<th>huge堆区使用</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>qsort</td>
-<td>快速排序随机整数数组</td>
-<td>640KB</td>
-<td>16MB</td>
-</tr>
-<tr class="even">
-<td>queen</td>
-<td>位运算实现的n皇后问题</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>bf</td>
-<td>Brainf**k解释器，快速排序输入的字符串</td>
-<td>32KB</td>
-<td>32KB</td>
-</tr>
-<tr class="even">
-<td>fib</td>
-<td>Fibonacci数列f(n)=f(n-1)+…+f(n-m)的矩阵求解</td>
-<td>256KB</td>
-<td>2MB</td>
-</tr>
-<tr class="odd">
-<td>sieve</td>
-<td>Eratosthenes筛法求素数</td>
-<td>2MB</td>
-<td>10MB</td>
-</tr>
-<tr class="even">
-<td>15pz</td>
-<td>A*算法求解4x4数码问题</td>
-<td>2MB</td>
-<td>64MB</td>
-</tr>
-<tr class="odd">
-<td>dinic</td>
-<td>Dinic算法求解二分图最大流</td>
-<td>680KB</td>
-<td>2MB</td>
-</tr>
-<tr class="even">
-<td>lzip</td>
-<td>Lzip数据压缩</td>
-<td>4MB</td>
-<td>64MB</td>
-</tr>
-<tr class="odd">
-<td>ssort</td>
-<td>Skew算法后缀排序</td>
-<td>4MB</td>
-<td>64MB</td>
-</tr>
-<tr class="even">
-<td>md5</td>
-<td>计算长随机字符串的MD5校验和</td>
-<td>10MB</td>
-<td>64MB</td>
-</tr>
-</tbody>
-</table></li>
-</ol>
-<h2 id="source-code">1.4 Source Code</h2>
+<li><p>step函数修改</p>
 <ul>
-<li>Microbench <img
-src="https://s2.loli.net/2023/09/01/pVzw6s8hkRtgLMO.png" /></li>
-<li>Coremark <img
-src="https://s2.loli.net/2023/09/01/9xMLikWUq7KjXFB.png" /></li>
-</ul>
-<h2 id="mcu移植coremark">1.5 MCU移植CoreMark：</h2>
-<ul>
-<li>提供对printf的重映射支持：在测试完成之后，需要在中断打印测试分数</li>
-<li>提供一个足够精准的时间测量手段：CoreMark的评价标准是<u>单位时间内运行的CoreMark程序次数是</u></li>
-</ul>
-<p><img src="https://s2.loli.net/2023/09/01/PgHoDackpyq5jlU.png" /></p>
-<h1 id="benchmark-vs-cpi">2 Benchmark vs ==CPI==</h1>
-<h2 id="影响benchmark得分的因素">2.1 影响Benchmark得分的因素</h2>
-<p>Benchmark的跑分需要计算一个关键的数据，即<strong>程序的运行时间</strong>，处理器微架构一模一样的情况下：</p>
-<ol type="1">
-<li>模拟器上跑benchmark：将处理器编译成模拟器在x86主机上运行，该模拟器运行benchmark的时间，受<strong>x86主机性能</strong>的影响
-<img src="https://s2.loli.net/2023/09/01/JRcsUmGWtadbI4p.png" /></li>
-<li>在FPGA上跑benchmark：将RTL移植到FPGA上运行benchmark程序，运行的时间受<strong>频率</strong>的影响
-<img src="https://s2.loli.net/2023/09/01/wTJSViA4HcXqPD5.png" />
-<ul>
-<li>如上图所示：coremark官网上跑分排行榜里的处理器得分，会给出<code>CoreMark</code>跟<code>Coremark/MHz</code>，其实后者更有意义</li>
-<li>例如：Intel Core
-I5在2500MHz下的CoreMark得分为12725分、Atmel的设备在21MHz下的得分为71分，因此频率对于CoreMark得分影响很大</li>
-<li>开源项目如蜂鸟以及Coremark官网上的跑分排行榜，都是在硬件上得出来的，而且会附上频率</li>
+<li>spike 提供了 step 函数，就是我们想要的单步执行</li>
+<li>但是，spike 的 step
+在遇到异常或者中断的时候也会返回，但实际上在处理器一侧，通常异常是单独处理的</li>
+<li>修改 spike 的 step
+函数，如果遇到<u>异常</u>了，继续执行，直到执行了一条指令为止</li>
 </ul></li>
-<li>除此之外
+<li><p>pc修改:</p>
 <ul>
-<li>Benchmarks得分受访存的影响很大，访问慢速存储器会导致程序的运行时间大大增加，从而严重降低得分</li>
-<li>Benchmarks不能完整测试处理器所有的性能，例如尽管Intel I5相比Arm
-M4有更好的浮点运算能力，但是其在Benchmarks里的<code>CoreMark/MHz</code>得分却比后者低了2倍</li>
+<li>spike 没有记录最后一次执行的指令的 pc，只记录了下一个 PC</li>
+<li>在发生<u>异常</u>的时候，就不会记录异常处理的第一条指令的 PC</li>
 </ul></li>
 </ol>
-<h2 id="在模拟器上跑分的时候通过cpi更能体现性能">2.2
-在模拟器上跑分的时候，通过CPI更能体现性能</h2>
-<ol type="1">
-<li>在处理器微架构确定的情况下，处理器运行同一套benchmark的CPI是恒定的</li>
-<li>CPI(Clock Per Instructions)在MCU上如何计算?
-<ul>
-<li>在TOP里设置两个计数器: <code>cycle_register</code>,
-<code>instruction_register</code></li>
-<li>每个时钟上升沿都将cycle_register加一</li>
-<li>在一条指令提交的时候才将instruction_register加一，被flush的指令不会导致instruction_register加一</li>
-<li>在MCU上跑benchmark程序，结束后即可计算CPI:
-<code>CPI=cycle_register/instruction_register</code></li>
-</ul></li>
-</ol>
-<h1 id="spyglass-license-failure">3 Spyglass License Failure</h1>
+<h2 id="处理器修改">处理器修改</h2>
 <blockquote>
-<p>source了您目录下的<code>.bashrc</code>文件，依然会License Failure</p>
+<p>需要修改处理器，让它可以汇报每个周期完成执行的指令情况，具体的格式因实现而异，最后都需要把这些信息暴露给仿真顶层，可能的方法有：</p>
 </blockquote>
 <ol type="1">
-<li><p>通过<code>make all</code>启动spyglass <img
-src="https://s2.loli.net/2023/09/02/VYR3FdzOMunmHAC.png" /></p></li>
-<li><p>通过<code>spyglass -gui</code>启动spyglass图形化界面</p>
-<figure>
-<img src="https://s2.loli.net/2023/09/02/huytiDNSjUmgw7A.png"
-alt="image-20230902080311122.png" />
-<figcaption aria-hidden="true">image-20230902080311122.png</figcaption>
-</figure>
-<p><img
-src="https://s2.loli.net/2023/09/02/arGoXQCi5dOj3LI.png" /></p></li>
+<li>通过<u>多级的 module output
+一路传到顶层</u>，最终是顶层模块的输出信号。这种方法改动比较大，而且麻烦。</li>
+<li>通过 <u>DPI 函数</u>，每个周期调用一次，把信息通过 DPI 的参数传递给
+C 函数。这种方法比较推荐。</li>
+<li>通过仿真器的功能，例如 verilator
+可以通过添加注释的方法，把信号暴露出去。</li>
 </ol>
-<h1 id="参考文献">4 参考文献</h1>
+<h2 id="执行cosim">执行cosim</h2>
+<blockquote>
+<p>CPU 执行一条指令，就让模拟器也 step 一步，然后比较二者的状态</p>
+</blockquote>
 <ol type="1">
-<li><a target="_blank" rel="noopener" href="https://github.com/eembc/coremark">Core Github</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ganssle.com/rants/coremark.html">How fast is
-your CPU, By Jack Ganssle</a></li>
+<li><p>比较寄存器堆跟CSR寄存器的方法:</p>
+<ul>
+<li>比较写入到寄存器堆的数据</li>
+<li>比较寄存器堆所有寄存器的值</li>
+</ul></li>
+<li><p>比较内存(data memory)，针对顺序处理器可以采用如下的方法比较：</p>
+<ol type="1">
+<li>把处理器读写的日志放到一个队列 deque 中</li>
+<li>让模拟器也记录下内存的读写</li>
+<li>从 deque 进行 pop 和比对</li>
+</ol></li>
+</ol>
+<h2 id="特殊情况处理">特殊情况处理</h2>
+<ol type="1">
+<li><p>外设:</p>
+<ul>
+<li>方法一：用 C 代码再写一个外设的模型，接到模拟器的虚拟总线上</li>
+<li>方法二：将处理器外设的读取发送给模拟器</li>
+</ul></li>
+<li><p><strong>中断</strong>：</p>
+<ul>
+<li>中断就会比较麻烦，因为中断的时机比较难保证同步</li>
+<li>把模拟器的中断处理关掉，当 CPU 发送 trap 的时候，让模拟器也发生一次
+trap</li>
+<li>MCU需要监控所有的中断，Difftest框架需要将中断发送给模拟器</li>
+<li>当多个中断同时发生时，Difftest框架需要根据优先级选择最高的中断发送给模拟器</li>
+<li>Q: 目前我们的中断具体有哪些？软件、定时器、外部? <img
+src="https://s2.loli.net/2023/09/08/wjJSCqhL9QkNPug.png" /></li>
+</ul></li>
+</ol>
+<h1 id="参考文献">参考文献</h1>
+<ol type="1">
 <li><a
-target="_blank" rel="noopener" href="https://www.cnblogs.com/WenGalois123/p/17455352.html">Spyglass的Lint检查
-by WenGalois123</a></li>
+target="_blank" rel="noopener" href="https://jia.je/hardware/2023/03/23/core-cosim/">单核处理器的协同仿真</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/XiangShan-doc/blob/main/slides/20210624-RVWC-SMP-Difftest%20%E6%94%AF%E6%8C%81%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%B7%AE%E5%88%86%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95.pdf">SMP-Difftest
+支持多处理器的差分测试方法</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://ibex-core.readthedocs.io/en/latest/03_reference/cosim.html">Co-simulation
+System</a></li>
 </ol>
 
     </div>
@@ -519,13 +429,13 @@ by WenGalois123</a></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">407k</span>
+    <span title="站点总字数">411k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:10</span>
+    <span title="站点阅读时长">6:13</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
