@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,6 +198,104 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/23/riscv-trap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/03/23/riscv-trap/" class="post-title-link" itemprop="url">RISC-V 异常和中断</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-23 14:58:33" itemprop="dateCreated datePublished" datetime="2023-03-23T14:58:33+08:00">2023-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-27 13:53:57" itemprop="dateModified" datetime="2023-06-27T13:53:57+08:00">2023-06-27</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>RISC-V 异常和中断</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/23/riscv-trap/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -688,7 +786,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-08 21:36:23" itemprop="dateModified" datetime="2023-09-08T21:36:23+08:00">2023-09-08</time>
+      <time title="修改时间：2023-09-15 17:16:31" itemprop="dateModified" datetime="2023-09-15T17:16:31+08:00">2023-09-15</time>
     </span>
 
   
@@ -698,7 +796,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
+      <span>17</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -717,102 +815,8 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="协同仿真">协同仿真</h1>
-<h2 id="协同仿真的过程">协同仿真的过程</h2>
-<p>cosim
-是怎么工作的呢？模拟器是软件实现的，它原子地执行一条条指令，同时记录下当前的状态，例如寄存器的取值、内存的状态等等。如果可以让
-CPU 和模拟器锁步运行，也就是 CPU
-执行一条指令，模拟器执行一条指令，然后比对状态，一旦出现不一致，就直接报错。但实际上
-CPU
-可能会更加复杂，因为它指令的执行拆分成了很多部分，需要针对流水线进行一些修改，使得它可以生成一个匹配模拟器的原子的执行流。</p>
-<p>整体的工作流程如下：</p>
 <ol type="1">
-<li>选择一个模拟器，自己写或者使用一个现成的。考虑到模拟器实现的功能和
-CPU
-不一定一致，有时候需要修改模拟器的源码，所以可以考虑使用一些现成的开源软件，如果是为了
-cosim 设计的就更好了。</li>
-<li>找到模拟器的单步执行接口，并且让模拟器可以把内部状态暴露出来。这一步可能需要修改源代码。</li>
-<li>修改
-RTL，把指令的提交信息、寄存器堆的内容通过一些方法传递出来。</li>
-<li>修改仿真顶层，每当指令提交的时候，单步执行模拟器，然后比对双方的状态。</li>
-</ol>
-<h2 id="spike模拟器修改">Spike模拟器修改</h2>
-<blockquote>
-<p>spike 实现了比较完整的 RISC-V 指令集，并且以库的形式提供了它的
-API，但还需要一些修改，让它更加适合协同仿真:</p>
-</blockquote>
-<ol type="1">
-<li><p>step函数修改</p>
-<ul>
-<li>spike 提供了 step 函数，就是我们想要的单步执行</li>
-<li>但是，spike 的 step
-在遇到异常或者中断的时候也会返回，但实际上在处理器一侧，通常异常是单独处理的</li>
-<li>修改 spike 的 step
-函数，如果遇到<u>异常</u>了，继续执行，直到执行了一条指令为止</li>
-</ul></li>
-<li><p>pc修改:</p>
-<ul>
-<li>spike 没有记录最后一次执行的指令的 pc，只记录了下一个 PC</li>
-<li>在发生<u>异常</u>的时候，就不会记录异常处理的第一条指令的 PC</li>
-</ul></li>
-</ol>
-<h2 id="处理器修改">处理器修改</h2>
-<blockquote>
-<p>需要修改处理器，让它可以汇报每个周期完成执行的指令情况，具体的格式因实现而异，最后都需要把这些信息暴露给仿真顶层，可能的方法有：</p>
-</blockquote>
-<ol type="1">
-<li>通过<u>多级的 module output
-一路传到顶层</u>，最终是顶层模块的输出信号。这种方法改动比较大，而且麻烦。</li>
-<li>通过 <u>DPI 函数</u>，每个周期调用一次，把信息通过 DPI 的参数传递给
-C 函数。这种方法比较推荐。</li>
-<li>通过仿真器的功能，例如 verilator
-可以通过添加注释的方法，把信号暴露出去。</li>
-</ol>
-<h2 id="执行cosim">执行cosim</h2>
-<blockquote>
-<p>CPU 执行一条指令，就让模拟器也 step 一步，然后比较二者的状态</p>
-</blockquote>
-<ol type="1">
-<li><p>比较寄存器堆跟CSR寄存器的方法:</p>
-<ul>
-<li>比较写入到寄存器堆的数据</li>
-<li>比较寄存器堆所有寄存器的值</li>
-</ul></li>
-<li><p>比较内存(data memory)，针对顺序处理器可以采用如下的方法比较：</p>
-<ol type="1">
-<li>把处理器读写的日志放到一个队列 deque 中</li>
-<li>让模拟器也记录下内存的读写</li>
-<li>从 deque 进行 pop 和比对</li>
-</ol></li>
-</ol>
-<h2 id="特殊情况处理">特殊情况处理</h2>
-<ol type="1">
-<li><p>外设:</p>
-<ul>
-<li>方法一：用 C 代码再写一个外设的模型，接到模拟器的虚拟总线上</li>
-<li>方法二：将处理器外设的读取发送给模拟器</li>
-</ul></li>
-<li><p><strong>中断</strong>：</p>
-<ul>
-<li>中断就会比较麻烦，因为中断的时机比较难保证同步</li>
-<li>把模拟器的中断处理关掉，当 CPU 发送 trap 的时候，让模拟器也发生一次
-trap</li>
-<li>MCU需要监控所有的中断，Difftest框架需要将中断发送给模拟器</li>
-<li>当多个中断同时发生时，Difftest框架需要根据优先级选择最高的中断发送给模拟器</li>
-<li>Q: 目前我们的中断具体有哪些？软件、定时器、外部? <img
-src="https://s2.loli.net/2023/09/08/wjJSCqhL9QkNPug.png" /></li>
-</ul></li>
-</ol>
-<h1 id="参考文献">参考文献</h1>
-<ol type="1">
-<li><a
-target="_blank" rel="noopener" href="https://jia.je/hardware/2023/03/23/core-cosim/">单核处理器的协同仿真</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/XiangShan-doc/blob/main/slides/20210624-RVWC-SMP-Difftest%20%E6%94%AF%E6%8C%81%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%B7%AE%E5%88%86%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95.pdf">SMP-Difftest
-支持多处理器的差分测试方法</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://ibex-core.readthedocs.io/en/latest/03_reference/cosim.html">Co-simulation
-System</a></li>
+<li>spyglass报告连接</li>
 </ol>
 
       
@@ -1228,105 +1232,6 @@ System</a></li>
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/10/25/dsp-matlab/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
-      <meta itemprop="name" content="FuJie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | timemeansalot">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/25/dsp-matlab/" class="post-title-link" itemprop="url">DSP用Matlab学习的笔记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-25 10:24:45" itemprop="dateCreated datePublished" datetime="2022-10-25T10:24:45+08:00">2022-10-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.8k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="matlab-笔记">Matlab 笔记</h1>
-<p>学习DSP时记录的笔记</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/25/dsp-matlab/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
@@ -1351,13 +1256,13 @@ System</a></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">411k</span>
+    <span title="站点总字数">410k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:13</span>
+    <span title="站点阅读时长">6:12</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动

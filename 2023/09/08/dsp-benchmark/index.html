@@ -28,7 +28,7 @@
 <meta property="og:description" content="[TOC]">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-08T05:14:32.000Z">
-<meta property="article:modified_time" content="2023-09-08T09:25:30.734Z">
+<meta property="article:modified_time" content="2023-09-09T01:12:40.883Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="DSP">
 <meta name="twitter:card" content="summary">
@@ -144,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdsp-benchmark"><span class="nav-number">1.</span> <span class="nav-text">1 什么是DSP Benchmark</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dsp-benchmark%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">2 DSP Benchmark的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dsp-benchmark-%E5%88%86%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 DSP Benchmark 分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E9%80%94%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Benchmark评估途径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E7%9A%84%E6%8C%87%E6%A0%87"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Benchmark评估的指标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dsp%E5%B8%B8%E8%A7%81%E7%9A%84benchmark"><span class="nav-number">3.</span> <span class="nav-text">3 DSP常见的Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dhrystone-benchmark"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Dhrystone Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eembc-benchmark"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 ※EEMBC Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bdti-benchmark"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 ※BDTI Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dspstone-benchmark"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 ※DSPStone Benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">4 参考文献</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dsp-benchmark"><span class="nav-number">1.</span> <span class="nav-text">DSP Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdsp-benchmark"><span class="nav-number">1.1.</span> <span class="nav-text">什么是DSP Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dsp-benchmark%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">DSP Benchmark的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dsp-benchmark-%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">DSP Benchmark 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E9%80%94%E5%BE%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">Benchmark评估途径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E7%9A%84%E6%8C%87%E6%A0%87"><span class="nav-number">1.2.3.</span> <span class="nav-text">Benchmark评估的指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dsp%E5%B8%B8%E8%A7%81%E7%9A%84benchmark"><span class="nav-number">1.3.</span> <span class="nav-text">DSP常见的Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dhrystone-benchmark"><span class="nav-number">1.3.1.</span> <span class="nav-text">Dhrystone Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eembc-benchmark"><span class="nav-number">1.3.2.</span> <span class="nav-text">※EEMBC Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bdti-benchmark"><span class="nav-number">1.3.3.</span> <span class="nav-text">※BDTI Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dspstone-benchmark"><span class="nav-number">1.3.4.</span> <span class="nav-text">※DSPStone Benchmark</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,9 +240,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-09-08 13:14:32 / 修改时间：17:25:30" itemprop="dateCreated datePublished" datetime="2023-09-08T13:14:32+08:00">2023-09-08</time>
+      <time title="创建时间：2023-09-08 13:14:32" itemprop="dateCreated datePublished" datetime="2023-09-08T13:14:32+08:00">2023-09-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-09 09:12:40" itemprop="dateModified" datetime="2023-09-09T09:12:40+08:00">2023-09-09</time>
     </span>
 
   
@@ -252,7 +258,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.5k</span>
+      <span>2.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -272,7 +278,8 @@
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
 <span id="more"></span>
-<h1 id="什么是dsp-benchmark">1 什么是DSP Benchmark</h1>
+<h1 id="dsp-benchmark">DSP Benchmark</h1>
+<h2 id="什么是dsp-benchmark">什么是DSP Benchmark</h2>
 <ol type="1">
 <li><p>定义:
 Benchmark是一个用于<u>定量评估</u>计算机<u>软硬件资源</u>的程序</p></li>
@@ -308,12 +315,12 @@ Benchmark是一个用于<u>定量评估</u>计算机<u>软硬件资源</u>的程
 <p>DSP对比CPU的不同，导致CPU的Benchmark并不能很好地评估DSP的优劣</p>
 </blockquote></li>
 </ol>
-<h1 id="dsp-benchmark的特点">2 DSP Benchmark的特点</h1>
+<h2 id="dsp-benchmark的特点">DSP Benchmark的特点</h2>
 <blockquote>
 <p>一开始DSP Benchmark主要有设备厂商如TI、摩托罗拉等公司给出；
 后来有了一些独立的DSP Benchmark如BDTIMark, EDN Benchmarks, DSPStone.</p>
 </blockquote>
-<h2 id="dsp-benchmark-分类">2.1 DSP Benchmark 分类</h2>
+<h3 id="dsp-benchmark-分类">DSP Benchmark 分类</h3>
 <p>DSP Benchmark可以分为如下三类：</p>
 <ol type="1">
 <li>Processor:
@@ -333,7 +340,7 @@ usage</strong>，比较二者的差异从而评估编译器的性能</li>
 <li>通过运行的性能来整体评估处理器跟编译器的性能</li>
 </ul></li>
 </ol>
-<h2 id="benchmark评估途径">2.2 Benchmark评估途径</h2>
+<h3 id="benchmark评估途径">Benchmark评估途径</h3>
 <ol type="1">
 <li>单看指标(Metrics):
 <ul>
@@ -353,18 +360,18 @@ usage</strong>，比较二者的差异从而评估编译器的性能</li>
 <li>从DSP应用程序里提取出专门的计算部分</li>
 </ul></li>
 </ol>
-<h2 id="benchmark评估的指标">2.3 Benchmark评估的指标</h2>
+<h3 id="benchmark评估的指标">Benchmark评估的指标</h3>
 <ol type="1">
 <li>周期数(Cycle Count)</li>
 <li>内存使用(Program Memory Usage &amp; Data Memory Usage)</li>
 <li>程序执行时间(Execution Time)</li>
 <li>功耗(Power Consumption)</li>
 </ol>
-<h1 id="dsp常见的benchmark">3 DSP常见的Benchmark</h1>
+<h2 id="dsp常见的benchmark">DSP常见的Benchmark</h2>
 <blockquote>
 <p>由于DSP系统的多样性，设计一款适合所有DSP系统的Benchmark不容易</p>
 </blockquote>
-<h2 id="dhrystone-benchmark">3.1 Dhrystone Benchmark</h2>
+<h3 id="dhrystone-benchmark">Dhrystone Benchmark</h3>
 <ol type="1">
 <li><a
 target="_blank" rel="noopener" href="https://github.com/search?q=Dhrystone&amp;type=repositories">Dhrystone官网</a></li>
@@ -376,8 +383,8 @@ target="_blank" rel="noopener" href="https://github.com/search?q=Dhrystone&amp;t
 <li>程序调用太浅，函数调用主要是3层</li>
 </ul></li>
 </ol>
-<!-- ## EDN's DSP Benchmark -->
-<h2 id="eembc-benchmark">3.2 ※EEMBC Benchmark</h2>
+<!-- ### EDN's DSP Benchmark -->
+<h3 id="eembc-benchmark">※EEMBC Benchmark</h3>
 <ol type="1">
 <li><a target="_blank" rel="noopener" href="https://www.eembc.org/">EEMBC官网</a></li>
 <li>由C编写、其测试用例包括：自动驾驶、物联网、机器学习、<strong>数字通信</strong>等行业</li>
@@ -386,7 +393,7 @@ kernel的性能，从DSP应用里提取了计算密集的相关代码</li>
 <li>包含很多Benchmark以针对不用的应用场景： <img
 src="https://s2.loli.net/2023/09/08/EPngJXj74zOiK6a.png" /></li>
 </ol>
-<h2 id="bdti-benchmark">3.3 ※BDTI Benchmark</h2>
+<h3 id="bdti-benchmark">※BDTI Benchmark</h3>
 <blockquote>
 <p>BDTI DSP
 内核基准测试是世界上使用最广泛的数字信号处理基准测试。几乎每个 DSP
@@ -394,7 +401,7 @@ src="https://s2.loli.net/2023/09/08/EPngJXj74zOiK6a.png" /></li>
 </blockquote>
 <ol type="1">
 <li><a
-target="_blank" rel="noopener" href="https://www.bdti.com/services/bdti-dsp-kernel-benchmarks#:~:text=The%20BDTI%20DSP%20Kernel%20Benchmarks%20are%20a%20suite%20of%20twelve,in%20most%20signal%20processing%20applications">BDTI官网</a></li>
+target="_blank" rel="noopener" href="https://www.bdti.com/services/bdti-dsp-kernel-benchmarks##:~:text=The%20BDTI%20DSP%20Kernel%20Benchmarks%20are%20a%20suite%20of%20twelve,in%20most%20signal%20processing%20applications">BDTI官网</a></li>
 <li>由汇编编写，测试Processor的性能，不评估
 I/O、外设或外部存储器的影响</li>
 <li>包含12个 DSP 算法内核基准测试的套件，如FIR, IIR filters, LMS filter,
@@ -403,7 +410,7 @@ src="https://s2.loli.net/2023/09/08/LQaIDsocKSU7d3j.png" /></li>
 <li>Benchmark结构默认是所有测试项的平均分，但是用户可以根据应用的倾向为测试分配权重</li>
 <li>Benchmark跑分受处理器数据格式影响，例如定点数的处理器跑分会高于浮点数处理器</li>
 </ol>
-<h2 id="dspstone-benchmark">3.4 ※DSPStone Benchmark</h2>
+<h3 id="dspstone-benchmark">※DSPStone Benchmark</h3>
 <ol type="1">
 <li><a
 target="_blank" rel="noopener" href="https://www.ice.rwth-aachen.de/research/tools-projects/closed-projects/dspstone">DSPStone官网</a></li>
@@ -414,7 +421,7 @@ target="_blank" rel="noopener" href="https://www.ice.rwth-aachen.de/research/too
 </ul></li>
 <li>专门针对DSP的Benchmark</li>
 </ol>
-<h1 id="参考文献">4 参考文献</h1>
+<h2 id="参考文献">参考文献</h2>
 <ol type="1">
 <li><a
 target="_blank" rel="noopener" href="https://www.bdti.com/services/bdti-dsp-kernel-benchmarks">BDTI DSP
@@ -454,6 +461,9 @@ Processing Applications &amp; Technology, Dallas, TX, 1994 (1994):
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2023/09/15/spyglass/" rel="next" title="spyglass报告">
+                  spyglass报告 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -485,13 +495,13 @@ Processing Applications &amp; Technology, Dallas, TX, 1994 (1994):
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">411k</span>
+    <span title="站点总字数">410k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:13</span>
+    <span title="站点阅读时长">6:12</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
