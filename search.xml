@@ -57,6 +57,7 @@ C编程一站式学习</a></label></li>
     <title>spyglass报告</title>
     <url>/2023/09/15/spyglass/</url>
     <content><![CDATA[<p>[TOC]</p>
+<span id="more"></span>
 <p>报告路径：</p>
 <ol type="1">
 <li>/home/fujie/Developer/verify/all.log</li>
@@ -67,36 +68,36 @@ C编程一站式学习</a></label></li>
 <h1 id="v1">V1</h1>
 <p><img src="https://s2.loli.net/2023/09/15/1oYaNBVTfwu5dzh.png" /></p>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915153622913.png"
-alt="image-20230915153622913" />
-<figcaption aria-hidden="true">image-20230915153622913</figcaption>
+<img src="https://s2.loli.net/2023/09/16/3ANf4H1XTjPpzyr.png"
+alt="image-20230916075102199" />
+<figcaption aria-hidden="true">image-20230916075102199</figcaption>
 </figure>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915153642449.png"
-alt="image-20230915153642449" />
-<figcaption aria-hidden="true">image-20230915153642449</figcaption>
+<img src="https://s2.loli.net/2023/09/16/qXAEoeO78B3mkSt.png"
+alt="image-20230916075151495" />
+<figcaption aria-hidden="true">image-20230916075151495</figcaption>
 </figure>
 <h1 id="v2">V2</h1>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915160018228.png"
-alt="image-20230915160018228" />
-<figcaption aria-hidden="true">image-20230915160018228</figcaption>
+<img src="https://s2.loli.net/2023/09/16/HnEZmvpcwUdqkXG.png"
+alt="image-20230916075333028" />
+<figcaption aria-hidden="true">image-20230916075333028</figcaption>
 </figure>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915160031960.png"
-alt="image-20230915160031960" />
-<figcaption aria-hidden="true">image-20230915160031960</figcaption>
+<img src="https://s2.loli.net/2023/09/16/Bl1mYaWZ5FJOSR3.png"
+alt="image-20230916075358125" />
+<figcaption aria-hidden="true">image-20230916075358125</figcaption>
 </figure>
 <h1 id="v3">V3</h1>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915160526081.png"
-alt="image-20230915160526081" />
-<figcaption aria-hidden="true">image-20230915160526081</figcaption>
+<img src="https://s2.loli.net/2023/09/16/gBqMJv4LtDoU3ZA.png"
+alt="image-20230916075420531" />
+<figcaption aria-hidden="true">image-20230916075420531</figcaption>
 </figure>
 <figure>
-<img src="../../../../../../Pictures/Typora/image-20230915170210787.png"
-alt="image-20230915170210787" />
-<figcaption aria-hidden="true">image-20230915170210787</figcaption>
+<img src="https://s2.loli.net/2023/09/16/y8x2GEMcJFBgCz3.png"
+alt="image-20230916075445019" />
+<figcaption aria-hidden="true">image-20230916075445019</figcaption>
 </figure>
 ]]></content>
       <tags>
@@ -9087,9 +9088,14 @@ RISC-V 上的操作系统 - 汪辰</a></li>
     <title>付杰周报-20230815</title>
     <url>/2023/03/08/week-report/</url>
     <content><![CDATA[<p>[TOC]</p>
-<ol type="1">
-<li>spyglass报告连接</li>
-</ol>
+<h1 id="difftest接入中断">Difftest接入中断</h1>
+<h2 id="对spike修改部分">对Spike修改部分</h2>
+<h2 id="对mcu修改部分">对MCU修改部分</h2>
+<h2 id="对difftest框架修改部分">对Difftest框架修改部分</h2>
+<h2 id="最终效果">最终效果</h2>
+<h1 id="spyglass">spyglass</h1>
+<p><a
+href="https://timemeansalot.github.io/2023/09/15/spyglass/">spyglass报告连接</a></p>
 ]]></content>
       <tags>
         <tag>RISC-V</tag>
