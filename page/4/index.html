@@ -887,7 +887,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-16 09:16:20" itemprop="dateModified" datetime="2023-09-16T09:16:20+08:00">2023-09-16</time>
+      <time title="修改时间：2023-09-21 19:04:30" itemprop="dateModified" datetime="2023-09-21T19:04:30+08:00">2023-09-21</time>
     </span>
 
   
@@ -897,7 +897,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.1k</span>
+      <span>45</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -916,93 +916,15 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="difftest接入中断">Difftest接入中断</h1>
-<blockquote>
-<p>本周基本完成了中断部分的Difftest框架接入</p>
-</blockquote>
-<h2 id="对spike修改部分">对Spike修改部分</h2>
-<blockquote>
-<p>编译Spike时需要做的修改</p>
-</blockquote>
+<h1 id="异常响应机制">异常响应机制</h1>
 <ol type="1">
-<li>关闭Spike本身的中断 <img
-src="https://s2.loli.net/2023/09/16/gHBntQA85JK1Uvz.png"
-alt="turn off spike interrupt" /></li>
-<li>在<code>diff_context</code>增加CSR寄存器相关的记录 <img
-src="https://s2.loli.net/2023/09/16/T1xRNPwdosJWcM5.png"
-alt="add_csr_in_difftest" /></li>
-<li>Difftest初始化时设置<code>mstatus</code>寄存器的初值 <img
-src="https://s2.loli.net/2023/09/16/Bh2XOosbcfum9Tx.png"
-alt="set mstatus init value" /> <img
-src="https://s2.loli.net/2023/09/16/PfS56cqjUVkNTYO.png"
-alt="set mstatus to 0x1800" /></li>
-<li>修改<code>diff_get_regs</code>函数，增加从spike获得内部CSR寄存器值的功能
-<img src="https://s2.loli.net/2023/09/16/dHG2npwm3LtMzyQ.png"
-alt="csr get" /></li>
-<li>修改<code>diff_set_regs</code>函数 <img
-src="https://s2.loli.net/2023/09/16/gi51XY4ERH7mGnB.png"
-alt="csr set" /></li>
+<li>csr寄存器、重要的csr寄存器</li>
+<li>csr指令: 已经实现</li>
 </ol>
-<blockquote>
-<p>完成上述修改之后对Spike进行编译得到<code>riscv32-spike-so</code>动态连接库，即可得到Spike的参考模型</p>
-</blockquote>
-<h2 id="对mcu修改部分">对MCU修改部分</h2>
+<h1 id="上下文管理">上下文管理</h1>
 <ol type="1">
-<li>通过DPI-C获得CSR寄存器的内容
-参考之前传递GPR到Difftest框架的过程（在<code>regfile.v</code>文件里通过DPI-C函数获取GRP的值），
-将<code>CSR.v</code>文件里的CSR寄存器的值传递到Difftest框架
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"> <span class="keyword">import</span> <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> <span class="keyword">void</span> set_csr_ptr(<span class="keyword">input</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] a []); <span class="comment">// add DPI-C function</span></span><br><span class="line"> <span class="keyword">initial</span> set_csr_ptr(CSRs);</span><br></pre></td></tr></table></figure></li>
-<li>将中断信号传到Difftest框架
-将PLIC传入的中断信号，连接到top，方便在Difftest框架里检测该信号</li>
+<li>栈空间</li>
 </ol>
-<h2 id="对difftest框架修改部分">对Difftest框架修改部分</h2>
-<ol type="1">
-<li><p>在CPU_State里增加CSR的值</p>
-<blockquote>
-<p>之前比较CPU_State只比较了PC, GPR的值，现在需要再多比较CSR的值</p>
-</blockquote>
-<p><img
-src="https://s2.loli.net/2023/09/16/1OBrqEyoP6gV9TS.png" /></p></li>
-<li><p>通过DPI-C获取MCU的CSR的值，并且保存到CPU_State里 <img
-src="https://s2.loli.net/2023/09/16/t36og17xFJ4uIrW.png" /></p></li>
-<li><p>检测MCU中断，让Spike进入中断 &gt; 在Difftest检测MCU
-top的中断信号，信号为高时让Spike执行<code>diff_raise_intr</code>函数</p></li>
-<li><p>在Difftest里，比较MCU跟Spike状态的时候，额外需要比较CSR寄存器的状态</p>
-<blockquote>
-<p>目前只比较了MSTATUS, MTVEC, MEPC,
-MCAUSE四个寄存器的值，后续会增加对CSR.v里其他寄存器的比较</p>
-</blockquote>
-<figure>
-<img src="https://s2.loli.net/2023/09/16/KcpaZwEGVXyhUg4.png"
-alt="compare csr" />
-<figcaption aria-hidden="true">compare csr</figcaption>
-</figure></li>
-</ol>
-<h2 id="执行效果">执行效果</h2>
-<p><img src="https://s2.loli.net/2023/09/16/4695XSYnvFZ7kQD.png" /></p>
-<h2 id="后续工作">后续工作</h2>
-<ol type="1">
-<li>对Spike跟MCU的CSR初始化细节做进一步同步、通过Difftest对中断进行测试</li>
-<li>tesecase构建</li>
-<li>Q: 外部中断响应程序编写</li>
-</ol>
-<h1 id="spyglass">spyglass</h1>
-<ol type="1">
-<li>报告路径：
-<ol type="1">
-<li><code>/home/fujie/Developer/verify/all.log</code></li>
-<li><code>/home/fujie/Developer/verify/all_v2.log</code></li>
-<li><code>/home/fujie/Developer/verify/all_v3.log</code></li>
-<li><code>/home/fujie/Developer/verify/vsrc/spyglass-1</code></li>
-</ol></li>
-<li>报告最终截图 <img
-src="https://s2.loli.net/2023/09/16/gBqMJv4LtDoU3ZA.png"
-alt="image-20230916075420531" /> <img
-src="https://s2.loli.net/2023/09/16/y8x2GEMcJFBgCz3.png"
-alt="image-20230916075445019" /></li>
-</ol>
-<p><a
-href="https://timemeansalot.github.io/2023/09/15/spyglass/">详细spyglass报告连接</a></p>
 
       
     </div>
@@ -1339,13 +1261,13 @@ href="https://timemeansalot.github.io/2023/09/15/spyglass/">详细spyglass报告
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">412k</span>
+    <span title="站点总字数">411k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:14</span>
+    <span title="站点阅读时长">6:13</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
