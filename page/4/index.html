@@ -869,7 +869,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/08/week-report/" class="post-title-link" itemprop="url">付杰周报-20230815</a>
+          <a href="/2023/03/08/week-report/" class="post-title-link" itemprop="url">付杰周报-20230923</a>
         </h2>
 
         <div class="post-meta-container">
@@ -887,7 +887,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-21 19:04:30" itemprop="dateModified" datetime="2023-09-21T19:04:30+08:00">2023-09-21</time>
+      <time title="修改时间：2023-09-23 06:03:30" itemprop="dateModified" datetime="2023-09-23T06:03:30+08:00">2023-09-23</time>
     </span>
 
   
@@ -897,7 +897,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>45</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -916,14 +916,98 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="异常响应机制">异常响应机制</h1>
+<h1 id="构建中断testcase">构建中断testcase</h1>
+<h2 id="初始化系统">初始化系统</h2>
 <ol type="1">
-<li>csr寄存器、重要的csr寄存器</li>
-<li>csr指令: 已经实现</li>
+<li>初始化所有的gpr，避免difftest报错</li>
+<li>设置<code>mtvec</code>的值:
+<ul>
+<li><code>mtvec</code>存放<u>中断处理程序的</u>地址</li>
+<li>当中断(interrupt)异常(exception)发生的时候，
+程序会在硬件控制下跳转到<code>mtvec</code>，即<code>pc=csr[mtvec]</code></li>
+</ul></li>
+<li>设置栈空间：中断处理程序需要保存上下文到栈里，栈大小设置为1024</li>
+<li>跳转到测试程序：系统基本设置好了之后，就跳转到测试程序处执行<code>jal _test</code></li>
 </ol>
-<h1 id="上下文管理">上下文管理</h1>
+<h2 id="准备中断处理程序">准备中断处理程序</h2>
+<ol start="2" type="1">
+<li><p>中断处理程序(软件)，主要做了如下的工作</p>
+<ul>
+<li>保存系统状态，即保存重要的csr寄存器的值到栈上</li>
+<li>将gpr进行压栈，避免gpr被trap_handler程序覆盖</li>
+<li>跳转到trap_handler: <code>jal trap_handler</code></li>
+<li>将gpr出栈</li>
+<li>从栈里恢复csr寄存器的值</li>
+<li>调用mret返回</li>
+</ul>
+<blockquote>
+<p>ps: ecall-&gt;硬件修改csr寄存器的值，如mstatus, mepc,
+<code>pc=csr[mtvec]</code> 进入到中断处理程序
+mret-&gt;硬件修改csr寄存器的值，<code>pc=csr[mepc]</code></p>
+</blockquote></li>
+<li><p>trap_handler
+顾名思义，是用于处理不同的中断、异常的程序，本质上是一段程序，
+可以由汇编编写、也可以由c编写。</p>
+<ul>
+<li>在testcase里，trap_handler只是一个在中断处理程序中的<strong>跳转地址</strong>，</li>
+<li>通过<code>jal trap_handler</code>进入具体的中断处理代码，通过<code>ret</code>返回到中断处理程序剩余部分</li>
+<li>如果trap_handler需要处理的中断类型比较多，则需要通过a0~a7寄存器为其传递参数，如
+<code>mcause</code>, <code>mtval</code>等寄存器的值</li>
+</ul></li>
+</ol>
+<h2 id="测试程序">测试程序</h2>
+<p>一段正常的测试程序:</p>
+<p>为了测试中断处理程序，有如下两种途径：</p>
 <ol type="1">
-<li>栈空间</li>
+<li><p>软件中断(YSYX的例子，其中断处理过程如下)：</p>
+<ul>
+<li>初始化系统，跳转到测试程序第一条指令处执行</li>
+<li>测试程序有一条<code>ecall</code>指令</li>
+<li>ecall指令触发软件中断，pc跳转到mepc位置，进入到中断处理程序</li>
+<li>中断处理程序处理器状态、保存上下文</li>
+<li>进入到trap_handler，具体针对中断进行处理</li>
+<li>trap_handler调用ret返回</li>
+<li>中断能处理程序恢复处理器状态、恢复上下文</li>
+<li>调用mret，pc跳转到之前程序的位置执行</li>
+</ul></li>
+<li><p>外部中断(测试plic):
+跟软件中断的过程很像，不同之处在于pc跳转到mepc不是因为ecall指令，而是因为
+plic发过来了一个中断</p></li>
+</ol>
+<blockquote>
+<p>PS：需要注意的是，由于多了初始化系统的部分，所以<code>0x80000000</code>不是存放测试程序第一条指令，
+测试程序第一条指令在初始化完成之后通过<code>jal</code>跳转</p>
+</blockquote>
+<ol start="3" type="1">
+<li>代码分析 testcase主要包含两个代码文件:
+<ul>
+<li>trap.S: 主要包括<u>系统初始化</u>，<u>中断处理程序</u></li>
+<li>test.S: 主要包括<u>测试程序</u>跟<u>trap_handler</u></li>
+<li>os.txt：整个testcase的反汇编代码</li>
+</ul>
+<blockquote>
+<p>代码在interrupt分支下: <a
+target="_blank" rel="noopener" href="https://github.com/ChipDesign/FAST_INTR_CPU/tree/interrupt/src/verification/riscvtest/interrupt">FAST_INTR_CPU/src/verification/riscvtest/interrupt/</a>
+## 运行截图</p>
+</blockquote></li>
+</ol>
+<p>目前对软件中断进行了测试，经过测试证明testcase代码逻辑能够按照预期运行到<code>_test</code>里的ebreak指令，从而退出difftest;
+各个函数的执行顺序如下图所示: <img
+src="https://s2.loli.net/2023/09/23/DysNzvjB1PAIrCh.png" />
+运行截图如下： <img
+src="https://s2.loli.net/2023/09/23/E4N6C1UwifdZ7Oz.png" /></p>
+<p>目前中断测试存在下面一些问题：</p>
+<ol type="1">
+<li>目前对于<code>ecall</code>的指令功能没有实现完全，导致<code>csr[mepc]=pc</code>功能没有实现，进而导致<code>mret</code>指令不能正常运行</li>
+<li>对于其他csr寄存器的功能正确性，需要进一步测试，现在difftest发现很多寄存器的值都对不上，需要找到哪里实现有问题</li>
+</ol>
+<h1 id="参考资料">参考资料</h1>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/3.2.html#%E8%AE%BE%E7%BD%AE%E5%BC%82%E5%B8%B8%E5%85%A5%E5%8F%A3%E5%9C%B0%E5%9D%80">YSYX
+PA3</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://gitee.com/unicornx/riscv-operating-system-mooc?_from=gitee_search">riscv-operating-system-mooc</a></li>
 </ol>
 
       
@@ -1261,13 +1345,13 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">411k</span>
+    <span title="站点总字数">412k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:13</span>
+    <span title="站点阅读时长">6:15</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
