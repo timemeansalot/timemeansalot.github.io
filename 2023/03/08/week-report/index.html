@@ -28,7 +28,7 @@
 <meta property="og:description" content="[TOC] 构建中断testcase 初始化系统  初始化所有的gpr，避免difftest报错 设置mtvec的值:  mtvec存放中断处理程序的地址 当中断(interrupt)异常(exception)发生的时候， 程序会在硬件控制下跳转到mtvec，即pc&#x3D;csr[mtvec]  设置栈空间：中断处理程序需要保存上下文到栈里，栈大小设置为1024 跳转到测试程序：系统基本设置好了之后，就">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-08T06:45:34.000Z">
-<meta property="article:modified_time" content="2023-09-22T22:03:30.541Z">
+<meta property="article:modified_time" content="2023-09-23T01:52:57.678Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -248,7 +248,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-23 06:03:30" itemprop="dateModified" datetime="2023-09-23T06:03:30+08:00">2023-09-23</time>
+      <time title="修改时间：2023-09-23 09:52:57" itemprop="dateModified" datetime="2023-09-23T09:52:57+08:00">2023-09-23</time>
     </span>
 
   
@@ -324,7 +324,7 @@ mret-&gt;硬件修改csr寄存器的值，<code>pc=csr[mepc]</code></p>
 <ul>
 <li>初始化系统，跳转到测试程序第一条指令处执行</li>
 <li>测试程序有一条<code>ecall</code>指令</li>
-<li>ecall指令触发软件中断，pc跳转到mepc位置，进入到中断处理程序</li>
+<li>ecall指令触发软件中断，pc跳转到mtvec位置，进入到中断处理程序</li>
 <li>中断处理程序处理器状态、保存上下文</li>
 <li>进入到trap_handler，具体针对中断进行处理</li>
 <li>trap_handler调用ret返回</li>
@@ -332,7 +332,7 @@ mret-&gt;硬件修改csr寄存器的值，<code>pc=csr[mepc]</code></p>
 <li>调用mret，pc跳转到之前程序的位置执行</li>
 </ul></li>
 <li><p>外部中断(测试plic):
-跟软件中断的过程很像，不同之处在于pc跳转到mepc不是因为ecall指令，而是因为
+跟软件中断的过程很像，不同之处在于pc跳转到mtvec不是因为ecall指令，而是因为
 plic发过来了一个中断</p></li>
 </ol>
 <blockquote>
