@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,104 +198,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/03/scientificResearch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
-      <meta itemprop="name" content="FuJie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | timemeansalot">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/03/scientificResearch/" class="post-title-link" itemprop="url">科研心得</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-03 20:55:01" itemprop="dateCreated datePublished" datetime="2023-04-03T20:55:01+08:00">2023-04-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>796</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>开始做科研一直以来所有的心得，得到了很多人的帮助</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/03/scientificResearch/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1094,7 +996,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-23 09:52:57" itemprop="dateModified" datetime="2023-09-23T09:52:57+08:00">2023-09-23</time>
+      <time title="修改时间：2023-10-13 22:42:08" itemprop="dateModified" datetime="2023-10-13T22:42:08+08:00">2023-10-13</time>
     </span>
 
   
@@ -1104,14 +1006,14 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -1123,99 +1025,149 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="构建中断testcase">构建中断testcase</h1>
-<h2 id="初始化系统">初始化系统</h2>
-<ol type="1">
-<li>初始化所有的gpr，避免difftest报错</li>
-<li>设置<code>mtvec</code>的值:
-<ul>
-<li><code>mtvec</code>存放<u>中断处理程序的</u>地址</li>
-<li>当中断(interrupt)异常(exception)发生的时候，
-程序会在硬件控制下跳转到<code>mtvec</code>，即<code>pc=csr[mtvec]</code></li>
-</ul></li>
-<li>设置栈空间：中断处理程序需要保存上下文到栈里，栈大小设置为1024</li>
-<li>跳转到测试程序：系统基本设置好了之后，就跳转到测试程序处执行<code>jal _test</code></li>
-</ol>
-<h2 id="准备中断处理程序">准备中断处理程序</h2>
-<ol start="2" type="1">
-<li><p>中断处理程序(软件)，主要做了如下的工作</p>
-<ul>
-<li>保存系统状态，即保存重要的csr寄存器的值到栈上</li>
-<li>将gpr进行压栈，避免gpr被trap_handler程序覆盖</li>
-<li>跳转到trap_handler: <code>jal trap_handler</code></li>
-<li>将gpr出栈</li>
-<li>从栈里恢复csr寄存器的值</li>
-<li>调用mret返回</li>
-</ul>
+<h1 id="中断的硬件实现原理">中断的硬件实现原理</h1>
+<h2 id="core的硬件支持">Core的硬件支持</h2>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/O3tbTVYWXhvn1dy.png"
+alt="image-20231013212119766" />
+<figcaption aria-hidden="true">image-20231013212119766</figcaption>
+</figure>
 <blockquote>
-<p>ps: ecall-&gt;硬件修改csr寄存器的值，如mstatus, mepc,
-<code>pc=csr[mtvec]</code> 进入到中断处理程序
-mret-&gt;硬件修改csr寄存器的值，<code>pc=csr[mepc]</code></p>
-</blockquote></li>
-<li><p>trap_handler
-顾名思义，是用于处理不同的中断、异常的程序，本质上是一段程序，
-可以由汇编编写、也可以由c编写。</p>
-<ul>
-<li>在testcase里，trap_handler只是一个在中断处理程序中的<strong>跳转地址</strong>，</li>
-<li>通过<code>jal trap_handler</code>进入具体的中断处理代码，通过<code>ret</code>返回到中断处理程序剩余部分</li>
-<li>如果trap_handler需要处理的中断类型比较多，则需要通过a0~a7寄存器为其传递参数，如
-<code>mcause</code>, <code>mtval</code>等寄存器的值</li>
-</ul></li>
-</ol>
-<h2 id="测试程序">测试程序</h2>
-<p>一段正常的测试程序:</p>
-<p>为了测试中断处理程序，有如下两种途径：</p>
-<ol type="1">
-<li><p>软件中断(YSYX的例子，其中断处理过程如下)：</p>
-<ul>
-<li>初始化系统，跳转到测试程序第一条指令处执行</li>
-<li>测试程序有一条<code>ecall</code>指令</li>
-<li>ecall指令触发软件中断，pc跳转到mtvec位置，进入到中断处理程序</li>
-<li>中断处理程序处理器状态、保存上下文</li>
-<li>进入到trap_handler，具体针对中断进行处理</li>
-<li>trap_handler调用ret返回</li>
-<li>中断能处理程序恢复处理器状态、恢复上下文</li>
-<li>调用mret，pc跳转到之前程序的位置执行</li>
-</ul></li>
-<li><p>外部中断(测试plic):
-跟软件中断的过程很像，不同之处在于pc跳转到mtvec不是因为ecall指令，而是因为
-plic发过来了一个中断</p></li>
-</ol>
-<blockquote>
-<p>PS：需要注意的是，由于多了初始化系统的部分，所以<code>0x80000000</code>不是存放测试程序第一条指令，
-测试程序第一条指令在初始化完成之后通过<code>jal</code>跳转</p>
+<p>PS:
+目前Core可以顺序的执行I-Memory里的指令，并且可以对Branch、Jump指令正确地跳转到对应PC，</p>
+<p>现在需要增加对中断的支持；中断=中断(Interrupt)+异常(Exception)</p>
 </blockquote>
-<ol start="3" type="1">
-<li>代码分析 testcase主要包含两个代码文件:
-<ul>
-<li>trap.S: 主要包括<u>系统初始化</u>，<u>中断处理程序</u></li>
-<li>test.S: 主要包括<u>测试程序</u>跟<u>trap_handler</u></li>
-<li>os.txt：整个testcase的反汇编代码</li>
-</ul>
+<h3
+id="core对中断进行处理需要增加如下的功能">Core对中断进行处理，需要增加如下的功能:</h3>
+<ol type="1">
+<li>接受中断发生的信号</li>
+<li>中断发生时，跳转到对应的处理程序的能力</li>
+<li>辨别不同类型的中断的能力</li>
+</ol>
 <blockquote>
-<p>代码在interrupt分支下: <a
-target="_blank" rel="noopener" href="https://github.com/ChipDesign/FAST_INTR_CPU/tree/interrupt/src/verification/riscvtest/interrupt">FAST_INTR_CPU/src/verification/riscvtest/interrupt/</a>
-## 运行截图</p>
-</blockquote></li>
-</ol>
-<p>目前对软件中断进行了测试，经过测试证明testcase代码逻辑能够按照预期运行到<code>_test</code>里的ebreak指令，从而退出difftest;
-各个函数的执行顺序如下图所示: <img
-src="https://s2.loli.net/2023/09/23/DysNzvjB1PAIrCh.png" />
-运行截图如下： <img
-src="https://s2.loli.net/2023/09/23/E4N6C1UwifdZ7Oz.png" /></p>
-<p>目前中断测试存在下面一些问题：</p>
+<p>PS:
+对中断处理的主要动作是<strong>当中断发生的时候-&gt;停止当前的工作流-&gt;按照中断的类型完成对应的处理-&gt;恢复之前的工作流</strong>。</p>
+</blockquote>
+<h3 id="core需要提供的硬件支持">Core需要提供的硬件支持</h3>
+<blockquote>
+<p>为了实现上述3种功能，Core需要在原来五级流水线的基础上增加如下的硬件支持</p>
+</blockquote>
+<h4 id="接受中断信号">接受中断信号</h4>
 <ol type="1">
-<li>目前对于<code>ecall</code>的指令功能没有实现完全，导致<code>csr[mepc]=pc</code>功能没有实现，进而导致<code>mret</code>指令不能正常运行</li>
-<li>对于其他csr寄存器的功能正确性，需要进一步测试，现在difftest发现很多寄存器的值都对不上，需要找到哪里实现有问题</li>
+<li>Core需要接受一个中断发生的信号，以通知Core当前发生了中断 &gt;
+具体指<strong>ID Stage</strong>需要接受信号、知道中断发生了，因为ID
+Stage负责PC的更新</li>
 </ol>
-<h1 id="参考资料">参考资料</h1>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/wivUfa6KOAXTej2.png"
+alt="image-20231013220122658" />
+<figcaption aria-hidden="true">image-20231013220122658</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>RISC-V规定了3种类型的中断，分别是：外部中断、软件中断、定时器中断，其来源会在下文<code>mcause</code>部分介绍</li>
+</ol>
+<h4 id="csr寄存器及其操作">🌟CSR寄存器及其操作</h4>
 <ol type="1">
-<li><a
-target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/3.2.html#%E8%AE%BE%E7%BD%AE%E5%BC%82%E5%B8%B8%E5%85%A5%E5%8F%A3%E5%9C%B0%E5%9D%80">YSYX
-PA3</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://gitee.com/unicornx/riscv-operating-system-mooc?_from=gitee_search">riscv-operating-system-mooc</a></li>
+<li><p>记录中断的发生:</p>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/PmEjCzUnF93lo1c.png"
+alt="image-20231013211942338" />
+<figcaption aria-hidden="true">image-20231013211942338</figcaption>
+</figure>
+<blockquote>
+<p>中断使能位在<code>CSR.mie</code>寄存器中配置</p>
+</blockquote>
+<ul>
+<li>CSR.mip寄存器用于记录各种pending的中断 <img
+src="https://s2.loli.net/2023/10/13/HPoTsMuENjwJQbV.png"
+alt="image-20231013131939115" /></li>
+<li>PLIC检测到外部中断之后，会发送一个<code>notify</code>信号到CSR单元，表明外部中断发生;
+导致<code>CSR.mip[11]=1;</code></li>
+<li>Timer触发时钟中断之后，也会发送一个<code>notify</code>信号到CSR单元，表明时钟中断发送;
+导致<code>CSR.mip[7]=1;</code></li>
+<li>软件中断（通常用于向另一个核发送），此时可以通过MMIO的方式往另一个核的CSR单元写入;
+导致<code>CSR.mip[3]=1;</code></li>
+</ul></li>
+<li><p>判断中断发生 <img
+src="https://s2.loli.net/2023/10/13/5iTmZIa8ESzwrR1.png"
+alt="image-20231013212029071" /></p>
+<blockquote>
+<p>如上所述：3种中断发生之后，都会通过硬件在1个cycle内记录到<code>CSR.mip</code>寄存器中，现在可以对中断进行处理了</p>
+</blockquote>
+<ul>
+<li>中断判断在<code>trap_handler</code>单用中完成（为了代码结构清晰)，它通过输入<code>CSR.mip, CSR.mie</code>信号，判断中断是否发生;
+若发生中断，则会将<code>Trap</code>信号拉高，该信号会被ID Stage使用,
+<code>Trap=mip[x] &amp; mie[x], x=3,7,11</code></li>
+<li><code>Trap</code>信号会发送给Core跟CSR单元，完成相应的硬件操作以支撑中断</li>
+</ul></li>
+<li><p>记录中断的类型&amp;更改处理器状态</p>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/WOxugf3lM5KEwty.png"
+alt="image-20231013213455624" />
+<figcaption aria-hidden="true">image-20231013213455624</figcaption>
+</figure>
+<ul>
+<li>在中断发生的时候，硬件会自动更新CSR.mcause寄存器，保存中断的原因
+<img
+src="https://img2023.cnblogs.com/blog/1653979/202307/1653979-20230712210012313-359133103.png" /></li>
+<li>例如“外部中断发生”之后，<code>CSR.mcause</code>寄存器的<code>Exception Code</code>字段会被写入<code>0x80000800</code></li>
+<li>中断处理程序(Interrupt Service Routine,
+ISR)通过查询<code>CSR.mcause</code>，就可以知道中断的原因，进而做想要的操作
+<img src="https://s2.loli.net/2023/10/13/uN9Spx3VnsyX5Oc.png" /></li>
+<li>中断判定之后，需要修改<code>CSR.mstatus</code>寄存器以更改处理器状态，
+硬件默认会将<code>CSR.mstatus.mpie=CSR.mstatus.mie, CSR.mstatus.mie=0</code>，默认不支持中断嵌套</li>
+<li><u>中断嵌套</u>:
+进入ISR后，可以通过CSR指令(如CSRRW)将<code>CSR.mstatus.mie</code>置1从而再次打开中断，实现中断嵌套</li>
+</ul></li>
+<li><p>跳转到ISR执行</p>
+<blockquote>
+<p>中断处理核心的工作就是更改PC，从而跳转到ISR并且从ISR返回</p>
+</blockquote>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/SJgC6qd7husZ1BL.png"
+alt="image-20231013214933645" />
+<figcaption aria-hidden="true">image-20231013214933645</figcaption>
+</figure>
+<ul>
+<li><code>CSR.mtvec</code>存放ISR的地址:
+上面的<code>Trap</code>信号被拉高之后，ID会将<code>pc_instr</code>更新为<code>mtvec</code>的值，起到跳转到ISR的功能;
+<code>CSR.mtvec</code>会在<u>系统初始化</u>的时候被CSR指令写入</li>
+<li>记录ISR返回的pc到<code>CSR.mepc</code>中:
+<code>mepc = interrupt ? pc_next : pc;</code></li>
+<li>在ISR中，需要通过指令来保存上下文到D-Memory（栈区），栈指针有<code>CSR.mscratch</code>寄存器给出
+<img src="https://s2.loli.net/2023/10/13/JQqOlPz9WfN4GBU.png" /></li>
+</ul></li>
+<li><p>从ISR返回</p>
+<blockquote>
+<p>中断处理结束之后，ID需要将pc更换为mepc的值，从而继续之前的任务</p>
+</blockquote>
+<figure>
+<img src="https://s2.loli.net/2023/10/13/cwpuMHThDAoKYU7.png"
+alt="image-20231013222648570" />
+<figcaption aria-hidden="true">image-20231013222648570</figcaption>
+</figure>
+<ul>
+<li>从ISR返回的条件是执行到了<code>mret</code>指令（在此之前，ISR已经通过指令完成了上下文的恢复才会调用<code>mret</code>指令）</li>
+<li>ID
+Stage会将pc替换为<code>CSR.mepc</code>的值，并且CSR相关的<code>status</code>,
+<code>mip</code>寄存器会被硬件恢复为中断之前的状态</li>
+<li>PLIC同样需要接受mret信号，从而判定当前中断已经处理完成、去仲裁新的外部中断</li>
+</ul></li>
 </ol>
+<h2
+id="中断发生时硬件自动完成的操作">中断发生时，硬件自动完成的操作</h2>
+<blockquote>
+<p>有了上述硬件支持之后，中断发生之后，下述操作会有硬件自动完成：</p>
+</blockquote>
+<ul>
+<li>异常指令的 PC 被保存在 mepc 中，PC 被设置为 mtvec</li>
+<li>根据异常来源设置 mcause</li>
+<li>把控制状态寄存器 mstatus 中的 MIE 位置零以禁用中断，并把先前的 MIE
+值保 留到 MPIE 中</li>
+<li>发生异常之前的权限模式保留在 mstatus 的 MPP 域中，再把权限模式更改为
+M(咱们只实现了M模式，故这一步可以省略)</li>
+</ul>
+<h1 id="ecall指令测试结果">ecall指令测试结果</h1>
 
       
     </div>
@@ -1332,6 +1284,104 @@ target="_blank" rel="noopener" href="https://gitee.com/unicornx/riscv-operating-
 
 
 
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/12/09/linux-using-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/12/09/linux-using-notes/" class="post-title-link" itemprop="url">Linux学习笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-12-09 10:35:05" itemprop="dateCreated datePublished" datetime="2022-12-09T10:35:05+08:00">2022-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文档记录一些 Linux 相关的工具、命令的使用</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/12/09/linux-using-notes/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
@@ -1356,13 +1406,13 @@ target="_blank" rel="noopener" href="https://gitee.com/unicornx/riscv-operating-
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">414k</span>
+    <span title="站点总字数">416k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:16</span>
+    <span title="站点阅读时长">6:18</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
