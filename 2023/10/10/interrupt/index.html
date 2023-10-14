@@ -32,8 +32,16 @@
 <meta property="og:image" content="https://s2.loli.net/2023/10/11/xJUHts7W16z8BoT.png">
 <meta property="og:image" content="https://s2.loli.net/2023/10/12/1waFnRdjViUW7fx.png">
 <meta property="og:image" content="https://s2.loli.net/2023/10/12/EGjYsOaxdPM9iNqng">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/O3TBTVYWXHVN1DY.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/WIVUFA6KOAXTEJ2.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/PMEJCZUNF93LO1C.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/WOXUGF3LM5KEWTY.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/UN9SPX3VNSYX5OC.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/SJGC6QD7HUSZ1BL.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/JQQOLPZ9WFN4GBU.PNG">
+<meta property="og:image" content="HTTPS://S2.LOLI.NET/2023/10/13/CWPUMHTHDAOKYU7.PNG">
 <meta property="article:published_time" content="2023-10-10T14:27:26.000Z">
-<meta property="article:modified_time" content="2023-10-12T15:13:29.671Z">
+<meta property="article:modified_time" content="2023-10-14T01:22:03.613Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
@@ -152,7 +160,7 @@
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0%E5%AF%84%E5%AD%98%E5%99%A8%E7%BA%A7%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">中断的硬件实现(寄存器级描述)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">中断介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">基础介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%92%9F%E4%B8%AD%E6%96%AD"><span class="nav-number">1.2.1.</span> <span class="nav-text">时钟中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E4%B8%AD%E6%96%AD"><span class="nav-number">1.2.2.</span> <span class="nav-text">软件中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-number">1.2.3.</span> <span class="nav-text">外部中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.</span> <span class="nav-text">中断处理操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.1.</span> <span class="nav-text">硬件操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">软件操作(中断处理程序)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%E5%BF%85%E9%A1%BB%E5%AE%9E%E7%8E%B0%E7%9A%848%E4%B8%AA%C3%A7sr%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.4.</span> <span class="nav-text">附录：必须实现的8个ÇSR寄存器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plicplatform-level-interrupt-controller"><span class="nav-number">2.</span> <span class="nav-text">PLIC(Platform-Level
 Interrupt Controller)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cliccore-local-interrupt-controller"><span class="nav-number">3.</span> <span class="nav-text">CLIC(Core-Local Interrupt
-Controller)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+Controller)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">我们的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#core%E7%9A%84%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">4.1.</span> <span class="nav-text">CORE的硬件支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#core%E5%AF%B9%E4%B8%AD%E6%96%AD%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86%E9%9C%80%E8%A6%81%E5%A2%9E%E5%8A%A0%E5%A6%82%E4%B8%8B%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">4.1.1.</span> <span class="nav-text">CORE对中断进行处理，需要增加如下的功能:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#core%E9%9C%80%E8%A6%81%E6%8F%90%E4%BE%9B%E7%9A%84%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">4.1.2.</span> <span class="nav-text">CORE需要提供的硬件支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%8F%97%E4%B8%AD%E6%96%AD%E4%BF%A1%E5%8F%B7"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">接受中断信号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#csr%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E5%85%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">🌟CSR寄存器及其操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%8F%91%E7%94%9F%E6%97%B6%E7%A1%AC%E4%BB%B6%E8%87%AA%E5%8A%A8%E5%AE%8C%E6%88%90%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">4.2.</span> <span class="nav-text">中断发生时，硬件自动完成的操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -256,7 +264,7 @@ Controller)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" 
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-12 23:13:29" itemprop="dateModified" datetime="2023-10-12T23:13:29+08:00">2023-10-12</time>
+      <time title="修改时间：2023-10-14 09:22:03" itemprop="dateModified" datetime="2023-10-14T09:22:03+08:00">2023-10-14</time>
     </span>
 
   
@@ -266,14 +274,14 @@ Controller)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" 
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.6k</span>
+      <span>4.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -443,6 +451,150 @@ src="https://s2.loli.net/2023/10/12/gBTxzArW12EqlGp.png" /></li>
 <li>仲裁原理：先比较Level，再比较Priority，在比较ID（数字都是越大越好）</li>
 </ul></li>
 </ol>
+<h1 id="我们的实现">我们的实现</h1>
+<h2 id="core的硬件支持">CORE的硬件支持</h2>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/O3TBTVYWXHVN1DY.PNG"
+alt="IMAGE-20231013212119766" />
+<figcaption aria-hidden="true">IMAGE-20231013212119766</figcaption>
+</figure>
+<blockquote>
+<p>PS:
+目前CORE可以顺序的执行I-MEMORY里的指令，并且可以对BRANCH、JUMP指令正确地跳转到对应PC，</p>
+<p>现在需要增加对中断的支持；中断=中断(INTERRUPT)+异常(EXCEPTION)</p>
+</blockquote>
+<h3
+id="core对中断进行处理需要增加如下的功能">CORE对中断进行处理，需要增加如下的功能:</h3>
+<ol type="1">
+<li>接受中断发生的信号</li>
+<li>中断发生时，跳转到对应的处理程序的能力</li>
+<li>辨别不同类型的中断的能力</li>
+</ol>
+<blockquote>
+<p>PS:
+对中断处理的主要动作是<strong>当中断发生的时候-&gt;停止当前的工作流-&gt;按照中断的类型完成对应的处理-&gt;恢复之前的工作流</strong>。</p>
+</blockquote>
+<h3 id="core需要提供的硬件支持">CORE需要提供的硬件支持</h3>
+<blockquote>
+<p>为了实现上述3种功能，CORE需要在原来五级流水线的基础上增加如下的硬件支持</p>
+</blockquote>
+<h4 id="接受中断信号">接受中断信号</h4>
+<ol type="1">
+<li><p>CORE需要接受一个中断发生的信号，以通知CORE当前发生了中断</p>
+<blockquote>
+<p>具体指<strong>ID STAGE</strong>需要接受信号、知道中断发生了，因为ID
+STAGE负责PC的更新</p>
+</blockquote></li>
+</ol>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/WIVUFA6KOAXTEJ2.PNG"
+alt="IMAGE-20231013220122658" />
+<figcaption aria-hidden="true">IMAGE-20231013220122658</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>RISC-V规定了3种类型的中断，分别是：外部中断、软件中断、定时器中断，其来源会在下文<code>MCAUSE</code>部分介绍</li>
+</ol>
+<h4 id="csr寄存器及其操作">🌟CSR寄存器及其操作</h4>
+<ol type="1">
+<li><p>记录中断的发生:</p>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/PMEJCZUNF93LO1C.PNG"
+alt="IMAGE-20231013211942338" />
+<figcaption aria-hidden="true">IMAGE-20231013211942338</figcaption>
+</figure>
+<blockquote>
+<p>中断使能位在<code>CSR.MIE</code>寄存器中配置</p>
+</blockquote>
+<ul>
+<li>CSR.MIP寄存器用于记录各种PENDING的中断 <img
+src="HTTPS://S2.LOLI.NET/2023/10/13/HPOTSMUENJWJQBV.PNG"
+alt="IMAGE-20231013131939115" /></li>
+<li>PLIC检测到外部中断之后，会发送一个<code>NOTIFY</code>信号到CSR单元，表明外部中断发生;
+导致<code>CSR.MIP[11]=1;</code></li>
+<li>TIMER触发时钟中断之后，也会发送一个<code>NOTIFY</code>信号到CSR单元，表明时钟中断发送;
+导致<code>CSR.MIP[7]=1;</code></li>
+<li>软件中断（通常用于向另一个核发送），此时可以通过MMIO的方式往另一个核的CSR单元写入;
+导致<code>CSR.MIP[3]=1;</code></li>
+</ul></li>
+<li><p>判断中断发生 <img
+src="HTTPS://S2.LOLI.NET/2023/10/13/5ITMZIA8ESZWRR1.PNG"
+alt="IMAGE-20231013212029071" /></p>
+<blockquote>
+<p>如上所述：3种中断发生之后，都会通过硬件在1个CYCLE内记录到<code>CSR.MIP</code>寄存器中，现在可以对中断进行处理了</p>
+</blockquote>
+<ul>
+<li>中断判断在<code>TRAP_HANDLER</code>单用中完成（为了代码结构清晰)，它通过输入<code>CSR.MIP, CSR.MIE</code>信号，判断中断是否发生;
+若发生中断，则会将<code>TRAP</code>信号拉高，该信号会被ID STAGE使用,
+<code>TRAP=MIP[X] &amp; MIE[X], X=3,7,11</code></li>
+<li><code>TRAP</code>信号会发送给CORE跟CSR单元，完成相应的硬件操作以支撑中断</li>
+</ul></li>
+<li><p>记录中断的类型&amp;更改处理器状态</p>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/WOXUGF3LM5KEWTY.PNG"
+alt="IMAGE-20231013213455624" />
+<figcaption aria-hidden="true">IMAGE-20231013213455624</figcaption>
+</figure>
+<ul>
+<li>在中断发生的时候，硬件会自动更新CSR.MCAUSE寄存器，保存中断的原因
+<img
+src="HTTPS://IMG2023.CNBLOGS.COM/BLOG/1653979/202307/1653979-20230712210012313-359133103.PNG" /></li>
+<li>例如“外部中断发生”之后，<code>CSR.MCAUSE</code>寄存器的<code>EXCEPTION CODE</code>字段会被写入<code>0X80000800</code></li>
+<li>中断处理程序(INTERRUPT SERVICE ROUTINE,
+ISR)通过查询<code>CSR.MCAUSE</code>，就可以知道中断的原因，进而做想要的操作
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/UN9SPX3VNSYX5OC.PNG" /></li>
+<li>中断判定之后，需要修改<code>CSR.MSTATUS</code>寄存器以更改处理器状态，
+硬件默认会将<code>CSR.MSTATUS.MPIE=CSR.MSTATUS.MIE, CSR.MSTATUS.MIE=0</code>，默认不支持中断嵌套</li>
+<li><U>中断嵌套</U>:
+进入ISR后，可以通过CSR指令(如CSRRW)将<code>CSR.MSTATUS.MIE</code>置1从而再次打开中断，实现中断嵌套</li>
+</ul></li>
+<li><p>跳转到ISR执行</p>
+<blockquote>
+<p>中断处理核心的工作就是更改PC，从而跳转到ISR并且从ISR返回</p>
+</blockquote>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/SJGC6QD7HUSZ1BL.PNG"
+alt="IMAGE-20231013214933645" />
+<figcaption aria-hidden="true">IMAGE-20231013214933645</figcaption>
+</figure>
+<ul>
+<li><code>CSR.MTVEC</code>存放ISR的地址:
+上面的<code>TRAP</code>信号被拉高之后，ID会将<code>PC_INSTR</code>更新为<code>MTVEC</code>的值，起到跳转到ISR的功能;
+<code>CSR.MTVEC</code>会在<U>系统初始化</U>的时候被CSR指令写入</li>
+<li>记录ISR返回的PC到<code>CSR.MEPC</code>中:
+<code>MEPC = INTERRUPT ? PC_NEXT : PC;</code></li>
+<li>在ISR中，需要通过指令来保存上下文到D-MEMORY（栈区），栈指针有<code>CSR.MSCRATCH</code>寄存器给出
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/JQQOLPZ9WFN4GBU.PNG" /></li>
+</ul></li>
+<li><p>从ISR返回</p>
+<blockquote>
+<p>中断处理结束之后，ID需要将PC更换为MEPC的值，从而继续之前的任务</p>
+</blockquote>
+<figure>
+<img src="HTTPS://S2.LOLI.NET/2023/10/13/CWPUMHTHDAOKYU7.PNG"
+alt="IMAGE-20231013222648570" />
+<figcaption aria-hidden="true">IMAGE-20231013222648570</figcaption>
+</figure>
+<ul>
+<li>从ISR返回的条件是执行到了<code>MRET</code>指令（在此之前，ISR已经通过指令完成了上下文的恢复才会调用<code>MRET</code>指令）</li>
+<li>ID
+STAGE会将PC替换为<code>CSR.MEPC</code>的值，并且CSR相关的<code>STATUS</code>,
+<code>MIP</code>寄存器会被硬件恢复为中断之前的状态</li>
+<li>PLIC同样需要接受MRET信号，从而判定当前中断已经处理完成、去仲裁新的外部中断</li>
+</ul></li>
+</ol>
+<h2
+id="中断发生时硬件自动完成的操作">中断发生时，硬件自动完成的操作</h2>
+<blockquote>
+<p>有了上述硬件支持之后，中断发生之后，下述操作会有硬件自动完成：</p>
+</blockquote>
+<ul>
+<li>异常指令的 PC 被保存在 MEPC 中，PC 被设置为 MTVEC</li>
+<li>根据异常来源设置 MCAUSE</li>
+<li>把控制状态寄存器 MSTATUS 中的 MIE 位置零以禁用中断，并把先前的 MIE
+值保 留到 MPIE 中</li>
+<li>发生异常之前的权限模式保留在 MSTATUS 的 MPP 域中，再把权限模式更改为
+M(咱们只实现了M模式，故这一步可以省略)</li>
+</ul>
 <h1 id="参考文献">参考文献</h1>
 <ol type="1">
 <li><a
@@ -514,13 +666,13 @@ target="_blank" rel="noopener" href="https://tinylab.org/riscv-irq-analysis-part
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">416k</span>
+    <span title="站点总字数">419k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:18</span>
+    <span title="站点阅读时长">6:21</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
