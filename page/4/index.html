@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,6 +198,104 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/04/riscv-WB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/04/riscv-WB/" class="post-title-link" itemprop="url">RISC-V写回级</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-04 09:35:30" itemprop="dateCreated datePublished" datetime="2023-04-04T09:35:30+08:00">2023-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>668</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="risc-v-wb-stage-设计">RISC-V WB Stage 设计</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/04/riscv-WB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1094,7 +1192,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-14 09:25:28" itemprop="dateModified" datetime="2023-10-14T09:25:28+08:00">2023-10-14</time>
+      <time title="修改时间：2023-10-23 16:34:36" itemprop="dateModified" datetime="2023-10-23T16:34:36+08:00">2023-10-23</time>
     </span>
 
   
@@ -1104,7 +1202,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.2k</span>
+      <span>3.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -1123,318 +1221,110 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="中断的硬件实现原理">1 中断的硬件实现原理</h1>
-<h2 id="core的硬件支持">1.1 Core的硬件支持</h2>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/O3tbTVYWXhvn1dy.png"
-alt="image-20231013212119766" />
-<figcaption aria-hidden="true">image-20231013212119766</figcaption>
-</figure>
-<blockquote>
-<p>PS:
-目前Core可以顺序的执行I-Memory里的指令，并且可以对Branch、Jump指令正确地跳转到对应PC，</p>
-<p>现在需要增加对中断的支持；中断=中断(Interrupt)+异常(Exception)</p>
-</blockquote>
-<h3 id="core对中断进行处理需要增加如下的功能">1.1.1
-Core对中断进行处理，需要增加如下的功能:</h3>
+<h1 id="测试外部中断">测试外部中断</h1>
 <ol type="1">
-<li>接受中断发生的信号</li>
-<li>中断发生时，跳转到对应的处理程序的能力</li>
-<li>辨别不同类型的中断的能力</li>
+<li>在spike中关闭其中断(编译spike的已经完成)</li>
+<li>在top里将PLIC的外部中断信号拉一根信号<code>ext_interrup</code>出去，在testbench里需要使用该信号
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">execute</span><span class="params">(<span class="type">uint64_t</span> n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (; n &gt; <span class="number">0</span>; n--) &#123;</span><br><span class="line">    g_nr_guest_inst++;</span><br><span class="line">    <span class="built_in">exec_once</span>(); <span class="comment">// dut run 1 cycle</span></span><br><span class="line">    cpu.pc = top-&gt;pc; <span class="comment">// pc存入cpu结构体</span></span><br><span class="line">    <span class="built_in">dump_gpr</span>();       <span class="comment">// 寄存器值存入cpu结构体</span></span><br><span class="line">    <span class="keyword">if</span> (top-&gt;commit_en) &#123;</span><br><span class="line">      <span class="built_in">difftest_step</span>(top-&gt;pc, top-&gt;ext_interrupt); <span class="comment">// spike run 1 cycle</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (npc_state.state != NPC_RUNNING)</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>修改Difftest框架，传入<code>ext_interupt</code>信号，当该信号为高的时候，让Spike也触发外部中断
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">difftest_step</span><span class="params">(<span class="type">uint64_t</span> pc, <span class="type">int</span> ext_interrupt)</span> </span>&#123;</span><br><span class="line">  CPU_state ref_r;</span><br><span class="line">  <span class="built_in">ref_difftest_exec</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span>(ext_interrupt)&#123; <span class="comment">// if external interrupt happen, make Spike interrupt happen</span></span><br><span class="line">        <span class="built_in">difftest_interrupt</span>(pc);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="built_in">ref_difftest_regcpy</span>(&amp;ref_r, DIFFTEST_TO_DUT); <span class="comment">// 从ref中拷贝寄存器状态</span></span><br><span class="line">  <span class="built_in">checkregs</span>(&amp;ref_r, pc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
-<blockquote>
-<p>PS:
-对中断处理的主要动作是<strong>当中断发生的时候-&gt;停止当前的工作流-&gt;按照中断的类型完成对应的处理-&gt;恢复之前的工作流</strong>。</p>
-</blockquote>
-<h3 id="core需要提供的硬件支持">1.1.2 Core需要提供的硬件支持</h3>
-<blockquote>
-<p>为了实现上述3种功能，Core需要在原来五级流水线的基础上增加如下的硬件支持</p>
-</blockquote>
-<h4 id="接受中断信号">接受中断信号</h4>
+<p><img src="https://s2.loli.net/2023/10/21/rYo47BPARDbwOeQ.png" /></p>
+<h1 id="发现的问题">发现的问题</h1>
 <ol type="1">
-<li><p>Core需要接受一个中断发生的信号，以通知Core当前发生了中断</p>
+<li><p>CSR寄存器写入的cycle晚了1个cycle</p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug 描述：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">_start:</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   la a5, _ISR</span><br><span class="line">   csrw	mtvec, a5</span><br><span class="line">   ecall</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br></pre></td></tr></table></figure>
+<p><code>csrw mtvec, a5</code>将a5的值写入到<code>CSRs[8]</code>寄存器中，<code>ecall</code>指令执行的时候会触发软件中断，
+将pc的值替换成<code>mtvec</code>的值，但是<code>mtvec</code>得更新迟了1个cycle，导致pc没有更新为正确的<code>mtvec</code>的值
+<img src="https://s2.loli.net/2023/10/18/FEwxjb9VWT8mdfk.png" /></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"><span class="comment">//mtvec</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= <span class="number">32&#x27;h80000000</span>;<span class="comment">//initialized as zero, to be reset by booting software</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(wen2&amp;waddr2 == <span class="number">12&#x27;h305</span>)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= wdata2;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li><p>bug 修复：将CSR写入逻辑提前1个cycle <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"><span class="comment">//mtvec</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= <span class="number">32&#x27;h80000000</span>;<span class="comment">//initialized as zero, to be reset by booting software</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(wen1&amp;waddr1 == <span class="number">12&#x27;h305</span>)</span><br><span class="line">    <span class="comment">// else if(wen2&amp;waddr2 == 12&#x27;h305)</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= wdata1;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure> <img
+src="https://s2.loli.net/2023/10/18/i4O8qsXAT7JjYKt.png" /></p></li>
+</ul></li>
+<li><p>trap发生的时候，mepc没有根据中断或异常做选择</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：当中断发生的时候，mepc应该写入next_pc的值；当异常发生的时候，mepc应当写入当前指令的pc值，目前版本mepc没有做选择，都是写入的当前pc的值
+<img src="https://s2.loli.net/2023/10/18/sPFRDW3Iw1qHao5.png" /></li>
+<li>bug 修复：mepc需要区分外部中断、内部异常
+<code>mepc=interrupt ? pc_next : pc</code></li>
+</ul></li>
+<li><p>trap发生的时候，hazard
+unit没有产生相应的flush信号，flush后续的指令</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：外部中断产生到Trap信号拉高再到从中断处理程序取出第一条指令，一共有3条
+无用的信号，需要被flush掉，但是hazard unit没有将对应flush信号拉高 <img
+src="https://s2.loli.net/2023/10/19/bT3RBCZKkFqW9AG.png" /></li>
+<li>bug
+修复：hazard需要考虑外部中断跟软件中断的情况，然后拉高相应的flush信号</li>
+</ul></li>
+</ol>
+<h1 id="risc-v-问题思考解决方法">RISC-V 问题思考&amp;解决方法</h1>
+<ol type="1">
+<li><p>目前中断发现到Trap信号拉高，一共有2个cycle，感觉可以优化掉1个cycle
+<img src="https://s2.loli.net/2023/10/20/C2QsfOlAbaj3W8n.png" /></p>
+<ul>
+<li><p>目前的逻辑是：ID
+Stage译码到<code>ecall</code>指令、或者是PLIC发来外部中断信号之后，会修改<code>CSR.mip</code>寄存器的值，将对应的pending位拉高</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// write CSR.mip</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        CSRs[<span class="number">14</span>] &lt;= <span class="number">32&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">3</span>]&lt;= soft_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">7</span>]&lt;= time_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">11</span>]&lt;= test_ext_pending;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>然后<code>htrap_handler</code>会通过<code>CSR.mip</code>寄存器的对应<u>中断位</u>来产生Trap信号、发送到各个功能部件</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(mstatus[<span class="number">3</span>]) <span class="comment">// 全局中断使能</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    ex_happen&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">if</span>(mip[<span class="number">11</span>]&amp;mie[<span class="number">11</span>]) <span class="comment">// 外部中断发生&amp;外部中断使能</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        cause&lt;=&#123;<span class="number">1&#x27;b1</span>,<span class="number">19&#x27;b0</span>,<span class="number">1&#x27;b1</span>,<span class="number">11&#x27;b0</span>&#125;;</span><br><span class="line">        trap_flush&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">        intr_happen&lt;=<span class="number">1&#x27;b1</span>; <span class="comment">// 进行中断处理信号拉高</span></span><br><span class="line">        intr_triggered&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>具体指<strong>ID Stage</strong>需要接受信号、知道中断发生了，因为ID
-Stage负责PC的更新</p>
+<p>其核心逻辑在于<strong>检测到了中断-&gt;修改<code>CSR.mip</code>寄存器-&gt;htrap_handler触发Trap信号</strong></p>
 </blockquote></li>
-</ol>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/wivUfa6KOAXTej2.png"
-alt="image-20231013220122658" />
-<figcaption aria-hidden="true">image-20231013220122658</figcaption>
-</figure>
-<ol start="2" type="1">
-<li>RISC-V规定了3种类型的中断，分别是：外部中断、软件中断、定时器中断，其来源会在下文<code>mcause</code>部分介绍</li>
-</ol>
-<h4 id="csr寄存器及其操作">🌟CSR寄存器及其操作</h4>
-<ol type="1">
-<li><p>记录中断的发生:</p>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/PmEjCzUnF93lo1c.png"
-alt="image-20231013211942338" />
-<figcaption aria-hidden="true">image-20231013211942338</figcaption>
-</figure>
+<li><p><u>解决办法</u>：<code>htrap_handler</code>可以不通过检测CSRs寄存器的值再判断软件中断发生，直接从ID
+Stage将
+<code>ecall</code>信号传给<code>htrap_handler</code>(或者从PLIC将<code>external_interrupt</code>信号传给<code>htrap_handler</code>)，这样<code>Trap</code>信号的拉高可以提前1个cycle</p></li>
+</ul></li>
+<li><p>ID
+Stage有很多的重定向发生，例如分支预测、分支预测错误、中断异常等:</p>
+<ul>
+<li><p>重定向发生的时候，ID
+Stage产生的重定向pc需要2个cycle才可以取到对应的指令进行译码</p></li>
+<li><p>重定向的时候，FIFO里的指令都需要被flush掉，浪费了一些有用的指令，例如ecall后面的指令在FIFO里，但是ecall执行的时候，会flush掉FIFO;
+mret的时候，有需要从I-Memory里重新取出指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_start:</span><br><span class="line">   ecall</span><br><span class="line">   li x1, 1</span><br><span class="line">   li x2, 2</span><br><span class="line">   li x3, 3</span><br><span class="line">   li x4, 4</span><br><span class="line">   li x5, 5</span><br><span class="line">     </span><br><span class="line">_ISR:</span><br><span class="line">   li x1, 11</span><br><span class="line">   li x2, 12</span><br><span class="line">   li x3, 13</span><br><span class="line">   li x4, 14</span><br><span class="line">   li x5, 15</span><br><span class="line">   mret</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/10/21/HBfNqmeJKTRa2Ud.png" />
+如上面的指令流，ecall导致跳转到中断处理程序，但是跳转的时候并不是立刻能够取到<code>li x1, 11</code>指令，而是会多取3条指令，这3条指令都会被flush掉</p></li>
+<li><p><u>解决办法</u>：改善flush的逻辑，尽可能保存取出来的指令，而不是直接flush掉，这样函数返回的时候，可以快速有指令可以译码、还可以减少访问I-Memory的次数
+<em>例如：在进行中断处理的时候，将预取的指令保存在另一组寄存器里（pc
+也需要保存），mret返回的时候，则用这组寄存器的值替换FIFO里的指令，从而避免指令的反复读取并且可以在返回的时候更快得到指令</em>
+<img src="https://s2.loli.net/2023/10/21/kyczjql149AvWZV.png" /></p>
 <blockquote>
-<p>中断使能位在<code>CSR.mie</code>寄存器中配置</p>
-</blockquote>
-<ul>
-<li>CSR.mip寄存器用于记录各种pending的中断 <img
-src="https://s2.loli.net/2023/10/13/HPoTsMuENjwJQbV.png"
-alt="image-20231013131939115" /></li>
-<li>PLIC检测到外部中断之后，会发送一个<code>notify</code>信号到CSR单元，表明外部中断发生;
-导致<code>CSR.mip[11]=1;</code></li>
-<li>Timer触发时钟中断之后，也会发送一个<code>notify</code>信号到CSR单元，表明时钟中断发送;
-导致<code>CSR.mip[7]=1;</code></li>
-<li>软件中断（通常用于向另一个核发送），此时可以通过MMIO的方式往另一个核的CSR单元写入;
-导致<code>CSR.mip[3]=1;</code></li>
+<p>PS：静态分支预测器判断跳转导致flush的时候，也可以采用该优化方法</p>
+</blockquote></li>
 </ul></li>
-<li><p>判断中断发生 <img
-src="https://s2.loli.net/2023/10/13/5iTmZIa8ESzwrR1.png"
-alt="image-20231013212029071" /></p>
-<blockquote>
-<p>如上所述：3种中断发生之后，都会通过硬件在1个cycle内记录到<code>CSR.mip</code>寄存器中，现在可以对中断进行处理了</p>
-</blockquote>
+<li><p>复杂度上升之后的验证问题</p>
 <ul>
-<li>中断判断在<code>trap_handler</code>单用中完成（为了代码结构清晰)，它通过输入<code>CSR.mip, CSR.mie</code>信号，判断中断是否发生;
-若发生中断，则会将<code>Trap</code>信号拉高，该信号会被ID Stage使用,
-<code>Trap=mip[x] &amp; mie[x], x=3,7,11</code></li>
-<li><code>Trap</code>信号会发送给Core跟CSR单元，完成相应的硬件操作以支撑中断</li>
-</ul></li>
-<li><p>记录中断的类型&amp;更改处理器状态</p>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/WOxugf3lM5KEwty.png"
-alt="image-20231013213455624" />
-<figcaption aria-hidden="true">image-20231013213455624</figcaption>
-</figure>
+<li>简单的功能模块，设计人员在设计完成之后，可以通过编写testbench来进行测试</li>
+<li>复杂的硬件，其测试向量(testcase)构建也更加复杂，需要精心设计以满足测试的全面</li>
+<li>复杂的模块很难通过人为设计testbench来验证功能的正确性，有如下一些原因:
 <ul>
-<li>在中断发生的时候，硬件会自动更新CSR.mcause寄存器，保存中断的原因
-<img
-src="https://img2023.cnblogs.com/blog/1653979/202307/1653979-20230712210012313-359133103.png" /></li>
-<li>例如“外部中断发生”之后，<code>CSR.mcause</code>寄存器的<code>Exception Code</code>字段会被写入<code>0x80000800</code></li>
-<li>中断处理程序(Interrupt Service Routine,
-ISR)通过查询<code>CSR.mcause</code>，就可以知道中断的原因，进而做想要的操作
-<img src="https://s2.loli.net/2023/10/13/uN9Spx3VnsyX5Oc.png" /></li>
-<li>中断判定之后，需要修改<code>CSR.mstatus</code>寄存器以更改处理器状态，
-硬件默认会将<code>CSR.mstatus.mpie=CSR.mstatus.mie, CSR.mstatus.mie=0</code>，默认不支持中断嵌套</li>
-<li><u>中断嵌套</u>:
-进入ISR后，可以通过CSR指令(如CSRRW)将<code>CSR.mstatus.mie</code>置1从而再次打开中断，实现中断嵌套</li>
-</ul></li>
-<li><p>跳转到ISR执行</p>
-<blockquote>
-<p>中断处理核心的工作就是更改PC，从而跳转到ISR并且从ISR返回</p>
-</blockquote>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/SJgC6qd7husZ1BL.png"
-alt="image-20231013214933645" />
-<figcaption aria-hidden="true">image-20231013214933645</figcaption>
-</figure>
-<ul>
-<li><code>CSR.mtvec</code>存放ISR的地址:
-上面的<code>Trap</code>信号被拉高之后，ID会将<code>pc_instr</code>更新为<code>mtvec</code>的值，起到跳转到ISR的功能;
-<code>CSR.mtvec</code>会在<u>系统初始化</u>的时候被CSR指令写入</li>
-<li>记录ISR返回的pc到<code>CSR.mepc</code>中:
-<code>mepc = interrupt ? pc_next : pc;</code></li>
-<li>在ISR中，需要通过指令来保存上下文到D-Memory（栈区），栈指针有<code>CSR.mscratch</code>寄存器给出
-<img src="https://s2.loli.net/2023/10/13/JQqOlPz9WfN4GBU.png" /></li>
-</ul></li>
-<li><p>从ISR返回</p>
-<blockquote>
-<p>中断处理结束之后，ID需要将pc更换为mepc的值，从而继续之前的任务</p>
-</blockquote>
-<figure>
-<img src="https://s2.loli.net/2023/10/13/cwpuMHThDAoKYU7.png"
-alt="image-20231013222648570" />
-<figcaption aria-hidden="true">image-20231013222648570</figcaption>
-</figure>
-<ul>
-<li>从ISR返回的条件是执行到了<code>mret</code>指令（在此之前，ISR已经通过指令完成了上下文的恢复才会调用<code>mret</code>指令）</li>
-<li>ID
-Stage会将pc替换为<code>CSR.mepc</code>的值，并且CSR相关的<code>status</code>,
-<code>mip</code>寄存器会被硬件恢复为中断之前的状态</li>
-<li>PLIC同样需要接受mret信号，从而判定当前中断已经处理完成、去仲裁新的外部中断</li>
-</ul></li>
-</ol>
-<h2 id="中断发生时硬件自动完成的操作">1.2
-中断发生时，硬件自动完成的操作</h2>
-<blockquote>
-<p>有了上述硬件支持之后，中断发生之后，下述操作会有硬件自动完成：</p>
-</blockquote>
-<ul>
-<li>异常指令的 PC 被保存在 mepc 中，PC 被设置为 mtvec</li>
-<li>根据异常来源设置 mcause</li>
-<li>把控制状态寄存器 mstatus 中的 MIE 位置零以禁用中断，并把先前的 MIE
-值保 留到 MPIE 中</li>
-<li>发生异常之前的权限模式保留在 mstatus 的 MPP 域中，再把权限模式更改为
-M(咱们只实现了M模式，故这一步可以省略)</li>
-</ul>
-<h1 id="ecall指令测试结果">2 ecall指令测试结果</h1>
-<ol type="1">
-<li><p>对ecall指令进行译码，产生ecall_inst信号传送给CSR，令<code>CSR.mip=1</code>；记录软件中断产</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// trap_handler.v</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn) <span class="keyword">begin</span></span><br><span class="line">        soft_pending &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        soft_pending &lt;= inst_ecall;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        CSRs[<span class="number">14</span>] &lt;= <span class="number">32&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// update CSR.mip register</span></span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">3</span>]&lt;= soft_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">7</span>]&lt;= time_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">11</span>]&lt;= test_ext_pending;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-<li><p>测试代码 <img
-src="https://s2.loli.net/2023/10/14/zjdlVZNM7KQrUF3.png" /></p></li>
-<li><p>测试通过 <img
-src="https://s2.loli.net/2023/10/14/Bo1tWMh6gpLNidb.png" /></p></li>
-</ol>
-<h1 id="剩余工作">3 剩余工作</h1>
-<ol type="1">
-<li>在testcase里增加更加复杂的测试用例测试，例如增加随机输入</li>
-<li>对外部中断进行Difftest测试</li>
-</ol>
-<h2 id="附录必须实现的8个çsr寄存器">3.1
-附录：必须实现的8个ÇSR寄存器</h2>
-<ol type="1">
-<li>mstatus：指令处理器核的状态信息 <img
-src="https://img2023.cnblogs.com/blog/1653979/202307/1653979-20230712210012932-1184025042.png" />
-<ul>
-<li>MIE是对应特权级下全局中断使能位</li>
-<li>xPIE, xPP, xIE举例：从s特权级产生中断进入到m特权级时
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mPIE=mIE; <span class="comment"># 存储trap发生之前的中断使能位</span></span><br><span class="line">mPP=s     <span class="comment"># trap发生之前，处理器所处的特权级</span></span><br><span class="line">mIE=0     <span class="comment"># 关闭中断</span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
-<li>mtvec:
-<ul>
-<li>可以配置向量模式跟非向量模式，向量模式下中断响应最快</li>
-<li>非向量模式下(参考<a
-target="_blank" rel="noopener" href="https://www.rvmcu.com/quickstart-show-id-1.html#38">该文章</a>5.13):
-<ul>
-<li>mtvt2[0]==0: 中断跟异常都通过mtvec指定地址</li>
-<li>mtvt2[0]==1: 中断通过mtvt2指定地址</li>
+<li>本身复杂：处理器核本身就比某个功能模块复杂</li>
+<li>交互复杂：各个模块、pipeline
+stage连线到一起之后，彼此之间会有一些交互，会互相影响，例如
+ID译码到ecall指令的时候，会修改CSR寄存器，CSR寄存器修改导致htrap_handler触发中断，中断又导致ID
+Stage产生重定向pc</li>
+<li>Difftest框架失效（实现Difftest很困难）：在只验证处理器核的时候，由现成的开源处理器核如spike,
+nemu等可以作为Difftest的golden model，
+但是当引入外部中断的时候，没有相应的PLIC、CLINT单元可以作为Difftest的golden
+model，只能够通过比较处理器核的CSR寄存器来大概判断中断是否正确；或者是自己写相应的golden
+model</li>
 </ul></li>
 </ul></li>
-<li>mepc</li>
-<li>mcause：指令trap的原因；mcause[31]==1表示是外部中断、否则是异常；
-<!-- ![](https://img2023.cnblogs.com/blog/1653979/202307/1653979-20230712210012313-359133103.png) -->
-mcause代码参考<a
-target="_blank" rel="noopener" href="https://www.rvmcu.com/quickstart-show-id-1.html#38">该文章</a>的3.4.2节
-<img src="https://s2.loli.net/2023/10/12/1waFnRdjViUW7fx.png"
-alt="20231012172130.png" /><br />
-trap发生的时候, <code>mcause</code>会被硬件写入，记录trap发生的原因</li>
-<li>mie:
-针对各种类型的指令，指明当前处理器会处理哪些中断、忽视哪些中断</li>
-<li>mip: 列出目前正准备处理的中断</li>
-<li>mtval:
-保存了陷入（trap）的附加信息，当触发硬件断点、地址未对齐、access
-fault、page fault 时，mtval
-记录的是引发这些问题的虚拟地址；如果是由非法指令造成的异常，则将该指令的指令编码更新到mtval寄存器中</li>
-<li>mscratch: 暂时存放一个字大小的数据 &gt; 将所有三个控制状态寄存器
-虑，如果
-<code>mstatus.MIE = 1，mie[7] = 1，且 mip[7] = 1</code>，则可以处理机器的时钟中断</li>
-</ol>
-<h1 id="参考文献">4 参考文献</h1>
-<ol type="1">
-<li><a
-target="_blank" rel="noopener" href="http://riscvbook.com/chinese/RISC-V-Reader-Chinese-v2p1.pdf">RISC-V
-手册 10.3</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://www.cnblogs.com/harrypotterjackson/p/17548837.html">详解RISC
-v中断</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://www.rvmcu.com/quickstart-show-id-1.html#38">Nuclei_N级别指令架构手册</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://tinylab.org/riscv-irq-analysis-part3-interrupt-handling-cpu/">RISC-V
-中断子系统分析——CPU 中断处理</a></li>
-<li><a target="_blank" rel="noopener" href="https://tinylab.org/riscv-irq-analysis/">RISC-V
-中断子系统分析——硬件及其初始化</a></li>
+<li><p>TODO: 能否解决LW Stall，从而避免一个cycle的硬stall？</p></li>
+<li><p>TODO:
+取指部分考虑到Cache时有什么设计？不要限制在ITCM的框架里</p></li>
+<li><p>TODO: 低功耗方面有什么设计？</p></li>
 </ol>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/07/riscv-isa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
-      <meta itemprop="name" content="FuJie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | timemeansalot">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/07/riscv-isa/" class="post-title-link" itemprop="url">RISC-V指令集介绍</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-03-07 14:58:41" itemprop="dateCreated datePublished" datetime="2023-03-07T14:58:41+08:00">2023-03-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>16k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>15 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>RV-32IM 每条指令的特性和功能, 寄存器的通用功能(register mapping)</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/03/07/riscv-isa/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
@@ -1476,13 +1366,13 @@ target="_blank" rel="noopener" href="https://tinylab.org/riscv-irq-analysis-part
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">420k</span>
+    <span title="站点总字数">422k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:22</span>
+    <span title="站点阅读时长">6:24</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
