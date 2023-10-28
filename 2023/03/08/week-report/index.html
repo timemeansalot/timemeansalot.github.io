@@ -20,35 +20,43 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="[TOC] 测试外部中断  在spike中关闭其中断(编译spike的已经完成) 在top里将PLIC的外部中断信号拉一根信号ext_interrup出去，在testbench里需要使用该信号 12345678910111213static void execute(uint64_t n) &amp;#123;  for (; n &gt; 0; n--) &amp;#123;    g_nr_guest_ins">
+    <meta name="description" content="[TOC] 取指Ping Pong FIFO设计 问题描述  IF Stage的FIFO在遇到指令重定向到时候，会导致冲刷掉其内部所有的预取指令，是很大的浪费    image-20231028053834305   由于FIFO容量是5*16，当所有指令都是压缩指令的时候，指令的冲刷会导致至多4条有效指令被浪费了 单一FIFO的重定向逻辑如下:   image-20231028073735678">
 <meta property="og:type" content="article">
-<meta property="og:title" content="付杰周报-20230923">
+<meta property="og:title" content="付杰周报-20231028">
 <meta property="og:url" content="http://timemeansalot.github.io/2023/03/08/week-report/index.html">
 <meta property="og:site_name" content="timemeansalot">
-<meta property="og:description" content="[TOC] 测试外部中断  在spike中关闭其中断(编译spike的已经完成) 在top里将PLIC的外部中断信号拉一根信号ext_interrup出去，在testbench里需要使用该信号 12345678910111213static void execute(uint64_t n) &amp;#123;  for (; n &gt; 0; n--) &amp;#123;    g_nr_guest_ins">
+<meta property="og:description" content="[TOC] 取指Ping Pong FIFO设计 问题描述  IF Stage的FIFO在遇到指令重定向到时候，会导致冲刷掉其内部所有的预取指令，是很大的浪费    image-20231028053834305   由于FIFO容量是5*16，当所有指令都是压缩指令的时候，指令的冲刷会导致至多4条有效指令被浪费了 单一FIFO的重定向逻辑如下:   image-20231028073735678">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/10/21/rYo47BPARDbwOeQ.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/18/FEwxjb9VWT8mdfk.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/18/sPFRDW3Iw1qHao5.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/20/C2QsfOlAbaj3W8n.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/21/HBfNqmeJKTRa2Ud.png">
-<meta property="og:image" content="https://s2.loli.net/2023/10/21/kyczjql149AvWZV.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028053834305.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028073735678.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028074746545.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028080113030.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028081111125.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028083903963.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028083851150.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231027233257343.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028091548022.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231027233040588.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028091655026.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028091722792.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028092019593.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028092251194.png">
 <meta property="article:published_time" content="2023-03-08T06:45:34.000Z">
-<meta property="article:modified_time" content="2023-10-23T08:34:36.954Z">
+<meta property="article:modified_time" content="2023-10-28T01:32:45.001Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/10/21/rYo47BPARDbwOeQ.png">
+<meta name="twitter:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231028053834305.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/03/08/week-report/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/08/week-report/","path":"2023/03/08/week-report/","title":"付杰周报-20230923"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/08/week-report/","path":"2023/03/08/week-report/","title":"付杰周报-20231028"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>付杰周报-20230923 | timemeansalot</title>
+<title>付杰周报-20231028 | timemeansalot</title>
   
 
 
@@ -151,7 +159,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD"><span class="nav-number">1.</span> <span class="nav-text">测试外部中断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">发现的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#risc-v-%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">RISC-V 问题思考&amp;解决方法</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E6%8C%87ping-pong-fifo%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">取指Ping Pong FIFO设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.2.</span> <span class="nav-text">改进设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ping-pong-fifoppf%E6%80%9D%E6%83%B3"><span class="nav-number">1.2.1.</span> <span class="nav-text">Ping Pong FIFO(PPF)思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">硬件实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BF%E5%AD%98leftover-buffer-prefetch-buffer"><span class="nav-number">2.</span> <span class="nav-text">访存Leftover Buffer &amp;
+Prefetch Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leftover-buffer"><span class="nav-number">2.2.</span> <span class="nav-text">Leftover Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E6%83%B3"><span class="nav-number">2.2.1.</span> <span class="nav-text">思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">硬件实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prefetch-buffer"><span class="nav-number">2.3.</span> <span class="nav-text">Prefetch Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E6%83%B3-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">硬件实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">综合结果</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +175,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -232,12 +241,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="付杰周报-20230923 | timemeansalot">
+      <meta itemprop="name" content="付杰周报-20231028 | timemeansalot">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          付杰周报-20230923
+          付杰周报-20231028
         </h1>
 
         <div class="post-meta-container">
@@ -255,7 +264,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-23 16:34:36" itemprop="dateModified" datetime="2023-10-23T16:34:36+08:00">2023-10-23</time>
+      <time title="修改时间：2023-10-28 09:32:45" itemprop="dateModified" datetime="2023-10-28T09:32:45+08:00">2023-10-28</time>
     </span>
 
   
@@ -265,14 +274,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.8k</span>
+      <span>2.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -284,108 +293,213 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>[TOC]</p>
-<h1 id="测试外部中断">测试外部中断</h1>
+<h1 id="取指ping-pong-fifo设计">取指Ping Pong FIFO设计</h1>
+<h2 id="问题描述">问题描述</h2>
+<blockquote>
+<p>IF
+Stage的FIFO在遇到指令重定向到时候，会导致冲刷掉其内部所有的预取指令，是很大的浪费</p>
+</blockquote>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028053834305.png"
+alt="image-20231028053834305" />
+<figcaption aria-hidden="true">image-20231028053834305</figcaption>
+</figure>
 <ol type="1">
-<li>在spike中关闭其中断(编译spike的已经完成)</li>
-<li>在top里将PLIC的外部中断信号拉一根信号<code>ext_interrup</code>出去，在testbench里需要使用该信号
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">execute</span><span class="params">(<span class="type">uint64_t</span> n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (; n &gt; <span class="number">0</span>; n--) &#123;</span><br><span class="line">    g_nr_guest_inst++;</span><br><span class="line">    <span class="built_in">exec_once</span>(); <span class="comment">// dut run 1 cycle</span></span><br><span class="line">    cpu.pc = top-&gt;pc; <span class="comment">// pc存入cpu结构体</span></span><br><span class="line">    <span class="built_in">dump_gpr</span>();       <span class="comment">// 寄存器值存入cpu结构体</span></span><br><span class="line">    <span class="keyword">if</span> (top-&gt;commit_en) &#123;</span><br><span class="line">      <span class="built_in">difftest_step</span>(top-&gt;pc, top-&gt;ext_interrupt); <span class="comment">// spike run 1 cycle</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (npc_state.state != NPC_RUNNING)</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>修改Difftest框架，传入<code>ext_interupt</code>信号，当该信号为高的时候，让Spike也触发外部中断
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">difftest_step</span><span class="params">(<span class="type">uint64_t</span> pc, <span class="type">int</span> ext_interrupt)</span> </span>&#123;</span><br><span class="line">  CPU_state ref_r;</span><br><span class="line">  <span class="built_in">ref_difftest_exec</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span>(ext_interrupt)&#123; <span class="comment">// if external interrupt happen, make Spike interrupt happen</span></span><br><span class="line">        <span class="built_in">difftest_interrupt</span>(pc);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="built_in">ref_difftest_regcpy</span>(&amp;ref_r, DIFFTEST_TO_DUT); <span class="comment">// 从ref中拷贝寄存器状态</span></span><br><span class="line">  <span class="built_in">checkregs</span>(&amp;ref_r, pc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p><img src="https://s2.loli.net/2023/10/21/rYo47BPARDbwOeQ.png" /></p>
-<h1 id="发现的问题">发现的问题</h1>
-<ol type="1">
-<li><p>CSR寄存器写入的cycle晚了1个cycle</p>
+<li><p>由于FIFO容量是5*16，当所有指令都是压缩指令的时候，指令的冲刷会导致至多4条有效指令被浪费了</p></li>
+<li><p>单一FIFO的重定向逻辑如下:</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028073735678.png"
+alt="image-20231028073735678" />
+<figcaption aria-hidden="true">image-20231028073735678</figcaption>
+</figure>
 <ul>
-<li><p><label><input type="checkbox" checked="" />bug
-已修复</label></p></li>
-<li><p>bug 描述：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">_start:</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   la a5, _ISR</span><br><span class="line">   csrw	mtvec, a5</span><br><span class="line">   ecall</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br><span class="line">   nop</span><br></pre></td></tr></table></figure>
-<p><code>csrw mtvec, a5</code>将a5的值写入到<code>CSRs[8]</code>寄存器中，<code>ecall</code>指令执行的时候会触发软件中断，
-将pc的值替换成<code>mtvec</code>的值，但是<code>mtvec</code>得更新迟了1个cycle，导致pc没有更新为正确的<code>mtvec</code>的值
-<img src="https://s2.loli.net/2023/10/18/FEwxjb9VWT8mdfk.png" /></p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"><span class="comment">//mtvec</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= <span class="number">32&#x27;h80000000</span>;<span class="comment">//initialized as zero, to be reset by booting software</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(wen2&amp;waddr2 == <span class="number">12&#x27;h305</span>)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= wdata2;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-<li><p>bug 修复：将CSR写入逻辑提前1个cycle <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: CSR.v</span></span><br><span class="line"><span class="comment">//mtvec</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= <span class="number">32&#x27;h80000000</span>;<span class="comment">//initialized as zero, to be reset by booting software</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(wen1&amp;waddr1 == <span class="number">12&#x27;h305</span>)</span><br><span class="line">    <span class="comment">// else if(wen2&amp;waddr2 == 12&#x27;h305)</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">    CSRs[<span class="number">8</span>] &lt;= wdata1;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure> <img
-src="https://s2.loli.net/2023/10/18/i4O8qsXAT7JjYKt.png" /></p></li>
-</ul></li>
-<li><p>trap发生的时候，mepc没有根据中断或异常做选择</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：当中断发生的时候，mepc应该写入next_pc的值；当异常发生的时候，mepc应当写入当前指令的pc值，目前版本mepc没有做选择，都是写入的当前pc的值
-<img src="https://s2.loli.net/2023/10/18/sPFRDW3Iw1qHao5.png" /></li>
-<li>bug 修复：mepc需要区分外部中断、内部异常
-<code>mepc=interrupt ? pc_next : pc</code></li>
-</ul></li>
-<li><p>trap发生的时候，hazard
-unit没有产生相应的flush信号，flush后续的指令</p>
-<ul>
-<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
-<li>bug
-描述：外部中断产生到Trap信号拉高再到从中断处理程序取出第一条指令，一共有3条
-无用的信号，需要被flush掉，但是hazard unit没有将对应flush信号拉高 <img
-src="https://s2.loli.net/2023/10/19/bT3RBCZKkFqW9AG.png" /></li>
-<li>bug
-修复：hazard需要考虑外部中断跟软件中断的情况，然后拉高相应的flush信号</li>
+<li>cycle0发生重定向</li>
+<li>cycle1冲刷掉FIFO里所有的指令，并且从I-Memory里按照sequential_pc取出指令放到FIFO头部(该指令在流水线上的指令可能会被Hazard
+Unit控制冲刷掉)</li>
+<li>cycle2按照redirection_pc从I-Memory里取出指令放到FIFO头部</li>
 </ul></li>
 </ol>
-<h1 id="risc-v-问题思考解决方法">RISC-V 问题思考&amp;解决方法</h1>
+<h2 id="改进设计">改进设计</h2>
+<blockquote>
+<p>核心思想是：尽可能保存预取指令，避免浪费</p>
+</blockquote>
+<h3 id="ping-pong-fifoppf思想">Ping Pong FIFO(PPF)思想</h3>
 <ol type="1">
-<li><p>目前中断发现到Trap信号拉高，一共有2个cycle，感觉可以优化掉1个cycle
-<img src="https://s2.loli.net/2023/10/20/C2QsfOlAbaj3W8n.png" /></p>
+<li>采用2个FIFO取指队列，当重定向产生导致FIFO需要冲刷的时候，暂时不要冲刷FIFO；
+将指令暂时写入到另一个空闲的FIFO当中</li>
+<li>重定向返回的时候，从之前的FIFO的去指令，利用预取的指令</li>
+</ol>
+<h3 id="硬件实现">硬件实现</h3>
+<ol type="1">
+<li><p>硬件上为了支持PPF需要实现的功能有:</p>
 <ul>
-<li><p>目前的逻辑是：ID
-Stage译码到<code>ecall</code>指令、或者是PLIC发来外部中断信号之后，会修改<code>CSR.mip</code>寄存器的值，将对应的pending位拉高</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// write CSR.mip</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        CSRs[<span class="number">14</span>] &lt;= <span class="number">32&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">3</span>]&lt;= soft_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">7</span>]&lt;= time_pending;</span><br><span class="line">        CSRs[<span class="number">14</span>][<span class="number">11</span>]&lt;= test_ext_pending;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>然后<code>htrap_handler</code>会通过<code>CSR.mip</code>寄存器的对应<u>中断位</u>来产生Trap信号、发送到各个功能部件</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(mstatus[<span class="number">3</span>]) <span class="comment">// 全局中断使能</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    ex_happen&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">if</span>(mip[<span class="number">11</span>]&amp;mie[<span class="number">11</span>]) <span class="comment">// 外部中断发生&amp;外部中断使能</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        cause&lt;=&#123;<span class="number">1&#x27;b1</span>,<span class="number">19&#x27;b0</span>,<span class="number">1&#x27;b1</span>,<span class="number">11&#x27;b0</span>&#125;;</span><br><span class="line">        trap_flush&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">        intr_happen&lt;=<span class="number">1&#x27;b1</span>; <span class="comment">// 进行中断处理信号拉高</span></span><br><span class="line">        intr_triggered&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<li><p>额外的FIFO(5*16bits寄存器)</p></li>
+<li><p>指令PC计算逻辑 &amp; 旧指令选择逻辑</p>
+<ul>
+<li>重定向发生的时候，提前根据重定向类型，将重定向返回时的指令对应的pc存储起来，
+那么在重定向返回的时候，可以通过该寄存器的值快速得到指令对应的pc</li>
+<li>旧指令选择逻辑需要根据重定向</li>
+</ul></li>
+<li><p>ping pong FIFO控制逻辑</p>
+<ul>
+<li>使用free[1:0]寄存器来表示ping pong FIFO里的内容是否有效</li>
+<li><strong>重定向发生的时候</strong>:
+如果一个FIFO里的内容是无效的，则可以在重定向发生的时候，将新的指令写入到该FIFO里</li>
+<li><strong>重定向发生的时候</strong>，假如另一个FIFO空闲，其free寄存器对应字段拉低</li>
+<li><strong>重定向返回的时候</strong>，将当前FIFO对应的free寄存器位拉高</li>
+</ul></li>
+</ul></li>
+<li><p>硬件实现</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028074746545.png"
+alt="image-20231028074746545" />
+<figcaption aria-hidden="true">image-20231028074746545</figcaption>
+</figure>
+<ul>
+<li>2个5*16的FIFO</li>
+<li>pc_instr寄存器用于记录FIFO头部的指令对应的pc</li>
+<li>free寄存器用于记录FIFO是否空闲，假如FIFO内部没有有效数据，则FIFO空闲</li>
+<li>waiting_for寄存器记录FIFO内指令对应内容，用于判断重定向的返回</li>
+</ul></li>
+<li><p>举例说明</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028080113030.png"
+alt="image-20231028080113030" />
+<figcaption aria-hidden="true">image-20231028080113030</figcaption>
+</figure>
+<ul>
+<li><p>针对SBP导致的重定向，其waing_for寄存器应该是EXE
+Stage的PTNT信号</p>
+<ul>
+<li>若下一个cycle没有得到该信号，则表示重定向正确，当前FIFO里的指令确实是无效指令，则free当前FIFO</li>
+</ul></li>
+<li><p>针对中断&amp;异常，会进入到中断服务程序去处理</p>
+<ul>
+<li><p>如果ISR指令很多，则mret指令迟迟不能遇到-&gt;waiting_for信号迟迟不能拉高</p></li>
+<li><p>此时一个FIFO相当于一直都是not
+free的，此时PPF退化成单一FIFO</p></li>
+<li><p>设置一个Timer计数器，当Timer达到一定值的时候，丢弃FIFO里的内容</p>
 <blockquote>
-<p>其核心逻辑在于<strong>检测到了中断-&gt;修改<code>CSR.mip</code>寄存器-&gt;htrap_handler触发Trap信号</strong></p>
-</blockquote></li>
-<li><p><u>解决办法</u>：<code>htrap_handler</code>可以不通过检测CSRs寄存器的值再判断软件中断发生，直接从ID
-Stage将
-<code>ecall</code>信号传给<code>htrap_handler</code>(或者从PLIC将<code>external_interrupt</code>信号传给<code>htrap_handler</code>)，这样<code>Trap</code>信号的拉高可以提前1个cycle</p></li>
+<p>有利于分支指令、不利于ISR的返回</p>
+</blockquote>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028081111125.png"
+alt="image-20231028081111125" />
+<figcaption aria-hidden="true">image-20231028081111125</figcaption>
+</figure></li>
 </ul></li>
-<li><p>ID
-Stage有很多的重定向发生，例如分支预测、分支预测错误、中断异常等:</p>
-<ul>
-<li><p>重定向发生的时候，ID
-Stage产生的重定向pc需要2个cycle才可以取到对应的指令进行译码</p></li>
-<li><p>重定向的时候，FIFO里的指令都需要被flush掉，浪费了一些有用的指令，例如ecall后面的指令在FIFO里，但是ecall执行的时候，会flush掉FIFO;
-mret的时候，有需要从I-Memory里重新取出指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_start:</span><br><span class="line">   ecall</span><br><span class="line">   li x1, 1</span><br><span class="line">   li x2, 2</span><br><span class="line">   li x3, 3</span><br><span class="line">   li x4, 4</span><br><span class="line">   li x5, 5</span><br><span class="line">     </span><br><span class="line">_ISR:</span><br><span class="line">   li x1, 11</span><br><span class="line">   li x2, 12</span><br><span class="line">   li x3, 13</span><br><span class="line">   li x4, 14</span><br><span class="line">   li x5, 15</span><br><span class="line">   mret</span><br></pre></td></tr></table></figure>
-<p><img src="https://s2.loli.net/2023/10/21/HBfNqmeJKTRa2Ud.png" />
-如上面的指令流，ecall导致跳转到中断处理程序，但是跳转的时候并不是立刻能够取到<code>li x1, 11</code>指令，而是会多取3条指令，这3条指令都会被flush掉</p></li>
-<li><p><u>解决办法</u>：改善flush的逻辑，尽可能保存取出来的指令，而不是直接flush掉，这样函数返回的时候，可以快速有指令可以译码、还可以减少访问I-Memory的次数
-<em>例如：在进行中断处理的时候，将预取的指令保存在另一组寄存器里（pc
-也需要保存），mret返回的时候，则用这组寄存器的值替换FIFO里的指令，从而避免指令的反复读取并且可以在返回的时候更快得到指令</em>
-<img src="https://s2.loli.net/2023/10/21/kyczjql149AvWZV.png" /></p>
+</ul></li>
+</ol>
+<h1 id="访存leftover-buffer-prefetch-buffer">访存Leftover Buffer &amp;
+Prefetch Buffer</h1>
+<h2 id="问题描述-1">问题描述</h2>
 <blockquote>
-<p>PS：静态分支预测器判断跳转导致flush的时候，也可以采用该优化方法</p>
-</blockquote></li>
-</ul></li>
-<li><p>复杂度上升之后的验证问题</p>
+<p>在访存的时候，若果存在lw+add这种的指令序列，由于没有MEM Stage-&gt;EXE
+Stage的bypass，则add指令需要等个1个cycle，造成1个bubble；
+能否通过寄存器缓存D-Memory的内容，从而避免这个cycle的时间浪费？</p>
+</blockquote>
+<h2 id="leftover-buffer">Leftover Buffer</h2>
+<h3 id="思想">思想</h3>
+<ol type="1">
+<li>将上次从D-Memory中取出的指令保存在寄存器里</li>
+<li>下次访问同样地址时，可以直接从该寄存器里读数</li>
+</ol>
+<h3 id="硬件实现-1">硬件实现</h3>
+<ol type="1">
+<li>硬件需要支持的功能：
 <ul>
-<li>简单的功能模块，设计人员在设计完成之后，可以通过编写testbench来进行测试</li>
-<li>复杂的硬件，其测试向量(testcase)构建也更加复杂，需要精心设计以满足测试的全面</li>
-<li>复杂的模块很难通过人为设计testbench来验证功能的正确性，有如下一些原因:
+<li>保存上次访存的内容</li>
+<li>访存是判断需要访问的地址对应的数据是否在Leftover buffer里</li>
+<li>在D-Memory跟Leftover Buffer里选择数据</li>
+</ul></li>
+<li>硬件实现:</li>
+</ol>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028083903963.png"
+alt="image-20231028083903963" />
+<figcaption aria-hidden="true">image-20231028083903963</figcaption>
+</figure>
+<ol start="3" type="1">
+<li>优点:
 <ul>
-<li>本身复杂：处理器核本身就比某个功能模块复杂</li>
-<li>交互复杂：各个模块、pipeline
-stage连线到一起之后，彼此之间会有一些交互，会互相影响，例如
-ID译码到ecall指令的时候，会修改CSR寄存器，CSR寄存器修改导致htrap_handler触发中断，中断又导致ID
-Stage产生重定向pc</li>
-<li>Difftest框架失效（实现Difftest很困难）：在只验证处理器核的时候，由现成的开源处理器核如spike,
-nemu等可以作为Difftest的golden model，
-但是当引入外部中断的时候，没有相应的PLIC、CLINT单元可以作为Difftest的golden
-model，只能够通过比较处理器核的CSR寄存器来大概判断中断是否正确；或者是自己写相应的golden
-model</li>
+<li>在特定情况下能解决lw stall问题</li>
+<li>并且可以避免D-Memory访问，节约功耗</li>
 </ul></li>
+<li>缺陷：
+<ul>
+<li>D-Memory访问很随机、因此不太可能访问到上次访问的数据</li>
+<li>增加了组合逻辑，增加了MEM Stage的周期</li>
 </ul></li>
-<li><p>TODO: 能否解决LW Stall，从而避免一个cycle的硬stall？</p></li>
-<li><p>TODO:
-取指部分考虑到Cache时有什么设计？不要限制在ITCM的框架里</p></li>
-<li><p>TODO: 低功耗方面有什么设计？</p></li>
+</ol>
+<h2 id="prefetch-buffer">Prefetch Buffer</h2>
+<h3 id="思想-1">思想</h3>
+<ol type="1">
+<li>每次取数据的时候，取64bits的数据，放入到一个Prefetch Buffer中</li>
+<li>在顺序访问D-Memory的时候，每个cycle都可以直接从Prefetch
+Buffer里取，并且更新Prefetch Buffer</li>
+</ol>
+<h3 id="硬件实现-2">硬件实现</h3>
+<ol type="1">
+<li><p>硬件需要支持的功能：</p>
+<ul>
+<li>每次取64bits数据</li>
+<li>存放预取的32bits数据，更新Prefetch Buffer</li>
+<li>在D-Memory跟Prefetch Buffer里选择数据</li>
+</ul></li>
+<li><p>硬件实现:</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028083851150.png"
+alt="image-20231028083851150" />
+<figcaption aria-hidden="true">image-20231028083851150</figcaption>
+</figure></li>
+<li><p>优点:在顺序访问D-Memory的内存下（例如数组遍历）时，Prefetch
+Buffer能够连续地发挥作用，解决lw stall</p></li>
+</ol>
+<h1 id="综合结果">综合结果</h1>
+<ol type="1">
+<li><p>read_file.tcl没有读进去文件</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231027233257343.png"
+alt="image-20231027233257343" />
+<figcaption aria-hidden="true">image-20231027233257343</figcaption>
+</figure>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028091548022.png"
+alt="image-20231028091548022" />
+<figcaption aria-hidden="true">image-20231028091548022</figcaption>
+</figure>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231027233040588.png"
+alt="image-20231027233040588" />
+<figcaption aria-hidden="true">image-20231027233040588</figcaption>
+</figure>
+<p><img
+src="../../../../../../Pictures/Typora/image-20231027233325726.png"
+alt="image-20231027233325726" /></p></li>
+<li><p>手动读取文件</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028091655026.png"
+alt="image-20231028091655026" />
+<figcaption aria-hidden="true">image-20231028091655026</figcaption>
+</figure></li>
+<li><p>面积报告</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028091722792.png"
+alt="image-20231028091722792" />
+<figcaption aria-hidden="true">image-20231028091722792</figcaption>
+</figure></li>
+<li><p>功耗报告</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028092019593.png"
+alt="image-20231028092019593" />
+<figcaption aria-hidden="true">image-20231028092019593</figcaption>
+</figure></li>
+<li><p>timing报告</p>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231028092251194.png"
+alt="image-20231028092251194" />
+<figcaption aria-hidden="true">image-20231028092251194</figcaption>
+</figure></li>
 </ol>
 
     </div>
@@ -442,13 +556,13 @@ model</li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">422k</span>
+    <span title="站点总字数">424k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:24</span>
+    <span title="站点阅读时长">6:26</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
