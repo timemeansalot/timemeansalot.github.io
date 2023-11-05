@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -198,6 +198,161 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/09/07/verilog-syntax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/07/verilog-syntax/" class="post-title-link" itemprop="url">Verilog语法学习笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-09-07 10:22:01" itemprop="dateCreated datePublished" datetime="2022-09-07T10:22:01+08:00">2022-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>此文档包含我学习 Verilog 时遇到的问题，对于一些第一次遇到的 Verilog
+关键字进行了记录</p>
+<h1 id="verilog-基础">Verilog 基础</h1>
+<p><a
+target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-codeguide.html">Verilog
+代码规范</a>, <a
+target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-codestyle.html">Verilog
+编码风格</a></p>
+<ol type="1">
+<li><p>verilog
+定义模块的时候，其输入端口只能定义成<code>wire</code>(从模块内部来看，外部输入给它的信号就是一个导线)，其输出端口可以定义成<code>wire</code>，也可以定义成<code>reg</code></p></li>
+<li><p>verilog
+例化模块的时候，模块的输入端口可以链接到<code>wire</code>或者<code>reg</code>，模块的输出只能连接到<code>wire</code>(从模块外部来看，模块输送到外部的信号也只是一个导线)</p></li>
+<li><p>组合逻辑电路：</p>
+<ul>
+<li><p>简单的组合逻辑电路可以用<code>assign</code>语句来实现，例如:</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux (</span><br><span class="line">    <span class="keyword">input</span>            sel ,</span><br><span class="line">    <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p0 ,</span><br><span class="line">    <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p1 ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>]    sout</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">   <span class="keyword">assign</span> sout = (sel==<span class="number">1&#x27;b0</span>) ? p0:p1;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
+<li><p>复杂的组合逻辑电路可以用<code>always@(*)</code>来实现，由于实用了
+always
+语句，输出数据必须被声明为<code>reg</code>类型。但是不用担心它的结果会被锁存一拍，实际上其生成的电路跟<code>assign</code>语句生成的电路是一样的，例如下面的代码跟上面的代码，其生成的电路是一样的：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux (</span><br><span class="line">  <span class="keyword">input</span>            sel ,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p0 ,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">3</span>:<span class="number">0</span>]     p1 ,</span><br><span class="line">  <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>]    sout</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//assign sout = (sel==1&#x27;b0) ? p0:p1;</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">   <span class="keyword">if</span>(sel==<span class="number">0</span>) <span class="keyword">begin</span></span><br><span class="line">     sout = p0;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">     sout = p1;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>测试文件，一个简单的测试文件包括如下的重要部分：</p>
+<ul>
+<li>信号声明（测试用例里面的信号，输入信号声明为<code>reg</code>，输出信号声明为<code>wire</code>
+<ul>
+<li>基础信号：时钟、复位</li>
+<li>测试用例(dut)涉及到的相关信号</li>
+</ul></li>
+<li>输入信号赋值:
+<ul>
+<li>生成周期时钟</li>
+<li>生成 dut 输入信号</li>
+</ul></li>
+<li>例化 dut</li>
+<li>生成波形</li>
+<li>进阶部分（文件操作&amp;生成内部数组的波形）</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux_tb ();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">reg</span> clk,resetn; <span class="comment">// 基本的信号：时钟、复位信号</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 测试模块(dut)涉及到的信号</span></span><br><span class="line">   <span class="keyword">reg</span> sel;</span><br><span class="line">   <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] p0, p1;</span><br><span class="line">   <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] sout;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 控制测试周期&amp;生成波形需要用到的信号</span></span><br><span class="line">   <span class="keyword">integer</span> i, counter;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 生成周期时钟</span></span><br><span class="line">   <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">     clk&lt;=<span class="number">0</span>;</span><br><span class="line">     counter &lt;= <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">forever</span> <span class="keyword">begin</span></span><br><span class="line">       #<span class="number">1</span>; clk&lt;=~clk;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 设置每个周期的输入测试信号</span></span><br><span class="line">   <span class="keyword">always</span>@(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">0</span>)<span class="keyword">begin</span></span><br><span class="line">       resetn &lt;= <span class="number">0</span>;</span><br><span class="line">       p0     &lt;= <span class="number">4&#x27;b110</span>;</span><br><span class="line">       p1     &lt;= <span class="number">4&#x27;b111</span>;</span><br><span class="line">       sel    &lt;= <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">1</span>)<span class="keyword">begin</span></span><br><span class="line">       resetn &lt;= <span class="number">1</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">2</span>)<span class="keyword">begin</span></span><br><span class="line">       sel &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span>(counter==<span class="number">10</span>)<span class="keyword">begin</span></span><br><span class="line">       <span class="built_in">$finish</span>();</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">     counter+=<span class="number">1</span>;</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 生成波形文件</span></span><br><span class="line">   <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">     <span class="built_in">$dumpfile</span>(<span class="string">&quot;mux_tb.vcd&quot;</span>);</span><br><span class="line">     <span class="built_in">$dumpvars</span>(<span class="number">0</span>, mux_tb);</span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">   <span class="comment">// 例化测试对象</span></span><br><span class="line">   mux muxInstance(</span><br><span class="line">   <span class="variable">.sel</span>(sel),</span><br><span class="line">   <span class="variable">.p0</span>(p0),</span><br><span class="line">   <span class="variable">.p1</span>(p1),</span><br><span class="line">   <span class="variable">.sout</span>(sout)</span><br><span class="line">   );</span><br><span class="line">   <span class="comment">// 进阶1：从文件读取输入数据&amp;输出结果到文件</span></span><br><span class="line">   <span class="comment">// 进阶2：打印波形的时候，打印内部的数组（默认情况下是不会打印dut内部数据数据的</span></span><br><span class="line"> <span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
+<li><p>文件操作：可以直接从文件读取数据来给“dut
+输入信号赋值”，也可以直接通过文件读取数据“来给 dut 内部数组赋值”, <a
+target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/verilog2-file.html">参考：runoob.com
+Verilog 文件操作</a></p>
+<ul>
+<li>给 dut 输入信号赋值 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">integer</span> fd, err;</span><br><span class="line"><span class="keyword">integer</span> code;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">640</span>:<span class="number">0</span>] str; <span class="comment">// 打开文件错误时，返回值</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] src; <span class="comment">// 寄存器</span></span><br><span class="line"><span class="comment">//string str,str2;</span></span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  fd = <span class="built_in">$fopen</span>(<span class="string">&quot;compressDecoderInput.txt&quot;</span>, <span class="string">&quot;r&quot;</span>); <span class="comment">// 打开一个文件</span></span><br><span class="line">  err = <span class="built_in">$ferror</span>(fd, str); <span class="comment">// 判断该文件是否存在</span></span><br><span class="line">  <span class="keyword">if</span>(!err)<span class="keyword">begin</span> <span class="comment">// 如果文件打开成功</span></span><br><span class="line">   <span class="comment">// code = $fread(src, fd);</span></span><br><span class="line">   code =<span class="built_in">$fscanf</span>(fd, <span class="string">&quot;%d&quot;</span>, src); <span class="comment">// 从文件里读取数据到寄存器里</span></span><br><span class="line">   <span class="built_in">$display</span>(<span class="string">&quot;src is %d&quot;</span>, src);</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="built_in">$fclose</span>(fd); <span class="comment">// 关闭文件</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>给 dut 内部数组赋值 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="comment">//格式: readmemh(file, target, start, length)</span></span><br><span class="line">  <span class="built_in">$readmemh</span>(<span class="string">&quot;i-memory.txt&quot;</span>, muxInstance<span class="variable">.sramInstance</span><span class="variable">.m_array</span>,<span class="number">0</span>,<span class="number">15</span>);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>输出 dut 内部数组的波形（verilog 默认情况下只会输出 dut
+内部信号的波形，但是不会输出 dut
+内部的数组的波形），因此需要手动通过一个循环，逐行输出 dut
+的内部数组</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="built_in">$dumpfile</span>(<span class="string">&quot;mux_tb.vcd&quot;</span>);</span><br><span class="line">  <span class="built_in">$dumpvars</span>(<span class="number">0</span>, mux_tb);</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">16</span>;i++) <span class="comment">// 循环输出内部数组每一行的波形</span></span><br><span class="line">    <span class="built_in">$dumpvars</span>(<span class="number">0</span>, muxInstance<span class="variable">.sramInstance</span><span class="variable">.m_array</span>[i]);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Makefile：使用 Makefile
+是为了更方便地编译文件、运行仿真、生成波形</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Makefile</span></span><br><span class="line">src = compressDecoder</span><br><span class="line"><span class="keyword">include</span> iverilog.mk</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"># iverilog.mk</span></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean all run waveform</span></span><br><span class="line"></span><br><span class="line">DEFAULT_GOAL:=all</span><br><span class="line"><span class="section">all: $&#123;src&#125;.v $&#123;src&#125;_tb.v</span></span><br><span class="line">    @iverilog -o $&#123;src&#125;_tb.vvp $&#123;src&#125;_tb.v <span class="comment"># @ means don&#x27;t echo this command to terminal, just run it.</span></span><br><span class="line"></span><br><span class="line"><span class="section">run: all</span></span><br><span class="line">    vvp $&#123;src&#125;_tb.vvp</span><br><span class="line"></span><br><span class="line"><span class="section">waveform: run</span></span><br><span class="line">    @gtkwave $&#123;src&#125;_tb.vcd -a gtkwave_setup.gtkw</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    -rm *vcd *vvp</span><br></pre></td></tr></table></figure></li>
+<li><p>打印控制信息:
+<code>$write</code>打印完后自动不换行、<code>$display</code>：打印完后要自动换行</p></li>
+<li><p>逻辑符号：</p>
+<ul>
+<li><code>&amp;&amp;</code>：逻辑与、<code>&amp;</code>：按位与</li>
+<li><code>!</code>: 逻辑取反、<code>~</code>：按位取反</li>
+</ul></li>
+</ol>
+<h1 id="fifo">FIFO</h1>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1104,104 +1259,6 @@ alt="image-20210709080219153" />
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2021/03/16/HEXO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
-      <meta itemprop="name" content="FuJie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="timemeansalot">
-      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | timemeansalot">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/16/HEXO/" class="post-title-link" itemprop="url">hexo搭建博客</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-03-16 12:29:38" itemprop="dateCreated datePublished" datetime="2021-03-16T12:29:38+08:00">2021-03-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-06-18 17:37:50" itemprop="dateModified" datetime="2023-06-18T17:37:50+08:00">2023-06-18</time>
-    </span>
-
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>328</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>How to build your own website using Hexo and Next theme.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/03/16/HEXO/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
@@ -1226,7 +1283,7 @@ alt="image-20210709080219153" />
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">431k</span>
+    <span title="站点总字数">432k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
