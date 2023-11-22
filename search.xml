@@ -55,6 +55,61 @@ C编程一站式学习</a></label></li>
       </tags>
   </entry>
   <entry>
+    <title>makefile</title>
+    <url>/2023/11/22/makefile/</url>
+    <content><![CDATA[<p>Makefile笔记</p>
+<p>[TOC]</p>
+<span id="more"></span>
+<h1 id="foreach">foreach</h1>
+<ol type="1">
+<li>格式 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">foreach</span> n, source, operation(n)</span>)</span><br></pre></td></tr></table></figure>
+source里的变量用n表示，采用<code>operation</code>对n进行操作，返回操作后的结果</li>
+<li>例子 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">foo=a b c</span><br><span class="line">target=<span class="variable">$(<span class="built_in">foreach</span> n, <span class="variable">$(foo)</span>, <span class="variable">$(i)</span>.cpp)</span></span><br></pre></td></tr></table></figure> 得到的<code>target= a.cpp b.cpp c.cpp</code></li>
+</ol>
+<h1 id="wrod-i">wrod, i</h1>
+<ol type="1">
+<li><p>格式</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">word</span> i, source)</span></span><br></pre></td></tr></table></figure>
+<p>返回source里的第i个变量</p></li>
+<li><p>例子 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">foo=a b c</span><br><span class="line">target=<span class="variable">$(<span class="built_in">word</span> 2, <span class="variable">$(foo)</span>)</span></span><br></pre></td></tr></table></figure> 得到的<code>target=b</code></p></li>
+</ol>
+<h1 id="filter">filter</h1>
+<ol type="1">
+<li><p>格式</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">$<span class="variable">$(<span class="built_in">filter</span> method, source)</span></span><br></pre></td></tr></table></figure>
+<p>使用method方法对source进行筛选，返回符合source里符合method筛选后的结果</p></li>
+<li><p>例子 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">foo=a.cpp b.h c.c</span><br><span class="line">target=$<span class="variable">$(<span class="built_in">filter</span> %.cpp, <span class="variable">$(foo)</span>)</span></span><br></pre></td></tr></table></figure> 得到的<code>target=a.cpp</code></p></li>
+</ol>
+<h1 id="ifeq">ifeq</h1>
+<ol type="1">
+<li><p>格式</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ifeq</span>(a,b)</span><br><span class="line">    function</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>如果ifeq的条件满足，就执行function</p></li>
+<li><p>例子 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">foo=a b c</span><br><span class="line"><span class="keyword">ifeq</span>(<span class="variable">$(foo)</span>,)</span><br><span class="line">  xx</span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+不会执行xx的内容，因为foo不等于<u><em>空</em></u></p></li>
+</ol>
+<h1 id="call">call</h1>
+<ol type="1">
+<li><p>格式</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">call</span> function, param1, param2,... )</span></span><br></pre></td></tr></table></figure>
+<p>调用函数function，并且为该函数传入参数param1, etc</p></li>
+<li><p>例子</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">reverse =  $(2) $(1)</span><br><span class="line">target = <span class="variable">$(<span class="built_in">call</span> reverse,a,b)</span></span><br></pre></td></tr></table></figure>
+<p>得到的<code>target=b a</code></p></li>
+</ol>
+<h1 id="template">template</h1>
+<ol type="1">
+<li><p>格式</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">word</span> i, source)</span></span><br></pre></td></tr></table></figure>
+<p>返回source里的第i个变量</p></li>
+<li><p>例子 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">foo=a b c</span><br><span class="line">target=<span class="variable">$(<span class="built_in">word</span> 2, <span class="variable">$(foo)</span>)</span></span><br></pre></td></tr></table></figure> 得到的<code>target=b</code></p></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>low-power-notes</title>
     <url>/2023/11/09/low-power-notes/</url>
     <content><![CDATA[<p>低功耗笔记</p>
