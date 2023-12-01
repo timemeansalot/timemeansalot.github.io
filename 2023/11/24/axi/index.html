@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="timemeansalot">
 <meta property="og:description" content="AXI笔记">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231125080220026.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
 <meta property="article:published_time" content="2023-11-24T15:45:16.000Z">
-<meta property="article:modified_time" content="2023-11-25T01:25:34.962Z">
+<meta property="article:modified_time" content="2023-12-01T15:30:32.587Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="Bus">
 <meta property="article:tag" content="AXI">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://timemeansalot.github.io/Pictures/Typora/image-20231125080220026.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/11/24/axi/">
@@ -252,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-25 09:25:34" itemprop="dateModified" datetime="2023-11-25T09:25:34+08:00">2023-11-25</time>
+      <time title="修改时间：2023-12-01 23:30:32" itemprop="dateModified" datetime="2023-12-01T23:30:32+08:00">2023-12-01</time>
     </span>
 
   
@@ -262,7 +262,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.5k</span>
+      <span>2.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -402,13 +402,13 @@ interface每次burst传输需要<code>3+N</code>个cycle，若N=0，则带宽利
 <li><p>特点: 通过ID实现乱序传输:</p>
 <ul>
 <li>outstanding but in order 读写： <img
-src="../../../../../../Pictures/Typora/image-20231125082444175.png"
+src="https://s2.loli.net/2023/12/01/iDRV5AxdF9hObBw.png"
 alt="image-20231125082444175" /></li>
 <li>OoO写：不同ID的写传输，其Response可以乱序，但是Wdata不能interleaving
-<img src="../../../../../../Pictures/Typora/image-20231125080220026.png"
+<img src="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png"
 alt="image-20231125080220026" /></li>
 <li>OoO读：不同ID的读传输，其Rdata可以interleaving <img
-src="../../../../../../Pictures/Typora/image-20231125080234460.png"
+src="https://s2.loli.net/2023/12/01/jhB7O3A4MCoLPT2.png"
 alt="image-20231125080234460" /></li>
 </ul></li>
 <li><p>实现:</p>
@@ -429,25 +429,10 @@ Interconnect要求比较高，master可以并行访问slaves时才好用</p></li
 <blockquote>
 <p>PS: ACC配置寄存器场景，寄存器地址是否连续？</p>
 </blockquote></li>
-<li><p>write to ACC: burst传输结束后不需要等待ACC
-response就可以开启下一笔传输</p></li>
-<li><p>read from ACC（涉及到pipeline stall）:</p>
-<ul>
-<li>顺序：只能顺序读取ACC</li>
-<li>乱序：可以同时读取多个ACC，busy的ACC不会影响别的ACC</li>
-</ul>
-<blockquote>
-<p>PS:
-即使当前读取到busy的ACC，MCU有切换到其他ACC进行读取的能力吗，例如指令流跳转?</p>
-</blockquote></li>
-</ol>
-<!-- 4. 根据2、3，可知应采取**bursting, multiple channel**的AXI Master架构 -->
-<ol start="4" type="1">
-<li>根据2、3，可知，write to ACC应采取<strong>bursting, multiple
-channel</strong>, read from ACC应该采用<strong>bursting, single
-channel</strong> <img
-src="../../../../../../Pictures/Typora/image-20231125092501904.png"
-alt="image-20231125092501904" /></li>
+<li><p>write to ACC: 采用single beat pipelined来写ACC寄存器</p></li>
+<li><p>read from PPM(ping-pong-memory): bursting, single
+channel</p></li>
+<li><p>AXI总线的拓扑结构采用一主多从的架构，其中主设备是MCU，从设备是ACC跟PPM</p></li>
 </ol>
 <h3 id="问题">问题</h3>
 <ol type="1">
