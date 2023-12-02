@@ -28,8 +28,10 @@
 <meta property="og:description" content="AXI笔记">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png">
 <meta property="article:published_time" content="2023-11-24T15:45:16.000Z">
-<meta property="article:modified_time" content="2023-12-01T15:30:32.587Z">
+<meta property="article:modified_time" content="2023-12-02T03:07:30.815Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="Bus">
@@ -148,7 +150,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-master%E8%AE%BE%E8%AE%A1"><span class="nav-number"></span> <span class="nav-text">AXI Master设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#single-beat"><span class="nav-number">1.1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">1.2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">1.3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">1.4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-interconnect-part"><span class="nav-number"></span> <span class="nav-text">AXI Interconnect Part</span></a></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number"></span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number"></span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.1.</span> <span class="nav-text">什么场景下会触发AXI
+Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">0.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">0.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">1.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number"></span> <span class="nav-text">Coding</span></a></div>
         </div>
         <!--/noindex-->
 
@@ -252,7 +255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-01 23:30:32" itemprop="dateModified" datetime="2023-12-01T23:30:32+08:00">2023-12-01</time>
+      <time title="修改时间：2023-12-02 11:07:30" itemprop="dateModified" datetime="2023-12-02T11:07:30+08:00">2023-12-02</time>
     </span>
 
   
@@ -262,14 +265,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.4k</span>
+      <span>3.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -340,15 +343,14 @@ transaction needed</li>
 <li>use Vivado HLS in your ACC</li>
 </ul></li>
 </ol>
-<h1 id="axi-master设计">AXI Master设计</h1>
-<h2 id="种axi-master类型">4种AXI Master类型</h2>
+<h1 id="种axi-master类型">4种AXI Master类型</h1>
 <ol type="1">
 <li>single beat</li>
 <li>single beat pipelined</li>
 <li>bursting, single channel</li>
 <li>bursting, multiple channel</li>
 </ol>
-<h3 id="single-beat">single beat</h3>
+<h2 id="single-beat">single beat</h2>
 <ol type="1">
 <li>特点：burst
 size等于0，给出地址及控制信号后只包含<strong>一次数据传输</strong>，传输完成之后再发送下一次地址跟控制信号</li>
@@ -364,7 +366,7 @@ AxBURST：不需要关注burst类型，也不需要关心burst地址是否跨越
 </ol>
 <p><img
 src="https://zipcpu.com/img/wbm2axisp/single-master-reads.svg" /></p>
-<h3 id="single-beat-pipelined">single beat pipelined</h3>
+<h2 id="single-beat-pipelined">single beat pipelined</h2>
 <ol type="1">
 <li>特点支持outstanding传输：传输反馈(response)没有收到之前就可以发送下一次传输的地址跟控制信号</li>
 <li>实现:
@@ -382,7 +384,7 @@ eg: Xilinx’s AXI block RAM
 interface每次burst传输需要<code>3+N</code>个cycle，若N=0，则带宽利用率为25%</li>
 <li>适用场景：传输地址不是连续（访问image的列数据)、或者下次传输地址未知的场景</li>
 </ol>
-<h3 id="bursting-single-channel">bursting, single channel</h3>
+<h2 id="bursting-single-channel">bursting, single channel</h2>
 <ol type="1">
 <li>特点：支持burst传输（一次地址&amp;控制信号，多次data传输）</li>
 <li>实现:
@@ -397,7 +399,7 @@ interface每次burst传输需要<code>3+N</code>个cycle，若N=0，则带宽利
 <li><u>PS: 尽可能在一次burst传输中传输尽可能多的beats</u></li>
 </ul></li>
 </ol>
-<h3 id="bursting-multiple-channel">bursting, multiple channel</h3>
+<h2 id="bursting-multiple-channel">bursting, multiple channel</h2>
 <ol type="1">
 <li><p>特点: 通过ID实现乱序传输:</p>
 <ul>
@@ -419,30 +421,104 @@ alt="image-20231125080234460" /></li>
 <li><p>缺点: 对AXI
 Interconnect要求比较高，master可以并行访问slaves时才好用</p></li>
 </ol>
-<h2 id="mcu设计方案">MCU设计方案</h2>
+<h1 id="mcu设计方案">MCU设计方案</h1>
+<p><img src="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png" /> ##
+单发射流水线MCU集成AXI需要的场景</p>
 <ol type="1">
-<li><p>采用burst方式对ACC进行读写:</p>
+<li>写到ACC的时候，由于地址不保证连续，所以不能采用burst写</li>
+<li>从PPM(ping pong memory)读的时候，地址是连续的，可以采用burst读</li>
+</ol>
+<h3 id="什么场景下会触发axi-burst传输">什么场景下会触发AXI
+Burst传输</h3>
+<ol type="1">
+<li>对于顺序处理器核而言，每个cycle至多有一条riscv load指令</li>
+<li>访问PPM的延迟比访问D-Memory的延迟高</li>
+<li>配置ACC的指令流:
 <ul>
-<li>减少地址传输</li>
-<li>提高带宽</li>
+<li>情形1 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">...</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure></li>
+<li>情形2 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">...</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure> &gt; PS: 从PPM
+read指令后面，还需要对read的数据进行解析得到addr跟data，才可以写入到ACC</li>
+</ul></li>
+<li>burst传输的场景:
+<ul>
+<li>通过burst读，顺序地读取多个地址的数据(预读取)</li>
+<li><strong>Optional</strong>: read操作不会stall流水线</li>
+</ul></li>
+</ol>
+<h3
+id="顺序单发射处理器核如何支持burst传输">顺序单发射处理器核如何支持burst传输</h3>
+<ol type="1">
+<li>需要在MCU跟AXI Channel之间增加AXI Master Interface</li>
+<li>Interface用于:
+<ul>
+<li>支持read burst</li>
+<li>避免burst传输时MCU stall</li>
+<li>支持write pipeline</li>
+<li>解决MCU跟ACC、PPM之间的跨时钟域问题</li>
+</ul></li>
+</ol>
+<h3 id="哪条指令会触发burst传输">哪条指令会触发burst传输</h3>
+<ol type="1">
+<li>CORTEX-A9有ldm/stm(load multiple, store multiple)指令来触发AXI
+burst操作</li>
+<li>MCU可以根据load指令&amp;地址范围处于PPM来触发burst
+read，<code>burst length=16</code></li>
+<li>增加自定义指令来支持对PPM的burst读:
+<ul>
+<li>修改decoder</li>
+<li>修改编译器</li>
+<li>灵活</li>
+</ul></li>
+</ol>
+<h3 id="burst传输时mcu是否会stall">burst传输时MCU是否会Stall</h3>
+<ol type="1">
+<li>处理器是否支持Out-of-Order</li>
+<li>指令之间的相关性</li>
+<li>AXI Interface设计</li>
+</ol>
+<h3 id="write-to-acc流水">write to ACC流水</h3>
+<ol type="1">
+<li>MCU执行Store指令，Store的地址范围属于ACC的地址空间</li>
+<li>MCU执行到MEM
+Stage的时候，会判断地址范围，不会写入到D-Memory，而是通过AXI写通道写到ACC</li>
+</ol>
+<h2 id="mcu-axi的设计总结">MCU AXI的设计总结</h2>
+<figure>
+<img src="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png"
+alt="image-20231202110646792" />
+<figcaption aria-hidden="true">image-20231202110646792</figcaption>
+</figure>
+<ol type="1">
+<li><p>采用burst对PPM进行读取:</p>
+<ul>
+<li>当地址空间对应PPM时，Interface会对PPM发起16个beat的Burst读</li>
+<li>读回的data会被存放在Interface的异步<code>Read_FIFO</code>中</li>
+<li>FIFO头元素的地址跟MCU的read addr相时，FIFO头部元素pop</li>
+</ul></li>
+<li><p>采用pipeline的方式对ACC进行写:</p>
+<ul>
+<li>AXI Interface接收MCU发的write addr, write data, write
+control等信号</li>
+<li>写的时候不用收到ACC的反馈即可发起下一笔写</li>
+<li>Interface若收到AXI Slave的Error信号，会发送给MCU，触发Exception</li>
+</ul></li>
+<li><p>Interface跟Slave之间采用1主多从的拓扑结构:</p>
+<ul>
+<li>有译码器根据地址选择slave</li>
+<li>没有仲裁器</li>
+</ul></li>
+</ol>
+<h1 id="coding">Coding</h1>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />AXI Master
+Interface</label></li>
+<li><label><input
+type="checkbox" />MCU跟Interface交互的代码</label></li>
+<li><label><input type="checkbox" />AXI
+总线拓扑结构：译码器</label></li>
+<li><label><input
+type="checkbox" />Slave跟Interface交互代码</label></li>
 </ul>
-<blockquote>
-<p>PS: ACC配置寄存器场景，寄存器地址是否连续？</p>
-</blockquote></li>
-<li><p>write to ACC: 采用single beat pipelined来写ACC寄存器</p></li>
-<li><p>read from PPM(ping-pong-memory): bursting, single
-channel</p></li>
-<li><p>AXI总线的拓扑结构采用一主多从的架构，其中主设备是MCU，从设备是ACC跟PPM</p></li>
-</ol>
-<h3 id="问题">问题</h3>
-<ol type="1">
-<li>如何配置AxLEN？根据经验吗还是由软件来配置AXI Master？</li>
-</ol>
-<h1 id="axi-interconnect-part">AXI Interconnect Part</h1>
-<ol type="1">
-<li>我们需要实现AXI Interconnect？还是T502有现成的可以用?</li>
-<li>Interconnect是否需要仲裁？因为每一个cycle只有一条指令访存</li>
-</ol>
 
     </div>
 
@@ -503,7 +579,7 @@ channel</p></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">6:37</span>
+    <span title="站点阅读时长">6:38</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
