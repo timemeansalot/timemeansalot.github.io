@@ -1345,6 +1345,8 @@ stall）&lt;- 参考AXI写操作</li>
 <li>Read的时候数据来源可能有D-Memory, Cache,
 ACC，根据地址空间对地址译码，产生片选信号，避免Memory的访问</li>
 </ol>
+<h2 id="实施性">实施性</h2>
+<p>Write to ACC register fast，从而保证写入的实时性。</p>
 <h1 id="综合结果">综合结果</h1>
 <figure>
 <img src="../../../../../../Pictures/Typora/image-20231027233257343.png"
