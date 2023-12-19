@@ -55,6 +55,23 @@ C编程一站式学习</a></label></li>
       </tags>
   </entry>
   <entry>
+    <title>vivado使用笔记</title>
+    <url>/2023/12/18/vivado/</url>
+    <content><![CDATA[<p>Vivado 使用笔记</p>
+<p>[TOC]</p>
+<span id="more"></span>
+<h1 id="基础知识">基础知识</h1>
+<ol type="1">
+<li>在Vivado的终端里，任意命令后接<code>-help</code>可以看该命令的使用方法</li>
+<li>Vivado直接project模式跟non-project模式，后者主要是通过tcl脚本来管理项目</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Tools</tag>
+        <tag>FPGA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>axi</title>
     <url>/2023/11/24/axi/</url>
     <content><![CDATA[<p>AXI笔记</p>
