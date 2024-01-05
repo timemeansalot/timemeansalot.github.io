@@ -1094,7 +1094,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-06 20:49:49" itemprop="dateModified" datetime="2023-12-06T20:49:49+08:00">2023-12-06</time>
+      <time title="修改时间：2024-01-05 22:11:00" itemprop="dateModified" datetime="2024-01-05T22:11:00+08:00">2024-01-05</time>
     </span>
 
   
@@ -1104,7 +1104,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.3k</span>
+      <span>732</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -1123,96 +1123,89 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="mcu设计方案">1 MCU设计方案</h1>
-<p><img src="https://s2.loli.net/2023/12/02/1S3R8MJuh5F6LKA.png" /></p>
-<h2 id="单发射流水线mcu集成axi需要的场景">1.1
-单发射流水线MCU集成AXI需要的场景</h2>
+<h1 id="mcu未来工作计划">MCU未来工作计划</h1>
+<h2 id="mcu本身">MCU本身</h2>
 <ol type="1">
-<li>写到ACC的时候，由于地址不保证连续，所以不能采用burst写</li>
-<li>从PPM(ping pong memory)读的时候，地址是连续的，可以采用burst读</li>
-</ol>
-<h3 id="什么场景下会触发axi-burst传输">1.1.1 什么场景下会触发AXI
-Burst传输</h3>
-<ol type="1">
-<li>对于顺序处理器核而言，每个cycle至多有一条riscv load指令</li>
-<li>访问PPM的延迟比访问D-Memory的延迟高</li>
-<li>配置ACC的指令流:
+<li>实现WFI</li>
+<li>跟ACC集成测试(耗时较久):
 <ul>
-<li>情形1 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">...</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure></li>
-<li>情形2 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">...</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure> &gt; PS: 从PPM
-read指令后面，还需要对read的数据进行解析得到addr跟data，才可以写入到ACC</li>
-</ul></li>
-<li>burst传输的场景:
-<ul>
-<li>通过burst读，顺序地读取多个地址的数据(预读取)</li>
-<li><strong>Optional</strong>: read操作不会stall流水线</li>
+<li>搭建SoC</li>
+<li>测试MCU跟ACC的交互</li>
 </ul></li>
 </ol>
-<h3 id="顺序单发射处理器核如何支持burst传输">1.1.2
-顺序单发射处理器核如何支持burst传输</h3>
+<h2 id="加速器控制通路acc-control-path">加速器控制通路(ACC control
+path)</h2>
 <ol type="1">
-<li>需要在MCU跟AXI Channel之间增加AXI Master Interface</li>
-<li>Interface用于:
-<ul>
-<li>支持read burst</li>
-<li>避免burst传输时MCU stall</li>
-<li>支持write pipeline</li>
-<li>解决MCU跟ACC、PPM之间的跨时钟域问题</li>
-</ul></li>
+<li>实现自定义指令由MCU控制ACC的DMA控制器</li>
 </ol>
-<h3 id="哪条指令会触发burst传输">1.1.3 哪条指令会触发burst传输</h3>
-<ol type="1">
-<li>CORTEX-A9有ldm/stm(load multiple, store multiple)指令来触发AXI
-burst操作</li>
-<li>MCU可以根据load指令&amp;地址范围处于PPM来触发burst
-read，<code>burst length=16</code></li>
-<li>增加自定义指令来支持对PPM的burst读:
+<h2 id="加速器数据通路acc-data-path">加速器数据通路(ACC data path):</h2>
 <ul>
-<li>修改decoder</li>
-<li>修改编译器</li>
-<li>灵活</li>
-</ul></li>
-</ol>
-<h3 id="burst传输时mcu是否会stall">1.1.4 burst传输时MCU是否会Stall</h3>
-<ol type="1">
-<li>处理器是否支持Out-of-Order</li>
-<li>指令之间的相关性</li>
-<li>AXI Interface设计</li>
-</ol>
-<h2 id="mcu-axi的设计总结">1.2 MCU AXI的设计总结</h2>
-<p><img src="https://s2.loli.net/2023/12/02/jOINcTw9LEFDpg2.png" /></p>
-<ol type="1">
-<li><p>采用burst对PPM进行读取:</p>
-<ul>
-<li>当地址空间对应PPM时，Interface会对PPM发起16个beat的Burst读</li>
-<li>读回的data会被存放在Interface的异步<code>Read_FIFO</code>中</li>
-<li>FIFO头元素的地址跟MCU的read addr相时，FIFO头部元素pop</li>
-</ul></li>
-<li><p>采用pipeline的方式对ACC进行写:</p>
-<ul>
-<li>MCU执行到MEM
-Stage的时候，会判断地址范围，不会写入到D-Memory，而是通过AXI写通道写到ACC</li>
-<li>AXI Interface接收MCU发的write addr, write data, write
-control等信号</li>
-<li>写的时候不用收到ACC的反馈即可发起下一笔写</li>
-<li>Interface若收到AXI Slave的Error信号，会发送给MCU，触发Exception</li>
-</ul></li>
-<li><p>Interface跟Slave之间采用1主多从的拓扑结构:</p>
-<ul>
-<li>有译码器根据地址选择slave</li>
-<li>没有仲裁器</li>
-</ul></li>
-</ol>
-<h1 id="coding">2 Coding</h1>
-<ul class="task-list">
-<li><label><input type="checkbox"
-checked="" />MCU跟Interface交互的代码</label></li>
-<li><label><input type="checkbox" />AXI Master Interface</label></li>
-<li><label><input type="checkbox" />AXI
-总线拓扑结构：译码器</label></li>
-<li><label><input
-type="checkbox" />Slave跟Interface交互代码</label></li>
+<li>ACC之间存在数据依赖，ACC的输出会被别的ACC使用</li>
+<li>但是ACC之间彼此没有数据data path，体现为data path的不灵活</li>
+<li>Q:
+MCU可以作为连接所有ACC的数据中枢？将ACC的输出搬运到另一个ACC的输入？</li>
 </ul>
+<h1 id="自定义指令">自定义指令</h1>
+<p><img src="https://s2.loli.net/2024/01/05/AzK5bBO8JF9ixHN.png" /></p>
+<blockquote>
+<p>PS: Q: does ACC has shared bus structure to allow data transfer
+between ACC in T502?</p>
+</blockquote>
+<ol type="1">
+<li>write data to DMA config register
+<ul>
+<li>not much better than SW</li>
+</ul></li>
+<li>move data between ACC, MCU as data path center:
+<ul>
+<li>MCU has a DMA module used for move data between ACC</li>
+<li>This DMA module is composed of a FIFO</li>
+<li>use customized instruction to config the DMA, R-Type:
+<ul>
+<li>rd: target ACC</li>
+<li>src1: source ACC</li>
+<li>src2: base and offset?</li>
+</ul></li>
+</ul></li>
+</ol>
+<h1 id="axi-master测试">AXI Master测试</h1>
+<h2 id="写一次">写一次</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231229161242442.png"
+alt="image-20231229161242442" />
+<figcaption aria-hidden="true">image-20231229161242442</figcaption>
+</figure>
+<h2 id="读一次">读一次</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231229230534620.png"
+alt="image-20231229230534620" />
+<figcaption aria-hidden="true">image-20231229230534620</figcaption>
+</figure>
+<h2 id="读多次">读多次</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231229230044514.png"
+alt="image-20231229230044514" />
+<figcaption aria-hidden="true">image-20231229230044514</figcaption>
+</figure>
+<h2 id="读写交织">读写交织</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231229231439734.png"
+alt="image-20231229231439734" />
+<figcaption aria-hidden="true">image-20231229231439734</figcaption>
+</figure>
+<h2 id="读写错误">读写错误</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231230000039829.png"
+alt="image-20231230000039829" />
+<figcaption aria-hidden="true">image-20231230000039829</figcaption>
+</figure>
+<h2 id="读写stall">读写stall</h2>
+<figure>
+<img src="../../../../../../Pictures/Typora/image-20231230001138329.png"
+alt="image-20231230001138329" />
+<figcaption aria-hidden="true">image-20231230001138329</figcaption>
+</figure>
+<h2 id="spyglass">Spyglass</h2>
 
       
     </div>
@@ -1342,7 +1335,7 @@ type="checkbox" />Slave跟Interface交互代码</label></li>
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

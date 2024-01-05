@@ -20,24 +20,25 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="AXI笔记">
+    <meta name="description" content="AXI笔记 [TOC]">
 <meta property="og:type" content="article">
 <meta property="og:title" content="axi">
 <meta property="og:url" content="http://timemeansalot.github.io/2023/11/24/axi/index.html">
 <meta property="og:site_name" content="timemeansalot">
-<meta property="og:description" content="AXI笔记">
+<meta property="og:description" content="AXI笔记 [TOC]">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png">
 <meta property="article:published_time" content="2023-11-24T15:45:16.000Z">
-<meta property="article:modified_time" content="2023-12-02T03:07:30.815Z">
+<meta property="article:modified_time" content="2024-01-05T10:56:45.546Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="Bus">
 <meta property="article:tag" content="AXI">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
+<meta name="twitter:image" content="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/11/24/axi/">
@@ -150,8 +151,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number"></span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number"></span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.1.</span> <span class="nav-text">什么场景下会触发AXI
-Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">0.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">0.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">0.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">1.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number"></span> <span class="nav-text">Coding</span></a></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">AXI 自定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E9%85%8D%E7%BD%AEacc%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">MCU配置ACC的两种方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">加速器配置自定义指令集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">3.1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">3.2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">3.3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">4.1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">4.2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">4.3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">4.4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">5.</span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%8F%91%E5%B0%84%E6%B5%81%E6%B0%B4%E7%BA%BFmcu%E9%9B%86%E6%88%90axi%E9%9C%80%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">5.1.</span> <span class="nav-text">单发射流水线MCU集成AXI需要的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.1.</span> <span class="nav-text">什么场景下会触发AXI
+Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">5.1.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">5.1.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">5.2.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number">6.</span> <span class="nav-text">Coding</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -255,7 +256,7 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-02 11:07:30" itemprop="dateModified" datetime="2023-12-02T11:07:30+08:00">2023-12-02</time>
+      <time title="修改时间：2024-01-05 18:56:45" itemprop="dateModified" datetime="2024-01-05T18:56:45+08:00">2024-01-05</time>
     </span>
 
   
@@ -265,14 +266,14 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.4k</span>
+      <span>4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -283,9 +284,55 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>AXI笔记</p>
+        <p>AXI笔记 [TOC]</p>
 <span id="more"></span>
-<p>Core需要支持以下的AXI传输特性:</p>
+<h1 id="axi-自定义指令">AXI 自定义指令</h1>
+<h2 id="mcu配置acc的两种方式">MCU配置ACC的两种方式</h2>
+<p><img src="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png" /></p>
+<ol type="1">
+<li>通过MCU直接配置加速器的配置寄存器:
+<ul>
+<li>MCU从Config Memory读取配置信息</li>
+<li>MCU将配置信息写入到加速器内部的配置寄存器</li>
+</ul></li>
+<li>MCU通过自定义指令:
+<ul>
+<li>自定义指令用于配置ACC的DMA控制器
+<ul>
+<li>每一个ACC都有一个DMA</li>
+<li>从配置加速器寄存器的角度来看，DMA的效率更高、但是不够灵活</li>
+</ul></li>
+<li>MCU用于配置ACC内部的DMA，增加DMA的灵活性
+<ul>
+<li>DMA搬运数据的起始地址</li>
+<li>DMA搬运开始信号</li>
+</ul></li>
+<li>通过软件来执行自定义指令: 控制DMA -&gt; 配置ACC</li>
+</ul></li>
+</ol>
+<h1 id="加速器配置自定义指令集">加速器配置自定义指令集</h1>
+<ol type="1">
+<li>Instruction Format
+<ol type="1">
+<li>rd: dma address</li>
+<li>rs1: config memory start</li>
+<li>rs2: config memory stop</li>
+</ol></li>
+<li>start</li>
+<li>feature:
+<ol type="1">
+<li>don't need ALU calculation</li>
+</ol></li>
+<li>write to DMA: Custom from store instruction
+<ol type="1">
+<li>Base(Config Memory Space), Offset(ACC Register Space), Valid</li>
+<li>Q: why don't just use SW to write to DMA A: Don't know yet, maybe
+some cycle benefits? More clear function of the instruction</li>
+</ol></li>
+</ol>
+<p>====================================== 分割线
+============================================</p>
+<h1 id="axi-master类型">AXI Master类型</h1>
 <ol type="1">
 <li>多个Slave访问：arbiter, buffer</li>
 <li>Out of Order: ID</li>
@@ -422,8 +469,9 @@ alt="image-20231125080234460" /></li>
 Interconnect要求比较高，master可以并行访问slaves时才好用</p></li>
 </ol>
 <h1 id="mcu设计方案">MCU设计方案</h1>
-<p><img src="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png" /> ##
-单发射流水线MCU集成AXI需要的场景</p>
+<p><img src="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png" /></p>
+<h2
+id="单发射流水线mcu集成axi需要的场景">单发射流水线MCU集成AXI需要的场景</h2>
 <ol type="1">
 <li>写到ACC的时候，由于地址不保证连续，所以不能采用burst写</li>
 <li>从PPM(ping pong memory)读的时候，地址是连续的，可以采用burst读</li>
@@ -565,7 +613,7 @@ type="checkbox" />Slave跟Interface交互代码</label></li>
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
