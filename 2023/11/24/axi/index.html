@@ -27,18 +27,20 @@
 <meta property="og:site_name" content="timemeansalot">
 <meta property="og:description" content="AXI笔记 [TOC]">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/X7mDBRM9QF4526k.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/7vtCFhK6sLZ9TGI.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png">
 <meta property="og:image" content="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png">
 <meta property="article:published_time" content="2023-11-24T15:45:16.000Z">
-<meta property="article:modified_time" content="2024-01-05T10:56:45.546Z">
+<meta property="article:modified_time" content="2024-01-06T01:02:13.644Z">
 <meta property="article:author" content="FuJie">
 <meta property="article:tag" content="RISC-V">
 <meta property="article:tag" content="Bus">
 <meta property="article:tag" content="AXI">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png">
+<meta name="twitter:image" content="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png">
 
 
 <link rel="canonical" href="http://timemeansalot.github.io/2023/11/24/axi/">
@@ -151,8 +153,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">AXI 自定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E9%85%8D%E7%BD%AEacc%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">MCU配置ACC的两种方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">加速器配置自定义指令集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">3.1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">3.2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">3.3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">4.1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">4.2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">4.3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">4.4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">5.</span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%8F%91%E5%B0%84%E6%B5%81%E6%B0%B4%E7%BA%BFmcu%E9%9B%86%E6%88%90axi%E9%9C%80%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">5.1.</span> <span class="nav-text">单发射流水线MCU集成AXI需要的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.1.</span> <span class="nav-text">什么场景下会触发AXI
-Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">5.1.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">5.1.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">5.2.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number">6.</span> <span class="nav-text">Coding</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">AXI 自定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E9%85%8D%E7%BD%AEacc%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">MCU配置ACC的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">加速器配置自定义指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">硬件支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">1.2.2.</span> <span class="nav-text">软件支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">2.1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">2.2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">2.3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">3.1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">3.2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">3.3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">3.4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%8F%91%E5%B0%84%E6%B5%81%E6%B0%B4%E7%BA%BFmcu%E9%9B%86%E6%88%90axi%E9%9C%80%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">单发射流水线MCU集成AXI需要的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.1.</span> <span class="nav-text">什么场景下会触发AXI
+Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">4.1.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">4.1.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">4.2.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number">5.</span> <span class="nav-text">Coding</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -256,7 +258,7 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-01-05 18:56:45" itemprop="dateModified" datetime="2024-01-05T18:56:45+08:00">2024-01-05</time>
+      <time title="修改时间：2024-01-06 09:02:13" itemprop="dateModified" datetime="2024-01-06T09:02:13+08:00">2024-01-06</time>
     </span>
 
   
@@ -266,7 +268,7 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>4k</span>
+      <span>4.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -288,7 +290,6 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
 <span id="more"></span>
 <h1 id="axi-自定义指令">AXI 自定义指令</h1>
 <h2 id="mcu配置acc的两种方式">MCU配置ACC的两种方式</h2>
-<p><img src="https://s2.loli.net/2024/01/05/FB3KARlpNTwn1D4.png" /></p>
 <ol type="1">
 <li>通过MCU直接配置加速器的配置寄存器:
 <ul>
@@ -307,28 +308,59 @@ Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" 
 <li>DMA搬运数据的起始地址</li>
 <li>DMA搬运开始信号</li>
 </ul></li>
-<li>通过软件来执行自定义指令: 控制DMA -&gt; 配置ACC</li>
+<li>通过软件来执行自定义指令: 控制DMA -&gt; 配置ACC
+<ul>
+<li>对比LW指令没有明显的提升</li>
+</ul></li>
 </ul></li>
 </ol>
-<h1 id="加速器配置自定义指令集">加速器配置自定义指令集</h1>
+<h2 id="加速器配置自定义指令集">加速器配置自定义指令集</h2>
+<p><img src="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png" /></p>
+<h3 id="硬件支持">硬件支持</h3>
 <ol type="1">
-<li>Instruction Format
+<li>修改MCU ID以译码该自定义指令</li>
+<li>在MCU增加DMA模块(可以看作是MCU的协处理器)
+<ul>
+<li>DMA模块内部支持Operation FIFO用于存储所有的DMA操作(避免MCU
+Stall)</li>
+<li>Operation Format
+<ul>
+<li>Length: 24 bits</li>
+<li>Acc1: 4 bits</li>
+<li>Acc2: 4 bits</li>
+</ul></li>
+</ul></li>
+</ol>
+<h3 id="软件支持">软件支持</h3>
 <ol type="1">
-<li>rd: dma address</li>
-<li>rs1: config memory start</li>
-<li>rs2: config memory stop</li>
-</ol></li>
-<li>start</li>
-<li>feature:
-<ol type="1">
-<li>don't need ALU calculation</li>
-</ol></li>
-<li>write to DMA: Custom from store instruction
-<ol type="1">
-<li>Base(Config Memory Space), Offset(ACC Register Space), Valid</li>
-<li>Q: why don't just use SW to write to DMA A: Don't know yet, maybe
-some cycle benefits? More clear function of the instruction</li>
-</ol></li>
+<li><p>寻找可以自定义的编码空间 <img
+src="https://s2.loli.net/2024/01/06/pqHErjFiw2NIPTn.png" /></p>
+<ul>
+<li>上图展示了目前RISC-V的opcode字段的占用情况</li>
+<li>custom-0,
+custom-1是官方推荐的自定义的编码空间，因此我们自定义执行的opcode采用custom-0编码，为<code>0x0010111</code></li>
+</ul></li>
+<li><p>自定义指令格式</p>
+<ul>
+<li>确定了opcode之后，还需要确定指令的编码格式，RISC-V一共有6种编码格式
+<img src="https://s2.loli.net/2024/01/06/X7mDBRM9QF4526k.png" /></li>
+<li>根据我们对该自定义指令的使用需求来确定编码格式:
+<ul>
+<li><code>U-Type</code>是最适合的，但是<code>U-Type</code>在C程序里使用的时候不方便</li>
+<li><code>R-Type</code>在C程序里使用是最方便的</li>
+</ul></li>
+</ul></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1886469">支持自定义指令集采用<strong>内联汇编</strong>的方法</a>，具体有如下两种:</p>
+<ul>
+<li>利用.insn模板进行编程，该<a
+target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/as/RISC_002dV_002dFormats.html">网页</a>展示了各种类型的RISC-V指令的insn编码格式
+<img src="https://s2.loli.net/2024/01/06/7vtCFhK6sLZ9TGI.png" /></li>
+<li>修改<code>binutils</code>让riscv gcc认识到这条指令</li>
+</ul></li>
+<li><p>在c程序中使用该自定义令<br />
+<img
+src="https://s2.loli.net/2024/01/06/Fcn1d94imH7upgz.png" /></p></li>
 </ol>
 <p>====================================== 分割线
 ============================================</p>
@@ -624,7 +656,7 @@ type="checkbox" />Slave跟Interface交互代码</label></li>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">437k</span>
+    <span title="站点总字数">438k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">

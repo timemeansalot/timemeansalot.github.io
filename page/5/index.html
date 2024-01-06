@@ -1094,7 +1094,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-01-05 22:11:00" itemprop="dateModified" datetime="2024-01-05T22:11:00+08:00">2024-01-05</time>
+      <time title="修改时间：2024-01-06 09:03:13" itemprop="dateModified" datetime="2024-01-06T09:03:13+08:00">2024-01-06</time>
     </span>
 
   
@@ -1104,7 +1104,7 @@ C++的 testbench，可以编译成可执行的测试文件</li>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>732</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -1123,50 +1123,79 @@ C++的 testbench，可以编译成可执行的测试文件</li>
     
     <div class="post-body" itemprop="articleBody">
           <p>[TOC]</p>
-<h1 id="mcu未来工作计划">MCU未来工作计划</h1>
-<h2 id="mcu本身">MCU本身</h2>
+<h1 id="axi-自定义指令">AXI 自定义指令</h1>
+<h2 id="mcu配置acc的两种方式">MCU配置ACC的两种方式</h2>
 <ol type="1">
-<li>实现WFI</li>
-<li>跟ACC集成测试(耗时较久):
+<li>通过MCU直接配置加速器的配置寄存器:
 <ul>
-<li>搭建SoC</li>
-<li>测试MCU跟ACC的交互</li>
+<li>MCU从Config Memory读取配置信息</li>
+<li>MCU将配置信息写入到加速器内部的配置寄存器</li>
+</ul></li>
+<li>MCU通过自定义指令:
+<ul>
+<li>自定义指令用于配置ACC的DMA控制器
+<ul>
+<li>每一个ACC都有一个DMA</li>
+<li>从配置加速器寄存器的角度来看，DMA的效率更高、但是不够灵活</li>
+</ul></li>
+<li>MCU用于配置ACC内部的DMA，增加DMA的灵活性
+<ul>
+<li>DMA搬运数据的起始地址</li>
+<li>DMA搬运开始信号</li>
+</ul></li>
+<li>通过软件来执行自定义指令: 控制DMA -&gt; 配置ACC
+<ul>
+<li>对比LW指令没有明显的提升</li>
+</ul></li>
 </ul></li>
 </ol>
-<h2 id="加速器控制通路acc-control-path">加速器控制通路(ACC control
-path)</h2>
+<h2 id="加速器配置自定义指令集">加速器配置自定义指令集</h2>
+<p><img src="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png" /></p>
+<h3 id="硬件支持">硬件支持</h3>
 <ol type="1">
-<li>实现自定义指令由MCU控制ACC的DMA控制器</li>
+<li>修改MCU ID以译码该自定义指令</li>
+<li>在MCU增加DMA模块(可以看作是MCU的协处理器)
+<ul>
+<li>DMA模块内部支持Operation FIFO用于存储所有的DMA操作(避免MCU
+Stall)</li>
+<li>Operation Format
+<ul>
+<li>Length: 24 bits</li>
+<li>Acc1: 4 bits</li>
+<li>Acc2: 4 bits</li>
+</ul></li>
+</ul></li>
 </ol>
-<h2 id="加速器数据通路acc-data-path">加速器数据通路(ACC data path):</h2>
-<ul>
-<li>ACC之间存在数据依赖，ACC的输出会被别的ACC使用</li>
-<li>但是ACC之间彼此没有数据data path，体现为data path的不灵活</li>
-<li>Q:
-MCU可以作为连接所有ACC的数据中枢？将ACC的输出搬运到另一个ACC的输入？</li>
-</ul>
-<h1 id="自定义指令">自定义指令</h1>
-<p><img src="https://s2.loli.net/2024/01/05/AzK5bBO8JF9ixHN.png" /></p>
-<blockquote>
-<p>PS: Q: does ACC has shared bus structure to allow data transfer
-between ACC in T502?</p>
-</blockquote>
+<h3 id="软件支持">软件支持</h3>
 <ol type="1">
-<li>write data to DMA config register
+<li><p>寻找可以自定义的编码空间 <img
+src="https://s2.loli.net/2024/01/06/pqHErjFiw2NIPTn.png" /></p>
 <ul>
-<li>not much better than SW</li>
+<li>上图展示了目前RISC-V的opcode字段的占用情况</li>
+<li>custom-0,
+custom-1是官方推荐的自定义的编码空间，因此我们自定义执行的opcode采用custom-0编码，为<code>0x0010111</code></li>
 </ul></li>
-<li>move data between ACC, MCU as data path center:
+<li><p>自定义指令格式</p>
 <ul>
-<li>MCU has a DMA module used for move data between ACC</li>
-<li>This DMA module is composed of a FIFO</li>
-<li>use customized instruction to config the DMA, R-Type:
+<li>确定了opcode之后，还需要确定指令的编码格式，RISC-V一共有6种编码格式
+<img src="https://s2.loli.net/2024/01/06/X7mDBRM9QF4526k.png" /></li>
+<li>根据我们对该自定义指令的使用需求来确定编码格式:
 <ul>
-<li>rd: target ACC</li>
-<li>src1: source ACC</li>
-<li>src2: base and offset?</li>
+<li><code>U-Type</code>是最适合的，但是<code>U-Type</code>在C程序里使用的时候不方便</li>
+<li><code>R-Type</code>在C程序里使用是最方便的</li>
 </ul></li>
 </ul></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1886469">支持自定义指令集采用<strong>内联汇编</strong>的方法</a>，具体有如下两种:</p>
+<ul>
+<li>利用.insn模板进行编程，该<a
+target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/as/RISC_002dV_002dFormats.html">网页</a>展示了各种类型的RISC-V指令的insn编码格式
+<img src="https://s2.loli.net/2024/01/06/7vtCFhK6sLZ9TGI.png" /></li>
+<li>修改<code>binutils</code>让riscv gcc认识到这条指令</li>
+</ul></li>
+<li><p>在c程序中使用该自定义令<br />
+<img
+src="https://s2.loli.net/2024/01/06/Fcn1d94imH7upgz.png" /></p></li>
 </ol>
 <h1 id="axi-master测试">AXI Master测试</h1>
 <h2 id="写一次">写一次</h2>
@@ -1205,7 +1234,28 @@ alt="image-20231230000039829" />
 alt="image-20231230001138329" />
 <figcaption aria-hidden="true">image-20231230001138329</figcaption>
 </figure>
-<h2 id="spyglass">Spyglass</h2>
+<h1 id="mcu未来工作计划">MCU未来工作计划</h1>
+<h2 id="mcu本身">MCU本身</h2>
+<ol type="1">
+<li>实现WFI</li>
+<li>跟ACC集成测试(耗时较久):
+<ul>
+<li>搭建SoC</li>
+<li>测试MCU跟ACC的交互</li>
+</ul></li>
+</ol>
+<h2 id="加速器控制通路acc-control-path">加速器控制通路(ACC control
+path)</h2>
+<ol type="1">
+<li>实现自定义指令由MCU控制ACC的DMA控制器</li>
+</ol>
+<h2 id="加速器数据通路acc-data-path">加速器数据通路(ACC data path):</h2>
+<ul>
+<li>ACC之间存在数据依赖，ACC的输出会被别的ACC使用</li>
+<li>但是ACC之间彼此没有数据data path，体现为data path的不灵活</li>
+<li>Q:
+MCU可以作为连接所有ACC的数据中枢？将ACC的输出搬运到另一个ACC的输入？</li>
+</ul>
 
       
     </div>
@@ -1346,7 +1396,7 @@ alt="image-20231230001138329" />
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">437k</span>
+    <span title="站点总字数">438k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
