@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="乱序执行微架构学习笔记：  记分板 score board Tomasolo Reorder Buffer Register Renaming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V 乱序执行">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/03/28/riscv-out-of-order/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="乱序执行微架构学习笔记：  记分板 score board Tomasolo Reorder Buffer Register Renaming">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-28T02:41:52.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/03/28/riscv-out-of-order/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/28/riscv-out-of-order/","path":"2023/03/28/riscv-out-of-order/","title":"RISC-V 乱序执行"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V 乱序执行 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E5%88%86%E7%89%8C-score-board"><span class="nav-number">1.</span> <span class="nav-text">记分牌 Score Board</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomasolo"><span class="nav-number">2.</span> <span class="nav-text">Tomasolo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reorder-buffer"><span class="nav-number">3.</span> <span class="nav-text">Reorder Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#register-renaming"><span class="nav-number">4.</span> <span class="nav-text">Register Renaming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rob"><span class="nav-number">4.1.</span> <span class="nav-text">ROB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">4.2.</span> <span class="nav-text">统一寄存器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%B1%E5%BA%8F%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0"><span class="nav-number"></span> <span class="nav-text">🌟乱序处理器核架构学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%86%E7%89%8C%E7%AE%97%E6%B3%95scoreboard"><span class="nav-number">1.</span> <span class="nav-text">计分牌算法(Scoreboard)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#somasulo%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Somasulo算法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/28/riscv-out-of-order/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V 乱序执行 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V 乱序执行
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-28 10:41:52" itemprop="dateCreated datePublished" datetime="2023-03-28T10:41:52+08:00">2023-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>乱序执行微架构学习笔记：</p>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" /><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/496078836">记分板 score
+board</a></label></li>
+<li><label><input type="checkbox" checked="" /><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/499978902">Tomasolo</a></label></li>
+<li><label><input type="checkbox" checked="" /><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/501631371">Reorder
+Buffer</a></label></li>
+<li><label><input type="checkbox" checked="" /><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/503257611">Register Renaming</a>
+<span id="more"></span></label></li>
+</ul>
+<h2 id="记分牌-score-board">记分牌 Score Board</h2>
+<figure>
+<img
+src="https://pic1.zhimg.com/80/v2-6b7e47a0ccd134bb87f058bc23ff2468_1440w.webp"
+alt="Score Board" />
+<figcaption aria-hidden="true">Score Board</figcaption>
+</figure>
+<ol type="1">
+<li><p>特点：顺序发射、乱序执行、乱序完成</p></li>
+<li><p>优点：简单&amp;能够实现乱序执行</p></li>
+<li><p>缺点：</p>
+<ul>
+<li>WAR(写回时判断), WAW(发射时判断) 都会导致 stall</li>
+<li>顺序发射：即使两条指令需要的是不同的功能部件，后者也会因为前者的阻塞而阻塞</li>
+<li>不是按序完成，对于 debug 比较困难</li>
+</ul></li>
+</ol>
+<h2 id="tomasolo">Tomasolo</h2>
+<blockquote>
+<p>通过寄存器重命名(Register Renaming)可以消除<u>假数据依赖</u>
+WAW，WAR</p>
+</blockquote>
+<figure>
+<img
+src="https://pic2.zhimg.com/80/v2-7c9ec91e4b9d9a052d39fcde3a2316c1_1440w.webp"
+alt="Tomasolo" />
+<figcaption aria-hidden="true">Tomasolo</figcaption>
+</figure>
+<p>在记分牌上面的改进：</p>
+<ol type="1">
+<li>每个数据通路配有保留站，可以缓存多个属于该数据通路的指令,
+只要保留站有空余位置，相关数据通路的指令就可以被发射到保留站中，然后在保留站中等待源操作数</li>
+<li>保留站回直接把需要的数据缓存下来，不用再从寄存器里去读数:
+保留站中每一条指令都会在数据更新的时候第一时间将源操作数存到保留站中，避免了
+<u>WAR</u></li>
+<li>指令在发射的时候会更新寄存器表：指明该寄存器的值由更新的指令计算得到，避免了
+<u>WAW</u></li>
+<li>指令计算完成之后就可以进入到写回阶段，写回的数据通过 CDB 通知 RF
+和所有的保留站，保留站中的相关源数据依赖会被替换成 CDB 广播的数据、RF
+中依赖该计算单元的数据也会被 CDB 的数据更新</li>
+<li>保留站中的指令在没有等到源操作数的时候不会被发射，而是标记其源操作数由何计算单元得到，避免了
+<u>RAW</u></li>
+</ol>
+<blockquote>
+<p>PS: 保留站中直接缓存了源操作数的依赖关系，并且会根据 CDB
+的广播直接更新，其本质是”提供了额外的寄存器，实现了寄存器重命名“</p>
+</blockquote>
+<ol type="1">
+<li>优点：避免了记分牌算法中应为 WAW, WAR 导致的 stall</li>
+<li>缺点：
+<ul>
+<li>当保留站中多条指令同时就绪的时候，需要一种逻辑来选择一条指令放到运算单元中运算</li>
+<li>当多个运算单元同时完成计算的时候，需要竞争 CDB 来进行广播</li>
+<li>在超标量处理器中，一次译码多条指令、并且一次发射多条指令到保留站中（如何保证这些指令发射到保留站中的顺序？）</li>
+<li>Load, Store 如果有相同的地址时，如何保证数据正确？</li>
+<li>乱序提交、不支持精确异常</li>
+</ul></li>
+</ol>
+<h2 id="reorder-buffer">Reorder Buffer</h2>
+<figure>
+<img
+src="https://pic3.zhimg.com/80/v2-252534106244ab82292e5b856f296a06_1440w.webp"
+alt="Reorder Buffer" />
+<figcaption aria-hidden="true">Reorder Buffer</figcaption>
+</figure>
+<ol type="1">
+<li>指令发射的时候会被同时发射到 ROB 和 RS，并且 RS 和 RF 都会指向
+ROB，表明其依赖 ROB 中的结果更新</li>
+<li>计算完成的时候，广播通知 ROB 和 RS</li>
+<li>commit 的时候只会更新 ROB 中最老的那条指令，指令只有 commit
+的时候，才可以将数据写入到 RF，实现按序提交</li>
+<li>ROB 中待提交的数据是有效数据，因此可以被 RS 读取用于源操作数</li>
+</ol>
+<blockquote>
+<p>在 Tomasolo 的基础上，利用 ROB(类似 FIFO)记录程序的指令的执行顺序
+-&gt; 实现指令的按序退休，从而实现精确异常</p>
+</blockquote>
+<ol type="1">
+<li>优点：
+<ul>
+<li>使用 ROB 来索引 RS 和 RF，当 RS 中的指令进入 exe 的时候，就可以从 RS
+中清除该指令</li>
+<li>方便流水线冲刷：直接将 ROB 中后续的所有指令冲刷即可</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>增加了硬件存储：源操作数可能在 RF, ROB, RS</li>
+<li>指令读取数据不仅通过逻辑寄存器和 CDB，还通过 ROB，这需要 ROB
+配置读口，增大布线压力，且要在读取数据的线路的末尾增加选择器（把 ROB
+的数据加入到选择器中），这会潜在地增加关键路径长度。在多发射的处理器中，ROB
+需要支持多端口读，在一个四发射的机器里，ROB
+需要支持八个读端口，压力很大。</li>
+</ul></li>
+</ol>
+<h2 id="register-renaming">Register Renaming</h2>
+<h3 id="rob">ROB</h3>
+<p>ROB 编号会被映射到
+RF，从而实现了虚拟寄存器到物理寄存器的映射，新的指令发射的时候尝试从 RF
+中读源操作数，若发现该寄存器已经映射到了 ROB
+中的表项，则新的指令更新其依赖关系为对应 ROB 编号</p>
+<ol type="1">
+<li>优点：逻辑简单</li>
+<li>缺点：
+<ul>
+<li>所有指令都会进入 ROB，包括不会写 RF 的指令如
+Store，相当于会浪费一个物理寄存器（ROB1 个表项就是一个物理寄存器）</li>
+<li>硬件复杂、布线复杂、ROB 需要多个读端口</li>
+</ul></li>
+</ol>
+<h3 id="统一寄存器">统一寄存器</h3>
+<h1 id="乱序处理器核架构学习">🌟乱序处理器核架构学习</h1>
+<h2 id="计分牌算法scoreboard">计分牌算法(Scoreboard)</h2>
+<p><img
+src="https://pic1.zhimg.com/v2-6b7e47a0ccd134bb87f058bc23ff2468_r.jpg"
+alt="img" /> <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/496078836">参考资料</a></p>
+<ol type="1">
+<li><p>单发射乱序架构:</p>
+<ul>
+<li>乱序体现在：不同数据通路之间的指令，彼此之间可以乱序执行</li>
+<li>单发射体现在：只有一个<code>INST</code>寄存器，每次只能DECODE一条指令</li>
+</ul></li>
+<li><p>INST经过DECODE单元进入到部件寄存器(MUL_1, MUL_2, etc)时:</p>
+<ul>
+<li>查询ScoreBoard，如果当前指令的目的寄存器被占用，则当前指令不会发射到部件寄存器中</li>
+<li>目的是为了避免<u>WRW</u>；<u>会导致流水线STALL</u></li>
+<li>会导致DECODE阻塞，所有的指令都会stall，非常严重的性能降低</li>
+</ul></li>
+<li><p>部件寄存器到操作数寄存器(OPRAND):</p>
+<ul>
+<li>查看指令的两个源寄存器是否需要由其他部件计算得到</li>
+<li>如果需要计算得到，则会停留在部件寄存器阶段、不会读取Register
+File进入到操作数寄存器阶段</li>
+<li>避免<u>RAW</u>：如果源操作数正在别的功能单元里计算，那么此时从寄存器里读取到的操作数，自然是过时的</li>
+</ul></li>
+<li><p>操作数寄存器到结果寄存器(RESULT):</p>
+<ul>
+<li>操作数寄存器里的指令已经具备读取操作数的能力</li>
+<li>当对应的计算单元空闲的时候，就可以进行计算了，计算完成之后结果会写入到RESULT寄存器里</li>
+<li>提交的时候会查看ScoreBoard，是否有别的操作数准备就绪但是还没有开始计算的指令，看它们的源寄存器
+跟当前指令的目的寄存器是否一致，如果一致则当前指令不能提交；<u>会导致流水线STALL</u></li>
+<li>避免WRA：别的指令想要读取旧的寄存器的值，所以我们必须等这些指令把寄存器的值读走了之后，再覆盖掉寄存器</li>
+<li>提交的时候是<strong>乱序提交</strong></li>
+</ul></li>
+<li><p>ScoreBoard优缺点总结:</p>
+<ul>
+<li>优点：实现简单</li>
+<li>缺点:
+<ul>
+<li>单发射、一条指令阻塞可能会导致流水线阻塞</li>
+<li>乱序提交</li>
+<li>WAR, WAW都会导致流水线STALL</li>
+</ul></li>
+</ul></li>
+</ol>
+<h2 id="somasulo算法">Somasulo算法</h2>
+<blockquote>
+<p>借助寄存器重命名的思想，解决了假数据冒险(WAW, WAR)</p>
+</blockquote>
+<ol type="1">
+<li>WAW：把最新的值写入到RF，旧指令的结果不写入RF，采取广播的方式通知其他指令</li>
+<li>WAR：不会出现该冒险，指令发射的时候，会把寄存器的值<strong><u>copy</u></strong>一份，这样就不会担心<strong>想要旧的值，但是寄存器被写入导致覆盖</strong></li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/499978902">参考链接</a></p>
+<figure>
+<img
+src="https://pic2.zhimg.com/v2-7c9ec91e4b9d9a052d39fcde3a2316c1_r.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/27/riscv-IF/" rel="prev" title="RISC-V 5级流水线取指级设计">
+                  <i class="fa fa-chevron-left"></i> RISC-V 5级流水线取指级设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/03/scientificResearch/" rel="next" title="科研心得">
+                  科研心得 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="AXI笔记 [TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="axi">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/11/24/axi/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="AXI笔记 [TOC]">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/X7mDBRM9QF4526k.png">
+<meta property="og:image" content="https://s2.loli.net/2024/01/06/7vtCFhK6sLZ9TGI.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png">
+<meta property="article:published_time" content="2023-11-24T15:45:16.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.095Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta property="article:tag" content="Bus">
+<meta property="article:tag" content="AXI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/11/24/axi/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/11/24/axi/","path":"2023/11/24/axi/","title":"axi"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>axi | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">AXI 自定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu%E9%85%8D%E7%BD%AEacc%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">MCU配置ACC的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">加速器配置自定义指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">硬件支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="nav-number">1.2.2.</span> <span class="nav-text">软件支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#axi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method-1"><span class="nav-number">2.1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-2"><span class="nav-number">2.2.</span> <span class="nav-text">method 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method-3"><span class="nav-number">2.3.</span> <span class="nav-text">method 3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%8Daxi-master%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">4种AXI Master类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat"><span class="nav-number">3.1.</span> <span class="nav-text">single beat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#single-beat-pipelined"><span class="nav-number">3.2.</span> <span class="nav-text">single beat pipelined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-single-channel"><span class="nav-number">3.3.</span> <span class="nav-text">bursting, single channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bursting-multiple-channel"><span class="nav-number">3.4.</span> <span class="nav-text">bursting, multiple channel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">MCU设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%8F%91%E5%B0%84%E6%B5%81%E6%B0%B4%E7%BA%BFmcu%E9%9B%86%E6%88%90axi%E9%9C%80%E8%A6%81%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">单发射流水线MCU集成AXI需要的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E8%A7%A6%E5%8F%91axi-burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.1.</span> <span class="nav-text">什么场景下会触发AXI
+Burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E5%8D%95%E5%8F%91%E5%B0%84%E5%A4%84%E7%90%86%E5%99%A8%E6%A0%B8%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.2.</span> <span class="nav-text">顺序单发射处理器核如何支持burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E6%9D%A1%E6%8C%87%E4%BB%A4%E4%BC%9A%E8%A7%A6%E5%8F%91burst%E4%BC%A0%E8%BE%93"><span class="nav-number">4.1.3.</span> <span class="nav-text">哪条指令会触发burst传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#burst%E4%BC%A0%E8%BE%93%E6%97%B6mcu%E6%98%AF%E5%90%A6%E4%BC%9Astall"><span class="nav-number">4.1.4.</span> <span class="nav-text">burst传输时MCU是否会Stall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-to-acc%E6%B5%81%E6%B0%B4"><span class="nav-number">4.1.5.</span> <span class="nav-text">write to ACC流水</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mcu-axi%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%BB%E7%BB%93"><span class="nav-number">4.2.</span> <span class="nav-text">MCU AXI的设计总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding"><span class="nav-number">5.</span> <span class="nav-text">Coding</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/11/24/axi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="axi | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          axi
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-24 23:45:16" itemprop="dateCreated datePublished" datetime="2023-11-24T23:45:16+08:00">2023-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>AXI笔记 [TOC]</p>
+<span id="more"></span>
+<h1 id="axi-自定义指令">AXI 自定义指令</h1>
+<h2 id="mcu配置acc的两种方式">MCU配置ACC的两种方式</h2>
+<ol type="1">
+<li>通过MCU直接配置加速器的配置寄存器:
+<ul>
+<li>MCU从Config Memory读取配置信息</li>
+<li>MCU将配置信息写入到加速器内部的配置寄存器</li>
+</ul></li>
+<li>MCU通过自定义指令:
+<ul>
+<li>自定义指令用于配置ACC的DMA控制器
+<ul>
+<li>每一个ACC都有一个DMA</li>
+<li>从配置加速器寄存器的角度来看，DMA的效率更高、但是不够灵活</li>
+</ul></li>
+<li>MCU用于配置ACC内部的DMA，增加DMA的灵活性
+<ul>
+<li>DMA搬运数据的起始地址</li>
+<li>DMA搬运开始信号</li>
+</ul></li>
+<li>通过软件来执行自定义指令: 控制DMA -&gt; 配置ACC
+<ul>
+<li>对比LW指令没有明显的提升</li>
+</ul></li>
+</ul></li>
+</ol>
+<h2 id="加速器配置自定义指令集">加速器配置自定义指令集</h2>
+<p><img src="https://s2.loli.net/2024/01/06/yufs1jWIL8m3v7J.png" /></p>
+<h3 id="硬件支持">硬件支持</h3>
+<ol type="1">
+<li>修改MCU ID以译码该自定义指令</li>
+<li>在MCU增加DMA模块(可以看作是MCU的协处理器)
+<ul>
+<li>DMA模块内部支持Operation FIFO用于存储所有的DMA操作(避免MCU
+Stall)</li>
+<li>Operation Format
+<ul>
+<li>Length: 24 bits</li>
+<li>Acc1: 4 bits</li>
+<li>Acc2: 4 bits</li>
+</ul></li>
+</ul></li>
+</ol>
+<h3 id="软件支持">软件支持</h3>
+<ol type="1">
+<li><p>寻找可以自定义的编码空间 <img
+src="https://s2.loli.net/2024/01/06/pqHErjFiw2NIPTn.png" /></p>
+<ul>
+<li>上图展示了目前RISC-V的opcode字段的占用情况</li>
+<li>custom-0,
+custom-1是官方推荐的自定义的编码空间，因此我们自定义执行的opcode采用custom-0编码，为<code>0x0010111</code></li>
+</ul></li>
+<li><p>自定义指令格式</p>
+<ul>
+<li>确定了opcode之后，还需要确定指令的编码格式，RISC-V一共有6种编码格式
+<img src="https://s2.loli.net/2024/01/06/X7mDBRM9QF4526k.png" /></li>
+<li>根据我们对该自定义指令的使用需求来确定编码格式:
+<ul>
+<li><code>U-Type</code>是最适合的，但是<code>U-Type</code>在C程序里使用的时候不方便</li>
+<li><code>R-Type</code>在C程序里使用是最方便的</li>
+</ul></li>
+</ul></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1886469">支持自定义指令集采用<strong>内联汇编</strong>的方法</a>，具体有如下两种:</p>
+<ul>
+<li>利用.insn模板进行编程，该<a
+target="_blank" rel="noopener" href="https://sourceware.org/binutils/docs/as/RISC_002dV_002dFormats.html">网页</a>展示了各种类型的RISC-V指令的insn编码格式
+<img src="https://s2.loli.net/2024/01/06/7vtCFhK6sLZ9TGI.png" /></li>
+<li>修改<code>binutils</code>让riscv gcc认识到这条指令</li>
+</ul></li>
+<li><p>在c程序中使用该自定义令<br />
+<img
+src="https://s2.loli.net/2024/01/06/Fcn1d94imH7upgz.png" /></p></li>
+</ol>
+<p>====================================== 分割线
+============================================</p>
+<h1 id="axi-master类型">AXI Master类型</h1>
+<ol type="1">
+<li>多个Slave访问：arbiter, buffer</li>
+<li>Out of Order: ID</li>
+<li>Outstanding transaction</li>
+<li>multi-clock domain for low power</li>
+<li>stall the pipeline before finish transaction</li>
+<li>register slice to pipeline: make this a TODO as I don't fully
+understand AXI pipeline</li>
+</ol>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />给出MEM模块针对AXI的架构图</label></li>
+<li><label><input
+type="checkbox" />说明架构图中的模块对应实现了上述AXI的什么特性</label></li>
+<li><label><input
+type="checkbox" />查看别的Core支持AXI时做的实现</label></li>
+<li><label><input type="checkbox" />store the config data in internal
+shadow registers and trigger DMA to pass the data to ACC</label></li>
+<li><label><input
+type="checkbox" /><strong>能否将AXI改为半双工？</strong>因为我们的顺序核一次要么读、要么写；并且方便的链接到AXI协议</label></li>
+</ul>
+<h2 id="method-1">method 1</h2>
+<ol type="1">
+<li>ACC serves as AXI slave, DMA serves as AXI master, DRAM serves as
+AXI slave</li>
+<li>every time ACC needs write/read to SDRAM, CPU triggers the DMA to
+pass the data from/to ACC</li>
+<li>bad:
+<ul>
+<li>every transaction need CPU</li>
+<li>it sucks when ACC need small amount of data very often, CPU has to
+trigger DMA very often</li>
+</ul></li>
+</ol>
+<h2 id="method-2">method 2</h2>
+<ol type="1">
+<li>ACC create the write/read request and stores the request in a
+FIFO</li>
+<li>the DMA can read from the FIFO and do the data transaction if there
+is a request</li>
+<li>bad:
+<ul>
+<li>transaction TIMING issue</li>
+<li>another hardware which watch the FIFO to see if there is a
+transaction needed</li>
+</ul></li>
+</ol>
+<h2 id="method-3">method 3</h2>
+<ol type="1">
+<li>ACC serves as AXI master, and direction write/read to DRAM</li>
+<li>ways to do this:
+<ul>
+<li>write RTL of AXI in your ACC</li>
+<li>use IP of AXI in your ACC</li>
+<li>use Vivado HLS in your ACC</li>
+</ul></li>
+</ol>
+<h1 id="种axi-master类型">4种AXI Master类型</h1>
+<ol type="1">
+<li>single beat</li>
+<li>single beat pipelined</li>
+<li>bursting, single channel</li>
+<li>bursting, multiple channel</li>
+</ol>
+<h2 id="single-beat">single beat</h2>
+<ol type="1">
+<li>特点：burst
+size等于0，给出地址及控制信号后只包含<strong>一次数据传输</strong>，传输完成之后再发送下一次地址跟控制信号</li>
+<li>实现:
+<ul>
+<li>AxLEN=0</li>
+<li>WLAST=1, ignore RLAST</li>
+<li>ignore
+AxBURST：不需要关注burst类型，也不需要关心burst地址是否跨越4kB边界</li>
+</ul></li>
+<li>优点：功能上是可用的</li>
+<li>缺点带宽(throughput)很低: data bus利用率很低，基本上都是空cycle</li>
+</ol>
+<p><img
+src="https://zipcpu.com/img/wbm2axisp/single-master-reads.svg" /></p>
+<h2 id="single-beat-pipelined">single beat pipelined</h2>
+<ol type="1">
+<li>特点支持outstanding传输：传输反馈(response)没有收到之前就可以发送下一次传输的地址跟控制信号</li>
+<li>实现:
+<ul>
+<li>issue状态机</li>
+<li>response状态机</li>
+<li>同步状态机</li>
+<li>counter &amp; FIFO用于记录request，并且在收到response的时候使用</li>
+<li>AxID是常量：保证所有传输是顺序的</li>
+</ul></li>
+<li>优点: data bus带宽理论上可以吃满</li>
+<li>缺点:
+对Slave要求过于理想（要求slave的两个burst传输之间没有空闲）；<br />
+eg: Xilinx’s AXI block RAM
+interface每次burst传输需要<code>3+N</code>个cycle，若N=0，则带宽利用率为25%</li>
+<li>适用场景：传输地址不是连续（访问image的列数据)、或者下次传输地址未知的场景</li>
+</ol>
+<h2 id="bursting-single-channel">bursting, single channel</h2>
+<ol type="1">
+<li>特点：支持burst传输（一次地址&amp;控制信号，多次data传输）</li>
+<li>实现:
+<ul>
+<li>记录当前已经传输的beats数</li>
+<li>WLAST在最后一次写的时候拉高</li>
+</ul></li>
+<li>地址:
+<ul>
+<li>wrap &amp; fixed, beats &lt;= 16; increment, beats &lt;= 256</li>
+<li>地址不能跨越4kB: 通过配置AxLEN保证</li>
+<li><u>PS: 尽可能在一次burst传输中传输尽可能多的beats</u></li>
+</ul></li>
+</ol>
+<h2 id="bursting-multiple-channel">bursting, multiple channel</h2>
+<ol type="1">
+<li><p>特点: 通过ID实现乱序传输:</p>
+<ul>
+<li>outstanding but in order 读写： <img
+src="https://s2.loli.net/2023/12/01/iDRV5AxdF9hObBw.png"
+alt="image-20231125082444175" /></li>
+<li>OoO写：不同ID的写传输，其Response可以乱序，但是Wdata不能interleaving
+<img src="https://s2.loli.net/2023/12/01/Hr37RSFp9wxvXAf.png"
+alt="image-20231125080220026" /></li>
+<li>OoO读：不同ID的读传输，其Rdata可以interleaving <img
+src="https://s2.loli.net/2023/12/01/jhB7O3A4MCoLPT2.png"
+alt="image-20231125080234460" /></li>
+</ul></li>
+<li><p>实现:</p>
+<ul>
+<li>master需要支持reorder buffer</li>
+</ul></li>
+<li><p>优点: 适用于一个Master需要同时访问多个slave的场景</p></li>
+<li><p>缺点: 对AXI
+Interconnect要求比较高，master可以并行访问slaves时才好用</p></li>
+</ol>
+<h1 id="mcu设计方案">MCU设计方案</h1>
+<p><img src="https://s2.loli.net/2023/12/02/FhNOpysj8SG1XmA.png" /></p>
+<h2
+id="单发射流水线mcu集成axi需要的场景">单发射流水线MCU集成AXI需要的场景</h2>
+<ol type="1">
+<li>写到ACC的时候，由于地址不保证连续，所以不能采用burst写</li>
+<li>从PPM(ping pong memory)读的时候，地址是连续的，可以采用burst读</li>
+</ol>
+<h3 id="什么场景下会触发axi-burst传输">什么场景下会触发AXI
+Burst传输</h3>
+<ol type="1">
+<li>对于顺序处理器核而言，每个cycle至多有一条riscv load指令</li>
+<li>访问PPM的延迟比访问D-Memory的延迟高</li>
+<li>配置ACC的指令流:
+<ul>
+<li>情形1 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">...</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure></li>
+<li>情形2 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load rd, PPM[addr]</span><br><span class="line">load rd, PPM[addr]</span><br><span class="line">...</span><br><span class="line">store rd, ACC[addr]</span><br><span class="line">store rd, ACC[addr]</span><br></pre></td></tr></table></figure> &gt; PS: 从PPM
+read指令后面，还需要对read的数据进行解析得到addr跟data，才可以写入到ACC</li>
+</ul></li>
+<li>burst传输的场景:
+<ul>
+<li>通过burst读，顺序地读取多个地址的数据(预读取)</li>
+<li><strong>Optional</strong>: read操作不会stall流水线</li>
+</ul></li>
+</ol>
+<h3
+id="顺序单发射处理器核如何支持burst传输">顺序单发射处理器核如何支持burst传输</h3>
+<ol type="1">
+<li>需要在MCU跟AXI Channel之间增加AXI Master Interface</li>
+<li>Interface用于:
+<ul>
+<li>支持read burst</li>
+<li>避免burst传输时MCU stall</li>
+<li>支持write pipeline</li>
+<li>解决MCU跟ACC、PPM之间的跨时钟域问题</li>
+</ul></li>
+</ol>
+<h3 id="哪条指令会触发burst传输">哪条指令会触发burst传输</h3>
+<ol type="1">
+<li>CORTEX-A9有ldm/stm(load multiple, store multiple)指令来触发AXI
+burst操作</li>
+<li>MCU可以根据load指令&amp;地址范围处于PPM来触发burst
+read，<code>burst length=16</code></li>
+<li>增加自定义指令来支持对PPM的burst读:
+<ul>
+<li>修改decoder</li>
+<li>修改编译器</li>
+<li>灵活</li>
+</ul></li>
+</ol>
+<h3 id="burst传输时mcu是否会stall">burst传输时MCU是否会Stall</h3>
+<ol type="1">
+<li>处理器是否支持Out-of-Order</li>
+<li>指令之间的相关性</li>
+<li>AXI Interface设计</li>
+</ol>
+<h3 id="write-to-acc流水">write to ACC流水</h3>
+<ol type="1">
+<li>MCU执行Store指令，Store的地址范围属于ACC的地址空间</li>
+<li>MCU执行到MEM
+Stage的时候，会判断地址范围，不会写入到D-Memory，而是通过AXI写通道写到ACC</li>
+</ol>
+<h2 id="mcu-axi的设计总结">MCU AXI的设计总结</h2>
+<figure>
+<img src="https://s2.loli.net/2023/12/02/YHsUMTXOQFA2ICl.png"
+alt="image-20231202110646792" />
+<figcaption aria-hidden="true">image-20231202110646792</figcaption>
+</figure>
+<ol type="1">
+<li><p>采用burst对PPM进行读取:</p>
+<ul>
+<li>当地址空间对应PPM时，Interface会对PPM发起16个beat的Burst读</li>
+<li>读回的data会被存放在Interface的异步<code>Read_FIFO</code>中</li>
+<li>FIFO头元素的地址跟MCU的read addr相时，FIFO头部元素pop</li>
+</ul></li>
+<li><p>采用pipeline的方式对ACC进行写:</p>
+<ul>
+<li>AXI Interface接收MCU发的write addr, write data, write
+control等信号</li>
+<li>写的时候不用收到ACC的反馈即可发起下一笔写</li>
+<li>Interface若收到AXI Slave的Error信号，会发送给MCU，触发Exception</li>
+</ul></li>
+<li><p>Interface跟Slave之间采用1主多从的拓扑结构:</p>
+<ul>
+<li>有译码器根据地址选择slave</li>
+<li>没有仲裁器</li>
+</ul></li>
+</ol>
+<h1 id="coding">Coding</h1>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />AXI Master
+Interface</label></li>
+<li><label><input
+type="checkbox" />MCU跟Interface交互的代码</label></li>
+<li><label><input type="checkbox" />AXI
+总线拓扑结构：译码器</label></li>
+<li><label><input
+type="checkbox" />Slave跟Interface交互代码</label></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+              <a href="/tags/Bus/" rel="tag"># Bus</a>
+              <a href="/tags/AXI/" rel="tag"># AXI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/22/makefile/" rel="prev" title="makefile">
+                  <i class="fa fa-chevron-left"></i> makefile
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/12/18/vivado/" rel="next" title="vivado使用笔记">
+                  vivado使用笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

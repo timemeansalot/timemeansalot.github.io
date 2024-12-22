@@ -1,0 +1,3810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RV-32IM 每条指令的特性和功能, 寄存器的通用功能(register mapping)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V指令集介绍">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/03/07/riscv-isa/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RV-32IM 每条指令的特性和功能, 寄存器的通用功能(register mapping)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/03/10/itwWJOdcnFNysMv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/14/xhcAnqPwzyH9aSD.png">
+<meta property="article:published_time" content="2023-03-07T06:58:41.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/03/10/itwWJOdcnFNysMv.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/03/07/riscv-isa/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/07/riscv-isa/","path":"2023/03/07/riscv-isa/","title":"RISC-V指令集介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V指令集介绍 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%A0%87%E8%AF%86%E4%BD%8D"><span class="nav-number">1.</span> <span class="nav-text">指令标识位</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#riscv-%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">RISCV 指令介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#opcode-%E6%80%BB%E7%BB%93"><span class="nav-number">2.1.</span> <span class="nav-text">opcode 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#riscv-isa-%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">RISCV ISA 模拟器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#calculation"><span class="nav-number">3.</span> <span class="nav-text">Calculation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lui"><span class="nav-number">3.1.</span> <span class="nav-text">LUI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#auipc"><span class="nav-number">3.2.</span> <span class="nav-text">AUIPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#addi"><span class="nav-number">3.3.</span> <span class="nav-text">ADDI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add"><span class="nav-number">3.4.</span> <span class="nav-text">ADD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sub"><span class="nav-number">3.5.</span> <span class="nav-text">SUB</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logic"><span class="nav-number">4.</span> <span class="nav-text">Logic</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#or"><span class="nav-number">4.1.</span> <span class="nav-text">OR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#and"><span class="nav-number">4.2.</span> <span class="nav-text">AND</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xor"><span class="nav-number">4.3.</span> <span class="nav-text">XOR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ori"><span class="nav-number">4.4.</span> <span class="nav-text">ORI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#andi"><span class="nav-number">4.5.</span> <span class="nav-text">ANDI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xori"><span class="nav-number">4.6.</span> <span class="nav-text">XORI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shifter"><span class="nav-number">5.</span> <span class="nav-text">Shifter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sll"><span class="nav-number">5.1.</span> <span class="nav-text">SLL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srl"><span class="nav-number">5.2.</span> <span class="nav-text">SRL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sra"><span class="nav-number">5.3.</span> <span class="nav-text">SRA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slli"><span class="nav-number">5.4.</span> <span class="nav-text">SLLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srli"><span class="nav-number">5.5.</span> <span class="nav-text">SRLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srai"><span class="nav-number">5.6.</span> <span class="nav-text">SRAI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slt"><span class="nav-number">5.7.</span> <span class="nav-text">SLT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sltu"><span class="nav-number">5.8.</span> <span class="nav-text">SLTU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slti"><span class="nav-number">5.9.</span> <span class="nav-text">SLTI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sltiu"><span class="nav-number">5.10.</span> <span class="nav-text">SLTIU</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#loadstore"><span class="nav-number">6.</span> <span class="nav-text">Load&#x2F;Store</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#loadstore-%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="nav-number">6.1.</span> <span class="nav-text">Load&#x2F;Store 指令格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lb"><span class="nav-number">6.2.</span> <span class="nav-text">LB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lh"><span class="nav-number">6.3.</span> <span class="nav-text">LH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lw"><span class="nav-number">6.4.</span> <span class="nav-text">LW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lbu"><span class="nav-number">6.5.</span> <span class="nav-text">LBU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lhu"><span class="nav-number">6.6.</span> <span class="nav-text">LHU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sb"><span class="nav-number">6.7.</span> <span class="nav-text">SB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sh"><span class="nav-number">6.8.</span> <span class="nav-text">SH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sw"><span class="nav-number">6.9.</span> <span class="nav-text">SW</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#branch"><span class="nav-number">7.</span> <span class="nav-text">Branch</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#branch-%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="nav-number">7.1.</span> <span class="nav-text">Branch 指令格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beq"><span class="nav-number">7.2.</span> <span class="nav-text">BEQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bne"><span class="nav-number">7.3.</span> <span class="nav-text">BNE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blt"><span class="nav-number">7.4.</span> <span class="nav-text">BLT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bge"><span class="nav-number">7.5.</span> <span class="nav-text">BGE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bltu"><span class="nav-number">7.6.</span> <span class="nav-text">BLTU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bgeu"><span class="nav-number">7.7.</span> <span class="nav-text">BGEU</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jump"><span class="nav-number">8.</span> <span class="nav-text">Jump</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jal"><span class="nav-number">8.1.</span> <span class="nav-text">JAL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jalr"><span class="nav-number">8.2.</span> <span class="nav-text">JALR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#isa-%E4%B8%AD%E6%8C%87%E4%BB%A4%E5%AF%B9%E5%BA%94%E7%9A%84%E5%90%84%E7%A7%8D%E7%BC%96%E7%A0%81"><span class="nav-number">9.</span> <span class="nav-text">ISA 中指令对应的各种编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E8%AF%B4%E6%98%8E"><span class="nav-number">9.1.</span> <span class="nav-text">编码说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#immtype"><span class="nav-number">9.1.1.</span> <span class="nav-text">immType</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/07/riscv-isa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V指令集介绍 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V指令集介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-07 14:58:41" itemprop="dateCreated datePublished" datetime="2023-03-07T14:58:41+08:00">2023-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>16k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RV-32IM 每条指令的特性和功能, 寄存器的通用功能(register mapping)</p>
+<span id="more"></span>
+<h1 id="指令标识位">指令标识位</h1>
+<p>指令标志位可以用来标志 CPU 的状态，例如
+V(overflow)表示溢出，当一条指令的结果出现溢出时，会将 V 置 1，否则置 0.
+例如：<code>add a0, a1</code>, a2 表示<span
+class="math inline">\(a0=a1+a2\)</span>, 如果 a1+a2 出现了溢出，则 V
+会被置 1.</p>
+<p>在 ARM 中，通过 CPSR 寄存器记录各种标识位、在 RISCV
+中，没有专门的标志位寄存器，因此需要使用额外的指令来判断。例如，在 RISCV
+中判断溢出需要在指令后面添加额外的指令，如：</p>
+<p>检查无符号加法的溢出只需要在指令后添加一个额外的分支指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">addu t0，t1，t2;</span><br><span class="line"></span><br><span class="line">bltu t0， t1，overflow</span><br></pre></td></tr></table></figure>
+<p>对于带符号的加法，如果已知一个操作数的符号，则溢出检查只需要在加法后添加一条分支
+指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">addi t0，t1，+ imm;</span><br><span class="line"></span><br><span class="line">blt t0，t1，overflow</span><br></pre></td></tr></table></figure>
+<p>对于一般的带符号加法，我们需要在加法指令后添加三个
+附加指令，当且仅当一个操作数为负数时，结果才能小于另一个操作数，否则就是溢出:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">add t0, t1, t2</span><br><span class="line"></span><br><span class="line">slti t3, t2, 0</span><br><span class="line"></span><br><span class="line">slt t4,t0,t1</span><br><span class="line"></span><br><span class="line">bne t3, t4, overflow</span><br></pre></td></tr></table></figure>
+<p>RISCV 中涉及到溢出的指令有: <code>ANDI</code>, <code>ADD</code>,
+<code>SUB</code></p>
+<p><img src="https://s2.loli.net/2023/03/10/itwWJOdcnFNysMv.png" /></p>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 3%" />
+<col style="width: 43%" />
+<col style="width: 25%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr>
+<th>5-bit Encoding (rx)</th>
+<th>3-bit Compressed Encoding (rx')</th>
+<th>Register</th>
+<th><a
+target="_blank" rel="noopener" href="https://en.wikichip.org/w/index.php?title=application_binary_interface&amp;action=edit&amp;redlink=1">ABI</a>
+Name</th>
+<th>Description</th>
+<th>Saved by Calle-</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-</td>
+<td>x0</td>
+<td>zero</td>
+<td><a target="_blank" rel="noopener" href="https://en.wikichip.org/wiki/zero_register">hardwired
+zero</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>1</td>
+<td>-</td>
+<td>x1</td>
+<td>ra</td>
+<td>return address</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-</td>
+<td>x2</td>
+<td>sp</td>
+<td>stack pointer</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-</td>
+<td>x3</td>
+<td>gp</td>
+<td>global pointer</td>
+<td>-</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-</td>
+<td>x4</td>
+<td>tp</td>
+<td>thread pointer</td>
+<td>-</td>
+</tr>
+<tr>
+<td>5</td>
+<td>-</td>
+<td>x5</td>
+<td>t0</td>
+<td>temporary register 0</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-</td>
+<td>x6</td>
+<td>t1</td>
+<td>temporary register 1</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>7</td>
+<td>-</td>
+<td>x7</td>
+<td>t2</td>
+<td>temporary register 2</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0</td>
+<td>x8</td>
+<td>s0 / fp</td>
+<td>saved register 0 / frame pointer</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>9</td>
+<td>1</td>
+<td>x9</td>
+<td>s1</td>
+<td>saved register 1</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>x10</td>
+<td>a0</td>
+<td>function argument 0 / return value 0</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>11</td>
+<td>3</td>
+<td>x11</td>
+<td>a1</td>
+<td>function argument 1 / return value 1</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>12</td>
+<td>4</td>
+<td>x12</td>
+<td>a2</td>
+<td>function argument 2</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>13</td>
+<td>5</td>
+<td>x13</td>
+<td>a3</td>
+<td>function argument 3</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>14</td>
+<td>6</td>
+<td>x14</td>
+<td>a4</td>
+<td>function argument 4</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>15</td>
+<td>7</td>
+<td>x15</td>
+<td>a5</td>
+<td>function argument 5</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>16</td>
+<td>-</td>
+<td>x16</td>
+<td>a6</td>
+<td>function argument 6</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>17</td>
+<td>-</td>
+<td>x17</td>
+<td>a7</td>
+<td>function argument 7</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>18</td>
+<td>-</td>
+<td>x18</td>
+<td>s2</td>
+<td>saved register 2</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>19</td>
+<td>-</td>
+<td>x19</td>
+<td>s3</td>
+<td>saved register 3</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>20</td>
+<td>-</td>
+<td>x20</td>
+<td>s4</td>
+<td>saved register 4</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>21</td>
+<td>-</td>
+<td>x21</td>
+<td>s5</td>
+<td>saved register 5</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>22</td>
+<td>-</td>
+<td>x22</td>
+<td>s6</td>
+<td>saved register 6</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>23</td>
+<td>-</td>
+<td>x23</td>
+<td>s7</td>
+<td>saved register 7</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>24</td>
+<td>-</td>
+<td>x24</td>
+<td>s8</td>
+<td>saved register 8</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>25</td>
+<td>-</td>
+<td>x25</td>
+<td>s9</td>
+<td>saved register 9</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>26</td>
+<td>-</td>
+<td>x26</td>
+<td>s10</td>
+<td>saved register 10</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>27</td>
+<td>-</td>
+<td>x27</td>
+<td>s11</td>
+<td>saved register 11</td>
+<td>-E</td>
+</tr>
+<tr>
+<td>28</td>
+<td>-</td>
+<td>x28</td>
+<td>t3</td>
+<td>temporary register 3</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>29</td>
+<td>-</td>
+<td>x29</td>
+<td>t4</td>
+<td>temporary register 4</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>30</td>
+<td>-</td>
+<td>x30</td>
+<td>t5</td>
+<td>temporary register 5</td>
+<td>-R</td>
+</tr>
+<tr>
+<td>31</td>
+<td>-</td>
+<td>x31</td>
+<td>t6</td>
+<td>temporary register 6</td>
+<td>-R</td>
+</tr>
+</tbody>
+</table>
+<h1 id="riscv-指令介绍">RISCV 指令介绍</h1>
+<figure>
+<img src="https://s2.loli.net/2023/03/14/xhcAnqPwzyH9aSD.png"
+alt="RV32I Base Instruction Set" />
+<figcaption aria-hidden="true">RV32I Base Instruction Set</figcaption>
+</figure>
+<h2 id="opcode-总结">opcode 总结</h2>
+<blockquote>
+<p>opcode 一共 7bits，其中低 2bits 恒为 11，只有高 5bits 不同</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th><span class="math inline">\(opcode_{[6:2]}\)</span></th>
+<th>Instruction Type</th>
+<th>Instruction Amount</th>
+<th>Relative Instructions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01101</td>
+<td>U-Type</td>
+<td>1</td>
+<td>LUI</td>
+</tr>
+<tr>
+<td>00101</td>
+<td>U-Type</td>
+<td>1</td>
+<td>AUIPC</td>
+</tr>
+<tr>
+<td>01000</td>
+<td>S-Type</td>
+<td>3</td>
+<td>SB, SH, SW</td>
+</tr>
+<tr>
+<td>00000</td>
+<td>I-Type</td>
+<td>5</td>
+<td>LB, BH, LW, LBU, LHU</td>
+</tr>
+<tr>
+<td>00100</td>
+<td>I-Type</td>
+<td>9</td>
+<td>ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI</td>
+</tr>
+<tr>
+<td>01100</td>
+<td>R-Type</td>
+<td>10</td>
+<td>ADD, SUB, SLT, SLTU, XOR, OR, AND, SLL, SRL, SRA</td>
+</tr>
+<tr>
+<td>11001</td>
+<td>R-Type</td>
+<td>1</td>
+<td>JALR</td>
+</tr>
+<tr>
+<td>11011</td>
+<td>J-Type</td>
+<td>1</td>
+<td>JAL</td>
+</tr>
+<tr>
+<td>11000</td>
+<td>B-Type</td>
+<td>6</td>
+<td>BEQ, BNE, BLT, BGE, BLTU, BGEU</td>
+</tr>
+<tr>
+<td>00011</td>
+<td>TBD</td>
+<td>1</td>
+<td>FENCE</td>
+</tr>
+<tr>
+<td>11100</td>
+<td>TBD</td>
+<td>2</td>
+<td>ECALL, EBREAK</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total Instructions Amount = 37+3 = 40, Total opcode type =
+11</strong></p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th><span class="math inline">\(opcode_{[6:2]}\)</span></th>
+<th>Instruction Type</th>
+<th>Instruction Amount</th>
+<th>Relative Instructions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>I-Type</td>
+<td>5</td>
+<td>LB, BH, LW, LBU, LHU</td>
+</tr>
+<tr>
+<td>00011</td>
+<td>TBD</td>
+<td>1</td>
+<td>FENCE</td>
+</tr>
+<tr>
+<td>00100</td>
+<td>I-Type</td>
+<td>9</td>
+<td>ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI</td>
+</tr>
+<tr>
+<td>00101</td>
+<td>U-Type</td>
+<td>1</td>
+<td>AUIPC</td>
+</tr>
+<tr>
+<td>01000</td>
+<td>S-Type</td>
+<td>3</td>
+<td>SB, SH, SW</td>
+</tr>
+<tr>
+<td>01100</td>
+<td>R-Type</td>
+<td>10</td>
+<td>ADD, SUB, SLL, SLTU, XOR, OR, AND, SLL, SRL, SRA</td>
+</tr>
+<tr>
+<td>01101</td>
+<td>U-Type</td>
+<td>1</td>
+<td>LUI</td>
+</tr>
+<tr>
+<td>11000</td>
+<td>B-Type</td>
+<td>6</td>
+<td>BEQ, BNE, BLT, BGE, BLTU, BGEU</td>
+</tr>
+<tr>
+<td>11001</td>
+<td>R-Type</td>
+<td>1</td>
+<td>JALR</td>
+</tr>
+<tr>
+<td>11011</td>
+<td>J-Type</td>
+<td>1</td>
+<td>JAL</td>
+</tr>
+<tr>
+<td>11100</td>
+<td>TBD</td>
+<td>2</td>
+<td>ECALL, EBREAK</td>
+</tr>
+</tbody>
+</table>
+<h2 id="riscv-isa-模拟器">RISCV ISA 模拟器</h2>
+<p>模拟 RISCV 指令在 RISCV 处理器上的运行，可以查看某个寄存器的状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cross compile to get ELF File</span></span><br><span class="line">riscv64-unknown-elf-gcc -nostdlib -fno-builtin -march=rv32ima -mabi=ilp32 -g -Wall test.s -Ttext=0x80000000 -o test.elf</span><br><span class="line"></span><br><span class="line"><span class="comment"># simulate: running elf on qeum simulator</span></span><br><span class="line">qemu-system-riscv32 -nographic -smp 1 -machine virt -bios none -kernel <span class="variable">$&#123;EXEC&#125;</span>.elf -s -S &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># use gdb to debug</span></span><br><span class="line">riscv64-unknown-elf-gdb test.elf</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>PS: <span class="math inline">\((xx)_{[31:0]}\)</span>表示取 xx 的低
+32bits</p>
+</blockquote>
+<h1 id="calculation">Calculation</h1>
+<h2 id="lui">LUI</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 9%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LUI</td>
+<td><code>lui rd, imm</code></td>
+<td>U-Type</td>
+<td><span
+class="math inline">\(x[rd]=(im&lt;&lt;12+0x000)_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[31:12]</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>rd</td>
+<td>01101</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p><code>imm</code>是 20bits
+的无符号数，其取值范围是[0,0xfffff]，写汇编指令时如果 imm
+超出了这个范围，汇编器会报错<code>not in range</code></p>
+<h2 id="auipc">AUIPC</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 28%" />
+<col style="width: 9%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AUIPI</td>
+<td><code>auipi rd, imm</code></td>
+<td>U-Type</td>
+<td><span
+class="math inline">\(x[rd]=(im&lt;&lt;12+pc)_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[31:12]</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>rd</td>
+<td>00101</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p><code>imm</code>是 20bits
+的无符号数，其取值范围是[0,0xfffff]，写汇编指令时如果 imm
+不超出了这个范围，汇编器会报错 <code>not in range</code></p>
+<blockquote>
+<p>PS: 之所以<code>LUI/AUIPC</code>是 U-Type，是因为它们的 imm
+都是按照无符号数 unsigned 方式来对待的</p>
+</blockquote>
+<h2 id="addi">ADDI</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 21%" />
+<col style="width: 20%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADDI</td>
+<td><code>add rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]+signExt(imm))_{[31:0]}\)</span></td>
+</tr>
+<tr>
+<td>LI</td>
+<td><code>li rd, imm</code></td>
+<td>pseudoinstruction</td>
+<td><span class="math inline">\(x[rd]=imm_{[31:0]}\)</span><br /></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>000</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li><code>ADDI</code>指令中 Imm 一共是 12bits
+的有符号数，合法的取值范围是<span class="math inline">\([-2048,
+2047)\)</span>，在写汇编代码的时候，如果 imm
+不在该范围内则汇编的时候会直接报错<code>illegal operands</code>。例如：<code>addi a0, zero, 2048</code>汇编的时候会报错。</li>
+<li><code>li rd, imm</code>：
+<ul>
+<li>当<span class="math inline">\(imm\in [-2048,
+2047]\)</span>的时候，会被翻译成<code>addi rd, imm</code></li>
+<li>当<span class="math inline">\(imm\notin [-2048,
+2047]\)</span>的时候，会被翻译成<code>lui</code>+<code>addi</code>的指令序列</li>
+</ul></li>
+</ol>
+<h2 id="add">ADD</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 26%" />
+<col style="width: 8%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADD</td>
+<td><code>add rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]+x[rs2])_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>000</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sub">SUB</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 26%" />
+<col style="width: 8%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SUB</td>
+<td><code>sub rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]-x[rs2])_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>000</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h1 id="logic">Logic</h1>
+<h2 id="or">OR</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 25%" />
+<col style="width: 8%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OR</td>
+<td><code>or rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=(x[rs1] \|
+x[rs2])\_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>110</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="and">AND</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 26%" />
+<col style="width: 8%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td><code>and rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]\&amp;x[rs2])_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>111</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="xor">XOR</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 8%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XOR</td>
+<td><code>xor rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=(x[rs1] \oplus
+x[rs2])_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>100</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ori">ORI</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 8%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ORI</td>
+<td><code>or rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]\|signExt(imm))\_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>110</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="andi">ANDI</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 8%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ANDI</td>
+<td><code>and rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]\&amp;signExt(imm))_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>111</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="xori">XORI</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 22%" />
+<col style="width: 7%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XORI</td>
+<td><code>xor rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span class="math inline">\(x[rd]=(x[rs1]\oplus
+signExt(imm))_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>100</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h1 id="shifter">Shifter</h1>
+<h2 id="sll">SLL</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 23%" />
+<col style="width: 7%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLL</td>
+<td><code>sll rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=(x[rs1] &lt;&lt;
+x[rs2]_{[4:0]})_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>001</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>移位的范围截取 rs2 寄存器的低 5 位数据</p>
+<h2 id="srl">SRL</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 6%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SRL</td>
+<td><code>srl rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=((unsigned)x[rs1] &gt;&gt;
+x[rs2]_{[4:0]})_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>101</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>移位的范围截取 rs2 寄存器的低 5 位数据, 高位补 0</p>
+<h2 id="sra">SRA</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 6%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SRA</td>
+<td><code>sra rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=((signed)x[rs1] &gt;&gt;
+x[rs2]_{[4:0]})_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>101</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>移位的范围截取 rs2 寄存器的低 5 位数据，高位补 msb</p>
+<h2 id="slli">SLLI</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 28%" />
+<col style="width: 9%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLLI</td>
+<td><code>slli rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=(x[rs1]&lt;&lt;imm)_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>0X</td>
+<td>shamt</td>
+<td>rs1</td>
+<td>001</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p><code>imm</code>的取值范围是[0,31],不在该范围会导致汇编器报错<code>improper shifter amount</code></p>
+<h2 id="srli">SRLI</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SRLI</td>
+<td><code>srli rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=((unsigned)x[rs1]&gt;&gt;imm)_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>0X</td>
+<td>shamt</td>
+<td>rs1</td>
+<td>101</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p><code>imm</code>的取值范围是[0,31],不在该范围会导致汇编器报错<code>improper shifter amount</code></p>
+<h2 id="srai">SRAI</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 25%" />
+<col style="width: 8%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SRAI</td>
+<td><code>srai rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=((signed)x[rs1]&gt;&gt;imm)_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01000</td>
+<td>0X</td>
+<td>shamt</td>
+<td>rs1</td>
+<td>101</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>imm<code>的取值范围是[0,31],不在该范围会导致汇编器报错</code>improper
+shifter amount`</p>
+<h2 id="slt">SLT</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 21%" />
+<col style="width: 7%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLT</td>
+<td><code>slt rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=(signed)x[rs1] &lt; (signed)x[rs2]
+? 1 : 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>010</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sltu">SLTU</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 6%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLTU</td>
+<td><code>sltu rd, rs1, rs2</code></td>
+<td>R-Type</td>
+<td><span class="math inline">\(x[rd]=(unsigned)x[rs1] &lt;
+(unsigned)x[rs2] ? 1 : 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000</td>
+<td>00</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>011</td>
+<td>rd</td>
+<td>01100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slti">SLTI</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 7%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLTI</td>
+<td><code>slti rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span class="math inline">\(x[rd]=(signed)x[rs1] &lt; signExt(imm) ?
+1 : 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>010</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>Imm 一共是 12bits 的有符号数，合法的取值范围是[-2048,
+2047)，在写汇编代码的时候，如果 imm
+不在该范围内则汇编的时候会直接报错<code>illegal operands</code>。
+在进行比较大小的时候，imm 是符号拓展为 32bits，再跟 x[rs1]比较.</p>
+<h2 id="sltiu">SLTIU</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLTIU</td>
+<td><code>sltiu rd, rs1, imm</code></td>
+<td>I-Type</td>
+<td><span class="math inline">\(x[rd]=(signed)x[rs1] &lt; Ext(imm) ? 1 :
+0\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>011</td>
+<td>rd</td>
+<td>00100</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>Imm 一共是 12bits 的有符号数，合法的取值范围是[-2048,
+2047)，在写汇编代码的时候，如果 imm
+不在该范围内则汇编的时候会直接报错<code>illegal operands</code>。</p>
+<p>在进行比较大小的时候，imm 是 0 拓展为 32bits，再跟 x[rs1]比较.</p>
+<h1 id="loadstore">Load/Store</h1>
+<h2 id="loadstore-指令格式">Load/Store 指令格式</h2>
+<p>Load 指令是 I-Type 指令，其编码格式为:</p>
+<table>
+<thead>
+<tr>
+<th>31, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>rd</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td>offset[11:0]</td>
+<td>base</td>
+<td>000-&gt;101</td>
+<td>dest</td>
+<td>0000011</td>
+</tr>
+</tbody>
+</table>
+<p>load 指令的 opcode 都是<code>0000011</code>, 5 条 load 指令的区别在于
+funct3 不同:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>funct3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LB</td>
+<td>000</td>
+</tr>
+<tr>
+<td>LH</td>
+<td>001</td>
+</tr>
+<tr>
+<td>LW</td>
+<td>010</td>
+</tr>
+<tr>
+<td>LBU</td>
+<td>100</td>
+</tr>
+<tr>
+<td>LHU</td>
+<td>101</td>
+</tr>
+</tbody>
+</table>
+<p>Store 指令有 3 条，都是 S-Type 指令，其编码格式为:</p>
+<table>
+<thead>
+<tr>
+<th>31, 25</th>
+<th>24, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>imm[4:0]</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td>offset[11:5]</td>
+<td>src</td>
+<td>base</td>
+<td>000-&gt;010</td>
+<td>offset[4:0]</td>
+<td>0100011</td>
+</tr>
+</tbody>
+</table>
+<p>Store 指令有 3 条, store 指令的 opcode 都是<code>0100011</code>, 3 条
+store 指令的区别在于 funct3 不同:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>funct3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB</td>
+<td>000</td>
+</tr>
+<tr>
+<td>SH</td>
+<td>001</td>
+</tr>
+<tr>
+<td>SW</td>
+<td>010</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lb">LB</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 6%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LB</td>
+<td><code>lb rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=signExt(M[x[rs1]+signExt(offset)]_{[7:0]})\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>000</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算内存地址：将 offset 符号拓展为 32bits，跟寄存器 rs1
+中的地址相加得到内存中的地址 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 按照地址从内存中取数：按照 address 从内存中取 8bits
+的数据</li>
+<li>WB Stage 将数存回到 Register File: 将该 8bits
+的数据<strong>符号拓展</strong>为 32bits，存到 rd 寄存器中</li>
+</ul>
+<h2 id="lh">LH</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 6%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LH</td>
+<td><code>lh rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=signExt(M[x[rs1]+signExt(offset)]_{[15:0]})\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>001</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算内存地址：将 offset 符号拓展为 32bits，跟寄存器 rs1
+中的地址相加得到内存中的地址 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 按照地址从内存中取数：按照 address 从内存中取 16bits
+的数据</li>
+<li>WB Stage 将数存回到 Register File: 将该 16bits
+的数据<strong>符号拓展</strong>为 32bits，存到 rd 寄存器中</li>
+</ul>
+<h2 id="lw">LW</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LW</td>
+<td><code>lw rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=M[x[rs1]+signExt(offset)]_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>010</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算内存地址：将 offset 符号拓展为 32bits，跟寄存器 rs1
+中的地址相加得到内存中的地址 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 按照地址从内存中取数：按照 address 从内存中取 32bits
+的数据</li>
+<li>WB Stage 将数存回到 Register File: 将该 32bits 的数据存到 rd
+寄存器中</li>
+</ul>
+<h2 id="lbu">LBU</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LBU</td>
+<td><code>lbu rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=Ext(M[x[rs1]+signExt(offset)]_{[7:0]})\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>100</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算内存地址：将 offset 符号拓展为 32bits，跟寄存器 rs1
+中的地址相加得到内存中的地址 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 按照地址从内存中取数：按照 address 从内存中取 8bits
+的数据</li>
+<li>WB Stage 将数存回到 Register File: 将该 8bits 的数据<strong>0
+拓展</strong>为 32bits，存到 rd 寄存器中</li>
+</ul>
+<h2 id="lhu">LHU</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 24%" />
+<col style="width: 7%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LHU</td>
+<td><code>lhu rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=Ext(M[x[rs1]+signExt(offset)]_{[15:0]})\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>101</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算内存地址：将 offset 符号拓展为 32bits，跟寄存器 rs1
+中的地址相加得到内存中的地址 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 按照地址从内存中取数：按照 address 从内存中取 16bits
+的数据</li>
+<li>WB Stage 将数存回到 Register File: 将该 16bits 的数据<strong>0
+拓展</strong>为 32bits，存到 rd 寄存器中</li>
+</ul>
+<blockquote>
+<p>PS: <code>LB/LBU</code>,
+<code>LH/LHU</code>之间的唯一区别在于从内存中取到的数，前者按照符号拓展为
+32bits，后者按照 0 扩展扩展为 32bits</p>
+</blockquote>
+<h2 id="sb">SB</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 26%" />
+<col style="width: 7%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SB</td>
+<td><code>sb rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[7:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 21%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>000</td>
+<td>offset[4:0]</td>
+<td>01000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算存数地址 address：offset 符号扩展为 32bits 之后跟 rs1
+寄存器里的数据相加得到 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 存数：将 rs2 寄存器里低 8bits 的数据存储到内存 address
+中</li>
+</ul>
+<h2 id="sh">SH</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SH</td>
+<td><code>sh rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[15:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 21%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>001</td>
+<td>offset[4:0]</td>
+<td>01000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算存数地址 address：offset 符号扩展为 32bits 之后跟 rs1
+寄存器里的数据相加得到 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 存数：将 rs2 寄存器里低 16bits 的数据存储到内存 address
+中</li>
+</ul>
+<h2 id="sw">SW</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 25%" />
+<col style="width: 7%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SW</td>
+<td><code>sw rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 21%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset[11:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>010</td>
+<td>offset[4:0]</td>
+<td>01000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算存数地址 address：offset 符号扩展为 32bits 之后跟 rs1
+寄存器里的数据相加得到 address<br />
+offset 是 12bits 的有符号数，其取值范围是[-2048, 2047],
+写汇编代码的时候如果 offset
+超过了该范围，汇编器会报错<code>illegal operands</code></li>
+<li>MEM Stage 存数：将 rs2 寄存器里 32bits 的数据存储到内存 address
+中</li>
+</ul>
+<blockquote>
+<p>S-Type 里没有 rd 寄存器</p>
+</blockquote>
+<h1 id="branch">Branch</h1>
+<h2 id="branch-指令格式">Branch 指令格式</h2>
+<p>branch 指令是 B-Type 指令，其编码格式为:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 25%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>31, 25</th>
+<th>24, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12, 10:5]</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>imm[4:1, 11]</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td>offset[12, 10:5]</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>000-&gt;111</td>
+<td>offset[4:1, 11]</td>
+<td>1100011</td>
+</tr>
+</tbody>
+</table>
+<p>branch 指令的 opcode 都是<code>1100011</code>, 6 条 branch
+指令的区别在于 funct3 不同:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>funct3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEQ</td>
+<td>000</td>
+</tr>
+<tr>
+<td>BNE</td>
+<td>001</td>
+</tr>
+<tr>
+<td>BLE</td>
+<td>100</td>
+</tr>
+<tr>
+<td>BGE</td>
+<td>101</td>
+</tr>
+<tr>
+<td>BLEU</td>
+<td>110</td>
+</tr>
+<tr>
+<td>BGEU</td>
+<td>111</td>
+</tr>
+</tbody>
+</table>
+<h2 id="beq">BEQ</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 22%" />
+<col style="width: 6%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEQ</td>
+<td><code>beq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(x[rs1]=x[rs2])\rightarrow
+PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>000</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 判断是否相等, 比较的时候 x[rs1], x[rs2]当作带符号数</li>
+<li>IF Stage 根据判断的结果选择 PC+=4 或者 PC+=signExt(imm&lt;&lt;1),
+<strong>写汇编代码的时候 imm 字段实际上是填写的<u>label</u>,
+然后由编译器和连接器根据 PC 和 label 实际计算 imm，最后拼成一条 beq
+指令</strong> &gt; imm 虽然是 12bits，但是<strong>PC 不是加
+signExt(Imm)而是 signExt(imm&lt;&lt;1)</strong>,<br />
+&gt; 因此寻址范围是 PC 附近<span class="math inline">\(\pm\)</span>
+4KB.</li>
+</ul>
+<h2 id="bne">BNE</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 6%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BNE</td>
+<td><code>bnq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(x[rs1]\neq x[rs2])\rightarrow
+PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>001</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="blt">BLT</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 6%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BNE</td>
+<td><code>bnq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(x[rs1]\lt x[rs2])\rightarrow
+PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>100</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bge">BGE</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 21%" />
+<col style="width: 6%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BNE</td>
+<td><code>bnq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(x[rs1]\ge x[rs2])\rightarrow
+PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>101</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bltu">BLTU</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 17%" />
+<col style="width: 5%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BNE</td>
+<td><code>bnq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(unsigned(x[rs1])\le
+unsigned(x[rs2]))\rightarrow PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>110</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 判断是否小于等于, 比较的时候 x[rs1],
+x[rs2]当作无符号数</li>
+<li>IF Stage 根据判断的结果选择 PC+=4 或者 PC+=signExt(imm&lt;&lt;1)
+&gt; imm 虽然是 12bits，但是<strong>PC 不是加 signExt(Imm)而是
+signExt(imm&lt;&lt;1)</strong>,<br />
+&gt; 因此寻址范围是 PC 附近<span class="math inline">\(\pm\)</span>
+4KB.</li>
+</ul>
+<h2 id="bgeu">BGEU</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 17%" />
+<col style="width: 5%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BNE</td>
+<td><code>bnq rs1, rs2, imm</code></td>
+<td>B-Type</td>
+<td><span class="math inline">\(if(unsigned(x[rs1])\ge
+unsigned(x[rs2]))\rightarrow PC+=signExt(imm&lt;&lt;1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 22%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[12|10:5]</td>
+<td></td>
+<td>rs2</td>
+<td>rs1</td>
+<td>111</td>
+<td>imm[4:1|11]</td>
+<td>11000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h1 id="jump">Jump</h1>
+<h2 id="jal">JAL</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 9%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JAL</td>
+<td><code>jal rd, imm</code></td>
+<td>J-Type</td>
+<td>x[rd]=pc+4, pc+=signExt(imm&lt;&lt;1)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 18%" />
+<col style="width: 9%" />
+<col style="width: 7%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[20|10:1|11</td>
+<td></td>
+<td></td>
+<td>imm[19:12]</td>
+<td></td>
+<td>rd</td>
+<td>11011</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算 pc+4 的值, aluResult=pc+4</li>
+<li>IF Stage 选择 PC+=signExt(imm&lt;&lt;1), <strong>写汇编代码的时候
+imm 字段实际上是填写的<u>label</u>, 然后由编译器和连接器根据 PC 和 label
+实际计算 imm，最后拼成一条 beq 指令</strong> &gt; imm 虽然是
+20bits，但是<strong>PC 不是加 signExt(Imm)而是
+signExt(imm&lt;&lt;1)</strong>,<br />
+&gt; 因此寻址范围是 PC 附近<span class="math inline">\(\pm\)</span>
+1MB.</li>
+<li>WB Stage 将 PC+4 的值存入到 rd 中: x[rd]=aluResult</li>
+</ul>
+<h2 id="jalr">JALR</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 22%" />
+<col style="width: 7%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JALR</td>
+<td><code>jalr rd, imm(rs1)</code></td>
+<td>I-Type</td>
+<td>x[rd]=pc+4, pc=(x[rs1]+signExt(imm))&amp;0xfffffffe</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>31-27</th>
+<th>26-25</th>
+<th>24-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td></td>
+<td></td>
+<td>rs1</td>
+<td>000</td>
+<td>rd</td>
+<td>11001</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>EXE Stage 计算 pc+4 的值, aluResult=pc+4</li>
+<li>IF Stage: imm 做符号扩展为 32bits 后跟 x[rs1]相加，然后将最低比特置
+0(地址 2Byte 对齐)，得到新的 PC<br />
+<strong>写汇编代码的时候 imm 字段实际上是填写的<u>label</u>,
+然后由编译器和连接器根据 PC 和 label 实际计算 imm，最后拼成一条 beq
+指令</strong> &gt; imm 虽然是 12bits 有符号数, 因此寻址范围是 PC
+附近<span class="math inline">\(\pm\)</span> 1MB.</li>
+<li>WB Stage 将 PC+4 的值存入到 rd 中: x[rd]=aluResult</li>
+</ul>
+<p>RV-32IM 涉及到的指令如下图所示： <img
+src="https://s2.loli.net/2023/03/11/C7nrmS1JoXOb2ag.png"
+alt="RV-32IM Instructions" /> <img
+src="https://s2.loli.net/2023/03/11/qLnapIYf25EGQdX.jpg"
+alt="RV-32IM Instructions" /> ALU 可能执行的操作一共有如下 18 种：</p>
+<h1 id="isa-中指令对应的各种编码">ISA 中指令对应的各种编码</h1>
+<ol type="1">
+<li>aluOperation: one hot bit encoding</li>
+</ol>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 15%" />
+<col style="width: 8%" />
+<col style="width: 12%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 8%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr>
+<th>指令</th>
+<th>Type</th>
+<th>aluOperation</th>
+<th>immType</th>
+<th>branchType</th>
+<th>dMemWriteEn</th>
+<th>dMemType</th>
+<th>regWBEn</th>
+<th>regWBSrc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LUI</td>
+<td>U-Type</td>
+<td>ALU_NO</td>
+<td>IMM_U</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>Extended_IMM</td>
+</tr>
+<tr>
+<td>AUIPC</td>
+<td>U-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_U</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>JAL</td>
+<td>J-Type</td>
+<td>ALU_NO</td>
+<td>IMM_J</td>
+<td>JUMP</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>PC+4</td>
+</tr>
+<tr>
+<td>JALR</td>
+<td>I-Type</td>
+<td>ALU_NO</td>
+<td>IMM_I</td>
+<td>JUMP</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>PC+4</td>
+</tr>
+<tr>
+<td>BEQ</td>
+<td>B-Type</td>
+<td>ALU_SUB</td>
+<td>IMM_B</td>
+<td>BEQ</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>BNE</td>
+<td>B-Type</td>
+<td>ALU_SUB</td>
+<td>IMM_B</td>
+<td>BNE</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>BLT</td>
+<td>B-Type</td>
+<td>ALU_SLT</td>
+<td>IMM_B</td>
+<td>BLT</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>BGE</td>
+<td>B-Type</td>
+<td>ALU_SLT</td>
+<td>IMM_B</td>
+<td>BLT</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>BLTU</td>
+<td>B-Type</td>
+<td>ALU_SLTU</td>
+<td>IMM_B</td>
+<td>BLTU</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>BGEU</td>
+<td>B-Type</td>
+<td>ALU_SLTU</td>
+<td>IMM_B</td>
+<td>BLTU</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>LB</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_LB</td>
+<td>1</td>
+<td>DMEM_READ</td>
+</tr>
+<tr>
+<td>LH</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_LH</td>
+<td>1</td>
+<td>DMEM_READ</td>
+</tr>
+<tr>
+<td>LH</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_LH</td>
+<td>1</td>
+<td>DMEM_READ</td>
+</tr>
+<tr>
+<td>LBU</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_LBU</td>
+<td>1</td>
+<td>DMEM_READ</td>
+</tr>
+<tr>
+<td>LHU</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_LHU</td>
+<td>1</td>
+<td>DMEM_READ</td>
+</tr>
+<tr>
+<td>SB</td>
+<td>S-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_S</td>
+<td>BNO</td>
+<td>1</td>
+<td>DMEM_SB</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SH</td>
+<td>S-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_S</td>
+<td>BNO</td>
+<td>1</td>
+<td>DMEM_SH</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SW</td>
+<td>S-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_S</td>
+<td>BNO</td>
+<td>1</td>
+<td>DMEM_SW</td>
+<td>0</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>ADDI</td>
+<td>I-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLTI</td>
+<td>I-Type</td>
+<td>ALU_SLT</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLTIU</td>
+<td>I-Type</td>
+<td>ALU_SLTU</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>XORI</td>
+<td>I-Type</td>
+<td>ALU_XOR</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>ORI</td>
+<td>I-Type</td>
+<td>ALU_OR</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>ANDI</td>
+<td>I-Type</td>
+<td>ALU_AND</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLLI</td>
+<td>I-Type</td>
+<td>ALU_SLL</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SRLI</td>
+<td>I-Type</td>
+<td>ALU_ARL</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SRAI</td>
+<td>I-Type</td>
+<td>ALU_SRA</td>
+<td>IMM_I</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>R-Type</td>
+<td>ALU_ADD</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SUB</td>
+<td>R-Type</td>
+<td>ALU_SUB</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLL</td>
+<td>R-Type</td>
+<td>ALU_SLL</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SRL</td>
+<td>R-Type</td>
+<td>ALU_ARL</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SRA</td>
+<td>R-Type</td>
+<td>ALU_SRA</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>R-Type</td>
+<td>ALU_XOR</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>OR</td>
+<td>R-Type</td>
+<td>ALU_OR</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>AND</td>
+<td>R-Type</td>
+<td>ALU_AND</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLT</td>
+<td>R-Type</td>
+<td>ALU_SLT</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>SLTU</td>
+<td>R-Type</td>
+<td>ALU_SLTU</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>MUL</td>
+<td>R-Type</td>
+<td>ALU_MUL</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>MULH</td>
+<td>R-Type</td>
+<td>ALU_MULH</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>MULHSU</td>
+<td>R-Type</td>
+<td>ALU_MULHSU</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>MULHU</td>
+<td>R-Type</td>
+<td>ALU_MULHU</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>DIV</td>
+<td>R-Type</td>
+<td>ALU_DIV</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>DIVU</td>
+<td>R-Type</td>
+<td>ALU_DIVU</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>REM</td>
+<td>R-Type</td>
+<td>ALU_REM</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+<tr>
+<td>REMU</td>
+<td>R-Type</td>
+<td>ALU_REMU</td>
+<td>IMM_NO</td>
+<td>BNO</td>
+<td>0</td>
+<td>DMEM_NO</td>
+<td>1</td>
+<td>ALU_RESULT</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>JAL 和 JALR 的 target PC 有 Static BP 在 ID Stage 计算得到，ALU
+不用再计算 target PC, 因此其 alu_opeartion 为 ALU_NO</li>
+</ol>
+<h2 id="编码说明">编码说明</h2>
+<h3 id="immtype">immType</h3>
+<ol type="1">
+<li>IMM_U: <code>imm=&#123;instr[31:12], 12'h000&#125;</code></li>
+<li>IMM_J:
+<code>imm=&#123;11&#123;instr[31]&#125;, instr[31], instr[19:15], instr[20], instr[30:21], 1'b0&#125;</code></li>
+<li>IMM_I: <code>imm=&#123;20&#123;instr[31]&#125;, instr[31:20]&#125;</code></li>
+<li>IMM_B:
+<code>imm=&#123;19&#123;instr[31]&#125;, instr[31], instr[7], instr[30,25], instr[11,8]&#125;</code></li>
+<li>IMM_S:
+<code>imm=&#123;20&#123;instr[31]&#125;, instr[31:25], instr[11:7]&#125;</code></li>
+<li>IMM_NO: no immediate</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/09/linux-using-notes/" rel="prev" title="Linux学习笔记">
+                  <i class="fa fa-chevron-left"></i> Linux学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/08/week-report/" rel="next" title="付杰周报-20231028">
+                  付杰周报-20231028 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

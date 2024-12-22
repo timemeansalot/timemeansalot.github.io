@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="[TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DSP基准测试">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/09/08/dsp-benchmark/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="[TOC]">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-08T05:14:32.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.096Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="DSP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/09/08/dsp-benchmark/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/09/08/dsp-benchmark/","path":"2023/09/08/dsp-benchmark/","title":"DSP基准测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DSP基准测试 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dsp-benchmark"><span class="nav-number">1.</span> <span class="nav-text">DSP Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdsp-benchmark"><span class="nav-number">1.1.</span> <span class="nav-text">什么是DSP Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dsp-benchmark%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">DSP Benchmark的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dsp-benchmark-%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">DSP Benchmark 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E9%80%94%E5%BE%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">Benchmark评估途径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#benchmark%E8%AF%84%E4%BC%B0%E7%9A%84%E6%8C%87%E6%A0%87"><span class="nav-number">1.2.3.</span> <span class="nav-text">Benchmark评估的指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dsp%E5%B8%B8%E8%A7%81%E7%9A%84benchmark"><span class="nav-number">1.3.</span> <span class="nav-text">DSP常见的Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dhrystone-benchmark"><span class="nav-number">1.3.1.</span> <span class="nav-text">Dhrystone Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eembc-benchmark"><span class="nav-number">1.3.2.</span> <span class="nav-text">※EEMBC Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bdti-benchmark"><span class="nav-number">1.3.3.</span> <span class="nav-text">※BDTI Benchmark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dspstone-benchmark"><span class="nav-number">1.3.4.</span> <span class="nav-text">※DSPStone Benchmark</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/09/08/dsp-benchmark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DSP基准测试 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DSP基准测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-08 13:14:32" itemprop="dateCreated datePublished" datetime="2023-09-08T13:14:32+08:00">2023-09-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<span id="more"></span>
+<h1 id="dsp-benchmark">DSP Benchmark</h1>
+<h2 id="什么是dsp-benchmark">什么是DSP Benchmark</h2>
+<ol type="1">
+<li><p>定义:
+Benchmark是一个用于<u>定量评估</u>计算机<u>软硬件资源</u>的程序</p></li>
+<li><p>作用:
+人们通过选择合适的Benchmark可以判断一个系统是否符合设计预期，具体为：</p>
+<ul>
+<li><strong>比较</strong>：通过Benchmark可以比较处理器之间的性能差距，从而选择更好的处理器</li>
+<li><strong>量化</strong>：定量地评估处理器的<em>速度、功耗、内存占用</em>等数据，从而<u>判断一个DSP平台是否符合特定的用户应用</u></li>
+</ul></li>
+<li><p>DSP对比CPU的不同之处:</p>
+<ol type="1">
+<li>更快地乘累加(Fast Multiply-Accumlate)：
+<ul>
+<li>乘累加在很多计算里都会使用，例如数字滤波、相关性、傅里叶变换等</li>
+<li>DSP内部有很多的乘法及累加器，从而使得一条DSP指令就可以完成乘累加的计算</li>
+</ul></li>
+<li>多访存架构(Multiple-Access Memory Architecture)
+<ul>
+<li>一次计算出多个方寸地址</li>
+<li>并行地完成取指令、取操作数、写回的操作</li>
+</ul></li>
+<li>特殊寻址方式(Specialized Addressing Modes):
+通过特殊的地址产生方式，从而更好的处理数据数组</li>
+<li>特殊执行控制(Specialized Execution Control):
+<ul>
+<li>DSP的计算很多都是<strong>重复地在某个循环内做计算</strong></li>
+<li>DSP针对loop做了特殊的优化</li>
+</ul></li>
+<li>外设跟IO控制(Peripherals and Input/Output Control):
+倾向于集成一些简单的片上外设及IO</li>
+</ol>
+<blockquote>
+<p>DSP对比CPU的不同，导致CPU的Benchmark并不能很好地评估DSP的优劣</p>
+</blockquote></li>
+</ol>
+<h2 id="dsp-benchmark的特点">DSP Benchmark的特点</h2>
+<blockquote>
+<p>一开始DSP Benchmark主要有设备厂商如TI、摩托罗拉等公司给出；
+后来有了一些独立的DSP Benchmark如BDTIMark, EDN Benchmarks, DSPStone.</p>
+</blockquote>
+<h3 id="dsp-benchmark-分类">DSP Benchmark 分类</h3>
+<p>DSP Benchmark可以分为如下三类：</p>
+<ol type="1">
+<li>Processor:
+<ul>
+<li>Benchmark必须由汇编编写，从而避免编译器的影响</li>
+</ul></li>
+<li>Compiler:
+<ul>
+<li>Benchmark由高级语言编写，由编译器进行编译</li>
+<li>同时需要手写的汇编语言版本的Benchmark</li>
+<li>运行两个程序，统计<strong>cycle</strong>跟<strong>memory
+usage</strong>，比较二者的差异从而评估编译器的性能</li>
+</ul></li>
+<li>Platform(Processor &amp; Compiler)
+<ul>
+<li>Benchmark由高级语言编写</li>
+<li>通过运行的性能来整体评估处理器跟编译器的性能</li>
+</ul></li>
+</ol>
+<h3 id="benchmark评估途径">Benchmark评估途径</h3>
+<ol type="1">
+<li>单看指标(Metrics):
+<ul>
+<li>单看DSP Benchmark跑分，如MIPS(Million Instruction per Seconds)</li>
+<li>没有意义：因为不同的DSP架构不同，其每一条指令做的事儿不同，因此指令数多表不代表执行的计算多</li>
+</ul></li>
+<li>完整的DSP应用(Complete DSP Application):
+<ul>
+<li>执行真正的DSP应用，例如调制解调、编码译码等操作</li>
+<li>这些程序通常是上千行的c代码</li>
+<li>评价的是<u>Platform</u>性能</li>
+</ul></li>
+<li>DSP算术核心(DSP algorithm kernel):
+<ul>
+<li>专门评估DSP算术核心的性能，如FIR, IIR, FFT, Convolution</li>
+<li>这些计算在DSP处理中占用了大量的执行时间</li>
+<li>从DSP应用程序里提取出专门的计算部分</li>
+</ul></li>
+</ol>
+<h3 id="benchmark评估的指标">Benchmark评估的指标</h3>
+<ol type="1">
+<li>周期数(Cycle Count)</li>
+<li>内存使用(Program Memory Usage &amp; Data Memory Usage)</li>
+<li>程序执行时间(Execution Time)</li>
+<li>功耗(Power Consumption)</li>
+</ol>
+<h2 id="dsp常见的benchmark">DSP常见的Benchmark</h2>
+<blockquote>
+<p>由于DSP系统的多样性，设计一款适合所有DSP系统的Benchmark不容易</p>
+</blockquote>
+<h3 id="dhrystone-benchmark">Dhrystone Benchmark</h3>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://github.com/search?q=Dhrystone&amp;type=repositories">Dhrystone官网</a></li>
+<li>并不主要是DSP的Benchmark，主要是CPU Benchmark</li>
+<li>有如下缺点:
+<ul>
+<li>Benchmark程序太小，导致有Cache的处理器评分会高很多</li>
+<li>测试程序权重差异太大，strcpy, strcmp占据了30%~40%的执行时间</li>
+<li>程序调用太浅，函数调用主要是3层</li>
+</ul></li>
+</ol>
+<!-- ### EDN's DSP Benchmark -->
+<h3 id="eembc-benchmark">※EEMBC Benchmark</h3>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://www.eembc.org/">EEMBC官网</a></li>
+<li>由C编写、其测试用例包括：自动驾驶、物联网、机器学习、<strong>数字通信</strong>等行业</li>
+<li>主要测试的是DSP algorithm
+kernel的性能，从DSP应用里提取了计算密集的相关代码</li>
+<li>包含很多Benchmark以针对不用的应用场景： <img
+src="https://s2.loli.net/2023/09/08/EPngJXj74zOiK6a.png" /></li>
+</ol>
+<h3 id="bdti-benchmark">※BDTI Benchmark</h3>
+<blockquote>
+<p>BDTI DSP
+内核基准测试是世界上使用最广泛的数字信号处理基准测试。几乎每个 DSP
+处理器的主要供应商或买家都使用此基准测试套件。</p>
+</blockquote>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.bdti.com/services/bdti-dsp-kernel-benchmarks##:~:text=The%20BDTI%20DSP%20Kernel%20Benchmarks%20are%20a%20suite%20of%20twelve,in%20most%20signal%20processing%20applications">BDTI官网</a></li>
+<li>由汇编编写，测试Processor的性能，不评估
+I/O、外设或外部存储器的影响</li>
+<li>包含12个 DSP 算法内核基准测试的套件，如FIR, IIR filters, LMS filter,
+convolutional encoder和FFT的算术性能 <img
+src="https://s2.loli.net/2023/09/08/LQaIDsocKSU7d3j.png" /></li>
+<li>Benchmark结构默认是所有测试项的平均分，但是用户可以根据应用的倾向为测试分配权重</li>
+<li>Benchmark跑分受处理器数据格式影响，例如定点数的处理器跑分会高于浮点数处理器</li>
+</ol>
+<h3 id="dspstone-benchmark">※DSPStone Benchmark</h3>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.ice.rwth-aachen.de/research/tools-projects/closed-projects/dspstone">DSPStone官网</a></li>
+<li>测试Platform的性能(Processor &amp; Compiler):
+<ul>
+<li>编译器性能评估：编译器生成代码的大小&amp;代码执行的性能</li>
+<li>处理器性能评估：Benchmark代码执行的效率</li>
+</ul></li>
+<li>专门针对DSP的Benchmark</li>
+</ol>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.bdti.com/services/bdti-dsp-kernel-benchmarks">BDTI DSP
+Kernel Benchmarks</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.ultragarsas.ktu.lt/index.php/USnd/article/view/8050/4009">Genutis,
+M., E. Kazanavicius, and O. Olsen. "Benchmarking in DSP."
+Ultragarsas/Ultrasound 39.2 (2001): 13-17.</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.eembc.org/techlit/datasheets/dhrystone_wp.pdf">Dhrystone
+Benchmark</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.eembc.org/">EEMBC Community</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.ice.rwth-aachen.de/fileadmin/Publications/Attachments/Zivojnovic94icspat.pdf">Zivojnovic,
+Vojin. "DSPstone: A DSP-oriented benchmarking methodology." Proc. Signal
+Processing Applications &amp; Technology, Dallas, TX, 1994 (1994):
+715-720.</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DSP/" rel="tag"># DSP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/30/linux-setup/" rel="prev" title="Ubuntu20.04 配置记录">
+                  <i class="fa fa-chevron-left"></i> Ubuntu20.04 配置记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/11/travel/" rel="next" title="travel">
+                  travel <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

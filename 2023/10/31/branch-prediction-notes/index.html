@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分之预测笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="branch-prediction-notes">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/10/31/branch-prediction-notes/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="分之预测笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-31T02:59:12.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.095Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="CA">
+<meta property="article:tag" content="NOTES">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/10/31/branch-prediction-notes/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/10/31/branch-prediction-notes/","path":"2023/10/31/branch-prediction-notes/","title":"branch-prediction-notes"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>branch-prediction-notes | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">基础定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E5%90%91%E7%9A%84%E9%A2%84%E6%B5%8B"><span class="nav-number">2.</span> <span class="nav-text">方向的预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pht"><span class="nav-number">2.1.</span> <span class="nav-text">PHT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bhr"><span class="nav-number">2.2.</span> <span class="nav-text">BHR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/10/31/branch-prediction-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="branch-prediction-notes | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          branch-prediction-notes
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-31 10:59:12" itemprop="dateCreated datePublished" datetime="2023-10-31T10:59:12+08:00">2023-10-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>分之预测笔记</p>
+<span id="more"></span>
+<h1 id="基础定义">基础定义</h1>
+<ol type="1">
+<li><p>分支预测的作用:</p>
+<ul>
+<li>跳转指令会改变指令流，导致顺序取指的指令做了无用功，分支预测就是<strong>在取指阶段根据pc值预测可能发生的pc改变，
+从预测的pc去取指令</strong>，避免无用功</li>
+<li>预测包含两部分内容：预测是否跳转、预测跳转的地址</li>
+</ul></li>
+<li><p>分支预测的种类:</p>
+<ul>
+<li>静态分支预测：对于流水线比较短的处理器核，分支预测的性能要求不高，可以使用静态分支预测</li>
+<li>动态分支预测：对于超标量乱序处理器核，其流水线比较深且一次取多条指令，需要比较复杂的动态分支预测</li>
+</ul></li>
+<li><p>分之延迟槽(branch delay slot):</p>
+<ul>
+<li>分之指令后面的指令可能是无效指令，需要被冲刷掉</li>
+<li>MISP在分支指令后面<u>插入无关的且必须执行的指令</u>，今儿避免冲刷指令</li>
+<li>分支延迟槽需要编译器或者程序员的支持</li>
+<li>不适用于复杂的处理器核设计中，因为找到无关的指令变得更复杂</li>
+</ul></li>
+<li><p>Q: 为什么通过PC来进行动态分支预测？</p>
+<ul>
+<li>通过PC预测，在取指的时候就可以根据PC去进行分之预测；如果根据指令内容再进行分支预测，至少需要进行预译码，不如通过PC快
+（分支预测越早作出预测，效果越好)</li>
+<li>PC对应的指令，其内容是不变的，即PC跟指令内容之间存在映射关系，因此一定程度上通过PC进行预测等价于通过指令内容进行预测</li>
+</ul></li>
+</ol>
+<h1 id="方向的预测">方向的预测</h1>
+<h2 id="pht">PHT</h2>
+<ol type="1">
+<li>一位饱和计数器（又叫做 last-outcome prediction)
+<ul>
+<li>采用1 bit来记录上一次是否跳转</li>
+<li>缺点：对于跳转来换切换比较频繁的情况，其预测准确率可能低到0%</li>
+</ul></li>
+<li>两位饱和计数器(2 bit saturating prediction)
+<ul>
+<li>采用2 bit来记录上一次是否跳转，分别是<code>strongly taken</code>,
+<code>weakly taken</code>, <code>strongly not taken</code>,
+<code>weakly not taken</code></li>
+<li>可以解决一位饱和计数器在频繁切换时的问题</li>
+<li>采用格雷码可以减少出错的概率、功耗</li>
+<li>当下比较常用的分支预测器，从2bit增加到3bit并不会提升多少准确率，反而会大大增加硬件复杂度</li>
+</ul></li>
+<li>PHT(Pattern History Table)
+<ul>
+<li>无法为所有的PC都准备一个2bit分支预测器</li>
+<li>将分之跳转的情况记录在PHT中，每一个PHT表项就是一个2bit分支预测器，通过PC某些位来索引</li>
+<li>多个PC会同时索引到同一个表项，这称之为<strong>分支别名(aliasing)</strong>，
+不直接采用PC索引PHT，对PC进行Hash之后再索引PHT可以优化别名的问题</li>
+<li>PHT的表项越多，预测越准确、占用的存储越多</li>
+<li>在乱序处理器中，在<strong>指令提交</strong>的时候，对PHT进行更新，
+所有的表项公用同一个更新硬件电路即可，因为一次只会索引到一个表项</li>
+</ul></li>
+</ol>
+<h2 id="bhr">BHR</h2>
+<ol type="1">
+<li>考虑指令的局部历史(local history)，对每个PC额外提供一个BHR(branch
+history register)存储最近几次的跳转情况</li>
+<li>BHR本身是一个移位寄存器，通过BHR再去索引PTH，找到PHT中的某个表项，这种方法称为<u>自适应两级预测(Adaptive
+two-level predictor)</u></li>
+<li>BHR的位宽：用1表示跳转、0表示不跳转，则历史跳转记录就是一串由01构成的序列，该序列里连续相同的数最多有p位，则BHR位宽为p即可</li>
+<li>训练时间(training time)，由于1个n bit的BHR对应一共有<span
+class="math inline">\(2^n\)</span>PHT表项，这些表项都是需要时间去更新从而达到稳定</li>
+</ol>
+<blockquote>
+<p>预测分支指令是跳转(taken)还是不跳转(not taken)</p>
+</blockquote>
+<h1 id="参考资料">参考资料</h1>
+<ol type="1">
+<li>《超标量处理器》第四章分支预测</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CA/" rel="tag"># CA</a>
+              <a href="/tags/NOTES/" rel="tag"># NOTES</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/22/ic-notes/" rel="prev" title="数字集成电路笔记">
+                  <i class="fa fa-chevron-left"></i> 数字集成电路笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/05/cache-notes/" rel="next" title="Cache笔记">
+                  Cache笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一些面试笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试笔记">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/05/15/interview-notes/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="一些面试笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/05/15/nVQfwYkRG1vFBZl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/15/8ULWgrd12a9wGoi.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/15/BP64YAEoGXF1wtR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/15/it9SeXy8KVERDHT.png">
+<meta property="article:published_time" content="2023-05-15T00:50:17.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.096Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="IC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/05/15/nVQfwYkRG1vFBZl.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/05/15/interview-notes/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/05/15/interview-notes/","path":"2023/05/15/interview-notes/","title":"面试笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>面试笔记 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">原码、反码、补码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%9E%E4%BA%89%E5%92%8C%E5%86%92%E9%99%A9"><span class="nav-number">2.</span> <span class="nav-text">竞争和冒险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-d-%E8%A7%A6%E5%8F%91%E5%99%A8%E5%B8%A6%E5%90%8C%E6%AD%A5%E9%AB%98%E7%BD%AE%E6%95%B0%E5%92%8C%E5%BC%82%E6%AD%A5%E9%AB%98%E5%A4%8D%E4%BD%8D%E7%AB%AF%E7%9A%84%E4%BA%8C%E5%88%86%E9%A2%91%E7%9A%84%E7%94%B5%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">用 D
+触发器带同步高置数和异步高复位端的二分频的电路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmos-%E5%8F%8D%E7%9B%B8%E5%99%A8%E7%9A%84%E5%8A%9F%E8%80%97%E4%B8%BB%E8%A6%81%E5%8C%85%E6%8B%AC%E5%93%AA%E5%87%A0%E9%83%A8%E5%88%86"><span class="nav-number">4.</span> <span class="nav-text">CMOS
+反相器的功耗主要包括哪几部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9F"><span class="nav-number">5.</span> <span class="nav-text">最小时钟周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%9A%E7%A8%B3%E6%80%81"><span class="nav-number">6.</span> <span class="nav-text">亚稳态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E6%97%B6%E9%92%9F%E5%9F%9F%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">跨时钟域问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#localparamparameter-%E5%92%8C-define"><span class="nav-number">8.</span> <span class="nav-text">localparam、parameter 和
+define</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/05/15/interview-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="面试笔记 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面试笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-15 08:50:17" itemprop="dateCreated datePublished" datetime="2023-05-15T08:50:17+08:00">2023-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>一些面试笔记</p>
+<span id="more"></span>
+<h3 id="原码反码补码">原码、反码、补码</h3>
+<p>以 8 进制的数为例</p>
+<ol type="1">
+<li>原码
+<ul>
+<li>表示范围: -127, 127</li>
+<li>000000000, 10000000 都表示 0</li>
+</ul></li>
+<li>反码
+<ul>
+<li>表示范围：-127，127</li>
+<li>000000000, 11111111 都表示 0</li>
+</ul></li>
+<li>补码
+<ul>
+<li>表示范围：-128, 127</li>
+<li>000000000 表示 0，10000000 表示-128</li>
+</ul></li>
+</ol>
+<h3 id="竞争和冒险">竞争和冒险</h3>
+<blockquote>
+<p>元件是有时延的，导致信号达到各个部件的时间其实是不一致的</p>
+</blockquote>
+<ol type="1">
+<li>竞争：信号达到各个部件之间的时间是不一样的，这就叫做竞争</li>
+<li>冒险：由于竞争导致电路产生的“瞬时的错误（毛刺）”</li>
+</ol>
+<figure>
+<img src="https://s2.loli.net/2023/05/15/nVQfwYkRG1vFBZl.png"
+alt="glitch" />
+<figcaption aria-hidden="true">glitch</figcaption>
+</figure>
+<h3 id="用-d-触发器带同步高置数和异步高复位端的二分频的电路">用 D
+触发器带同步高置数和异步高复位端的二分频的电路</h3>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">reg</span> Q;</span><br><span class="line"><span class="keyword">reg</span> clk, reset, enable;</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> reset) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(reset==<span class="number">1&#x27;b1</span>) <span class="keyword">begin</span></span><br><span class="line">        Q &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(enable) <span class="keyword">begin</span></span><br><span class="line">        Q &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        Q &lt;= ~Q;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2023/05/15/8ULWgrd12a9wGoi.png" /></p>
+<h3 id="cmos-反相器的功耗主要包括哪几部分">CMOS
+反相器的功耗主要包括哪几部分</h3>
+<p><span class="math inline">\(P_{avg}\)</span>=<span
+class="math inline">\(P_{dynamic}\)</span>+<span
+class="math inline">\(P_{static}\)</span>=(<span
+class="math inline">\(P_{short}\)</span>+<span
+class="math inline">\(P_{switch}\)</span>)+<span
+class="math inline">\(P_{static}\)</span>=<span
+class="math inline">\(I_{sc}\)</span><span
+class="math inline">\(V_{dd}\)</span>+<span
+class="math inline">\(\alpha\)</span><span
+class="math inline">\(C_{L}\)</span><span
+class="math inline">\(V_{dd}^{2}\)</span>f+<span
+class="math inline">\(I_{leak}\)</span><span
+class="math inline">\(V_{dd}\)</span></p>
+<figure>
+<img src="https://s2.loli.net/2023/05/15/BP64YAEoGXF1wtR.png"
+alt="cmos leakage" />
+<figcaption aria-hidden="true">cmos leakage</figcaption>
+</figure>
+<h3 id="最小时钟周期">最小时钟周期</h3>
+<p><img src="https://s2.loli.net/2023/05/15/it9SeXy8KVERDHT.png"
+alt="minimum T" /> <span
+class="math inline">\(T_{min}=T_{co}+T_{data}+T_{su}+T_{skew}\)</span></p>
+<ol type="1">
+<li><span class="math inline">\(T_{co}\)</span>: 寄存器更新延迟</li>
+<li><span
+class="math inline">\(T_{data}\)</span>：信号在导线上传输的延迟</li>
+<li><span class="math inline">\(T_{su}\)</span>: 第二个寄存器的 setup
+时间 <span class="math inline">\(T_h\)</span>: 第二个触发器的 hold
+时间</li>
+<li><span class="math inline">\(T_{skew}\)</span>：时钟的延迟，clk
+传到第二个寄存器需要更多的时间</li>
+</ol>
+<blockquote>
+<p>PS: clock jitter: 时钟周期由于晶振或者 PLL
+内部电路导致不是固定的周期，与布局布线没有关系</p>
+</blockquote>
+<h3 id="亚稳态">亚稳态</h3>
+<p><img
+src="https://pic1.zhimg.com/80/v2-52d7d442cc63a00330aaebe2d76f4b7c_720w.webp" /></p>
+<ol type="1">
+<li>定义: 触发器无法在某个规定时间段内达到一个确定的状态</li>
+<li>原因：由于触发器的 Tsu 和 Th
+不满足，当触发器进入亚稳态，使得无法预测该单元的输出，这种不稳定
+是会沿信号通道的各个触发器级联传播</li>
+<li>消除：两级或多级寄存器同步。理论上亚稳态不能完全消除，只能降低，一般采用两级触发器同步就可
+以大大降低亚稳态发生的概率，再加多级触发器改善不大<br />
+如果一个触发器进入正常的概率是 P，则 N 个触发器亚稳态的概率是 NP</li>
+<li>亚稳态窗口：setup + hold 当寄存器性能好，其 setup time 和 hold time
+都会更短，因此亚稳态窗口也更窄</li>
+</ol>
+<h3 id="跨时钟域问题">跨时钟域问题</h3>
+<ol type="1">
+<li>单 bit：两级触发器同步（适用于慢到快）</li>
+<li>多 bit：采用异步 FIFO，异步双口 RAM 加握手信号 格雷码转换</li>
+</ol>
+<p>单比特信号从慢速时钟域同步到快速时钟域，需要使用延迟两拍的方式消除亚稳态。
+第一级寄存器产生亚稳态并经过自身后可以稳定输出的概率为 70%～
+80%，第二级寄存器可以稳定输出的概率为 99%左右，
+后面再多加寄存器的级数，改善效果就不明显了，所以数据进来后一般选择延迟两拍即可。</p>
+<p>另外，单比特信号从快速时钟域同步到慢速时钟域时，仅使用延迟两拍的方式会漏采数据，
+所以往往使用脉冲同步法或的握手信号法；而多比特信号跨时钟域需要进行格雷码编码
+（多比特顺序数才可以）后才能进行延迟两拍的处理，或者通过使用 FIFO、RAM
+来处理数据与时钟同步的问题。 <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/483639639">浅析数字电路中的亚稳态现象</a></p>
+<h3 id="localparamparameter-和-define">localparam、parameter 和
+define</h3>
+<ol type="1">
+<li>localparam: 只在当前的 verilog 文件里有效</li>
+<li>parameter: 在当前文件和上层文件里都有效</li>
+<li>define：define
+定义的变量从编译器读到这条语句开始，到编译结束（或者到 undefine
+语句结束）</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IC/" rel="tag"># IC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/04/riscv-mcu-design/" rel="prev" title="RISC-V处理器设计">
+                  <i class="fa fa-chevron-left"></i> RISC-V处理器设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/15/riscv-tests/" rel="next" title="RISC-V测试">
+                  RISC-V测试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

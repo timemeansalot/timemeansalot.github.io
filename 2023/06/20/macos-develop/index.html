@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="MacOS and Linux 下搭建开发环境如：Python, Scala, Verilog, etc; 学习环境如：LaTex, WPS and other mac handy tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacOS and Linux搭建开发和学习环境">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/06/20/macos-develop/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="MacOS and Linux 下搭建开发环境如：Python, Scala, Verilog, etc; 学习环境如：LaTex, WPS and other mac handy tools">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-06-20T14:13:57.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.097Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="Tools">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/06/20/macos-develop/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/06/20/macos-develop/","path":"2023/06/20/macos-develop/","title":"MacOS and Linux搭建开发和学习环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MacOS and Linux搭建开发和学习环境 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ubuntu-22.04-config-notes"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu 22.04 config notes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#wechat"><span class="nav-number">1.1.</span> <span class="nav-text">wechat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#typing-tools-nvim-tmux-and-terminal"><span class="nav-number">1.2.</span> <span class="nav-text">Typing tools: nvim, tmux
+and terminal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sogou-input"><span class="nav-number">1.3.</span> <span class="nav-text">sogou input</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coding-tools"><span class="nav-number">1.4.</span> <span class="nav-text">Coding Tools</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#step-by-step-guide-to-setup-your-macbook-for-coding-and-study"><span class="nav-number">2.</span> <span class="nav-text">Step
+by step guide to setup your Macbook for coding and study</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#chrome"><span class="nav-number">2.1.</span> <span class="nav-text">Chrome</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clashx"><span class="nav-number">2.2.</span> <span class="nav-text">Clashx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#homebrew"><span class="nav-number">2.3.</span> <span class="nav-text">Homebrew</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git"><span class="nav-number">2.4.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iterm2"><span class="nav-number">2.5.</span> <span class="nav-text">Iterm2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#neovim"><span class="nav-number">2.6.</span> <span class="nav-text">Neovim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux"><span class="nav-number">2.7.</span> <span class="nav-text">Tmux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tools"><span class="nav-number">2.8.</span> <span class="nav-text">tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tools-which-makes-macbook-more-easy-to-ues"><span class="nav-number">2.9.</span> <span class="nav-text">Tools which makes
+Macbook more easy to ues</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding-setup"><span class="nav-number">3.</span> <span class="nav-text">Coding Setup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ide"><span class="nav-number">3.1.</span> <span class="nav-text">IDE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-python-env-using-miniconda"><span class="nav-number">3.2.</span> <span class="nav-text">Config Python env using
+Miniconda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-for-nodejs"><span class="nav-number">3.3.</span> <span class="nav-text">Config for NodeJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-for-verilog"><span class="nav-number">3.4.</span> <span class="nav-text">Config for Verilog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-for-scala-and-chisel"><span class="nav-number">3.5.</span> <span class="nav-text">Config for Scala and Chisel</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/06/20/macos-develop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MacOS and Linux搭建开发和学习环境 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MacOS and Linux搭建开发和学习环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-06-20 22:13:57" itemprop="dateCreated datePublished" datetime="2023-06-20T22:13:57+08:00">2023-06-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>MacOS and Linux 下搭建开发环境如：Python, Scala, Verilog, etc;
+学习环境如：LaTex, WPS and other mac handy tools</p>
+<span id="more"></span>
+<h1 id="ubuntu-22.04-config-notes">Ubuntu 22.04 config notes</h1>
+<h2 id="wechat">wechat</h2>
+<p>you have to install wine to install wechat, follow <a
+target="_blank" rel="noopener" href="https://github.com/zq1997/deepin-wine">this page</a> to install
+wine-wechat.<br />
+Then follow <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/Hesye/article/details/111087096?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-111087096-blog-126085602.235%5Ev38%5Epc_relevant_sort&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-111087096-blog-126085602.235%5Ev38%5Epc_relevant_sort&amp;utm_relevant_index=1">this
+guide</a> to solve wechat resolution problem.</p>
+<h2 id="typing-tools-nvim-tmux-and-terminal">Typing tools: nvim, tmux
+and terminal</h2>
+<ol type="1">
+<li><p>Nvim: Nvim is advanced-vim, on ubuntu you can use command
+<del><code>sudo apt install neovim</code></del> to install nvim.
+<strong>Important</strong>: make sure the neovim version is <span
+class="math inline">\(\ge\)</span> 0.8. &lt;- you can download Neovim
+source file and extract it, link the <code>nvim</code> executable file
+to <code>/usr/bin</code>.</p></li>
+<li><p>Tmux: tmux can allow you to manage your terminal windows quickly,
+you can use command <code>sudo apt install tmux</code> to install it.
+All tmux config is in the file <code>~/.tmux.config</code>, <a
+target="_blank" rel="noopener" href="https://github.com/timemeansalot/env_config/blob/main/tmux/.tmux.conf">this
+link</a> is my config for tmux.</p></li>
+<li><p>Terminal: the Ubuntu default terminal is not true color and has
+many bug when using tmux. So we have to use a third party terminal. I am
+using <code>wezterm</code> to replace the default ternimal. It's a cross
+plateform terminal.<br />
+You can go to <a target="_blank" rel="noopener" href="https://github.com/wez/wezterm">their github
+page</a> to download it.<br />
+Besides, wezterm config is in <code>~/.wezterm.lua</code>, <a
+target="_blank" rel="noopener" href="https://wezfurlong.org/wezterm/config/files.html">this website</a>
+is the config demo for wezterm.</p>
+<p><strong>Important:</strong> I think <code>alacritty</code> terminal
+is more useful that wezterm!!! So I prefer you use alacritty instead of
+wezterm.</p></li>
+</ol>
+<h2 id="sogou-input">sogou input</h2>
+<p>Just go to the sogou input <a href="">website</a>, they provided
+detailed installation guide. <strong>BUT</strong> sogou input works
+unstable on my Ubuntu. For example, sogou can't work with
+<code>zsh</code>, <code>wezterm</code>, etc. You have to make your
+default shell to be <code>bash</code>, if you make your default shell to
+be <code>zsh</code>, sogou input cannot type Chinese!</p>
+<ol type="1">
+<li>WPS一开始不支持搜狗中文输入法，按照<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/zaf0516/article/details/95769751">wps在Ubuntu下可以中文输入的方法</a>进行修复，主要是：
+方法一：在<code>/usr/bin/wps, /usr/bin/et, /usr/bin/wpp</code>三个文件一开始添加
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sogou input</span></span><br><span class="line"><span class="built_in">export</span> GTK_IM_MODULE=fcitx</span><br><span class="line"><span class="built_in">export</span> QT_IM_MODULE=fcitx</span><br><span class="line"><span class="built_in">export</span> XMODIFIERS=<span class="string">&quot;@im=fcitx&quot;</span></span><br></pre></td></tr></table></figure>
+方法二：直接在环境变量里面配置上述两行代码，就可以在所有的应用里输入中文啦</li>
+</ol>
+<p>method 3: create a file <code>~/.xprofile</code> and add the above 3
+codes</p>
+<h2 id="coding-tools">Coding Tools</h2>
+<p>TODO: add installation guide in the future</p>
+<ol type="1">
+<li>C++ and C
+<ul>
+<li>gcc, g++</li>
+<li>make</li>
+<li>gdb</li>
+</ul></li>
+<li>Chisel:
+<ul>
+<li>JRE</li>
+<li>Mill</li>
+</ul></li>
+<li>Verilog:
+<ul>
+<li>Verilator</li>
+</ul></li>
+<li>Python
+<ul>
+<li>Miniconda</li>
+<li>Jupyter</li>
+</ul></li>
+</ol>
+<h1
+id="step-by-step-guide-to-setup-your-macbook-for-coding-and-study">Step
+by step guide to setup your Macbook for coding and study</h1>
+<p>[TOC]</p>
+<p><strong>Acknowledgement</strong>: I used to want write a detailed
+guide of setting the Mac for coding and study, but I give up. The reason
+is: I get all the installation guide from Google, and the guide are
+quite detailed. I don't think it's meaningful to copy their articles
+here so I just do the following two things:</p>
+<ol type="1">
+<li>give url to the articles which I read when I try to install these
+tools.</li>
+<li>give my own notes about key steps which are not written by these
+articles.</li>
+</ol>
+<blockquote>
+<p>Thanks for reading this boring and long article, you can reach me by
+sending emails to <strong>timemeansalot@gmail.com</strong>.</p>
+</blockquote>
+<h2 id="chrome">Chrome</h2>
+<p>If you use Safari instead of Chrome, you can skip this part.</p>
+<ol type="1">
+<li>Open your Safari web browser and type Chrome, then you can go to the
+main website of chrome. Allow download from this website and you can
+download <code>googlechrome.dmg</code> under your download folder.</li>
+<li>Double click the install file, and you can finnaly install chrome on
+you MAC.</li>
+<li>if chrome can not show content right:
+<code>rm -rf ~/.config/google-chrome/Default/GPUCache</code></li>
+</ol>
+<h2 id="clashx"><a
+target="_blank" rel="noopener" href="https://github.com/yichengchen/clashX/releases">Clashx</a></h2>
+<p><strong>I Don't know why I want this app, I don't know what can I do
+with it, I don't take any responsibility for installing this App and I
+will not use it</strong></p>
+<h2 id="homebrew"><a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew</a></h2>
+<p>Mac package manager, very useful for installing apps in Mac.</p>
+<ol type="1">
+<li><p>Run the following code in your terminal to install
+<code>Homebrew</code>.
+<code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></p></li>
+<li><p>Run the following two command to add homebrew to your PATH.
+<code>(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') &gt;&gt; /Users/fujie/.zprofile</code>
+<code>eval "$(/opt/homebrew/bin/brew shellenv)"</code></p></li>
+<li><p>Check if homebrew is ready: <code>brew --version</code></p></li>
+</ol>
+<h2 id="git">Git</h2>
+<ol type="1">
+<li>install git: `brew install git</li>
+<li>config git:
+<code>cd ~ &amp;&amp; mkdir .ssh &amp;&amp; cd .ssh</code>
+<code>ssh-keygen -t rsa -C 'your email'</code></li>
+<li>copy the <code>.pub</code> key to your github setting</li>
+<li>test: `ssh -T git@github.com'</li>
+</ol>
+<h2 id="iterm2">Iterm2</h2>
+<p>Better terminal than the default terminal in Mac.</p>
+<ol type="1">
+<li>Install command: <code>brew install --cask iterm2</code></li>
+<li>follow <a target="_blank" rel="noopener" href="https://www.josean.com/posts/terminal-setup">this
+guid</a> to config Iterm2. It will teach the following things:
+<ul>
+<li>installing Oh-my-zsh</li>
+<li>installing powerlevel10K Theme for omz</li>
+<li>installing Nerd-Font</li>
+<li>installing zsh plugins</li>
+<li>config Iterm2 color theme</li>
+</ul></li>
+<li>optional: you can follow <a
+target="_blank" rel="noopener" href="https://draculatheme.com/iterm">dracula iterm2 theme guide</a> to
+install the dracula theme for Iterm2</li>
+</ol>
+<h2 id="neovim">Neovim</h2>
+<p>It's a better vim tool with a lot of config options.</p>
+<p>Make sure <strong>you have good internet connection</strong> before
+you want to config nvim, the config below will clone a lot of files from
+Githb.</p>
+<ol type="1">
+<li>install formatter <code>prettier</code>:
+<code>npm install -g prettier</code></li>
+<li>install neovim: <code>brew install neovim</code></li>
+<li>config neovim
+<ol type="1">
+<li>install <code>stow</code>: this is a tool for better manager git
+repos</li>
+<li>clone <code>.env_config</code> repo</li>
+<li><code>cd .env_config &amp;&amp; stow nvim</code></li>
+</ol></li>
+<li>install all plugins:
+<code>cd ~/.config/nvim/lua/user &amp;&amp; nvim plugins.lua</code>
+<u>Save the file</u>, nvim will <strong>auto install</strong> all the
+plugins.</li>
+<li>in nvim, use <code>TSUpdateSync</code> to install treesitter
+plugins.</li>
+<li>telescope: this is a fuzzy finder, you have to install ripgrep to
+use telescope in nvim: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># macos</span></span><br><span class="line">brew install ripgrep</span><br><span class="line"><span class="comment"># ubuntu</span></span><br><span class="line">sudo apt-get install ripgrep</span><br></pre></td></tr></table></figure></li>
+<li>config markdown-preview: markdown-preview can let you see your
+markdown file <strong>render</strong> effect in neovim, make sure you
+have <code>node</code> and <code>yarn</code> installed. <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.local/share/nvim/site/pack/packer/start/</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/iamcco/markdown-preview.nvim.git</span><br><span class="line"><span class="built_in">cd</span> markdown-preview.nvim</span><br><span class="line">yarn install</span><br><span class="line">yarn build</span><br></pre></td></tr></table></figure> if
+you have trouble running yarn install, you may have to reinstall yarn
+using npm: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove cmdtest</span><br><span class="line">sudo apt remove yarn</span><br><span class="line">sudo npm install -g yarn</span><br></pre></td></tr></table></figure></li>
+<li>install picgo_core: picgo is a picture upload tool to easy upload
+your picture to image bed. nvim is configed to support picgo, we need to
+install picgo core to support picgo on sysetm, follow <a
+target="_blank" rel="noopener" href="https://github.com/askfiy/nvim-picgo">this guide</a> to install
+picgo_core. <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install picgo -g <span class="comment"># install picgo-core</span></span><br><span class="line"><span class="comment"># set uploader</span></span><br><span class="line">picgo <span class="built_in">set</span> uploader</span><br></pre></td></tr></table></figure> the config file ins under
+<code>~/.picgo/config.json</code>, my config file is showing below:
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;smms&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;smms&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;smms&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vPkuQrDtSvj0nXrKgRTQbJqRoxP1msR2&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;backupDomain&quot;</span><span class="punctuation">:</span> <span class="string">&quot;smms.app&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>formatter: markdown formatter need to start null-ls LSP, and null-ls
+need you to install prettier on you Mac:
+<code>brew install prettier</code></li>
+</ol>
+<h2 id="tmux">Tmux</h2>
+<p>It's a terminal manager will allow you to quick manage all your
+terminals. Follow this <a
+target="_blank" rel="noopener" href="https://www.josean.com/posts/tmux-setup">guid</a> to config
+tmux.</p>
+<ol type="1">
+<li>install Tmux: <code>brew install tmux</code></li>
+<li>install tpm:
+<code>git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm</code></li>
+<li>config Tmux: <code>cd ~/.env_config &amp;&amp; stow tmux</code>
+`</li>
+</ol>
+<h2 id="tools">tools</h2>
+<ol type="1">
+<li>unzip: <code>brew install unzip</code></li>
+</ol>
+<h2 id="tools-which-makes-macbook-more-easy-to-ues">Tools which makes
+Macbook more easy to ues</h2>
+<blockquote>
+<p>those tools are open source and easy to get, you can get them by
+Google or App Store</p>
+</blockquote>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://www.drawio.com/">drawio</a>: Security-first
+diagramming for teams</li>
+<li><a target="_blank" rel="noopener" href="https://rectangleapp.com/">rectangle</a>: Move and resize
+windows in macOS using keyboard shortcuts or snap areas</li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/waydabber/BetterDisplay">betterdisplay</a>:Custom
+Resolutions, XDR/HDR Extra Brightness, Dummy Displays, Brightness
+Adjustment, Picture in Picture, Display and EDID overrides + more!</li>
+<li><a target="_blank" rel="noopener" href="https://www.macbartender.com/Bartender4">bartender</a>:
+Bartender is an award-winning app for macOS that superpowers your menu
+bar, giving you total control over your menu bar items, what's
+displayed, and when, with menu bar items only showing when you need
+them.</li>
+<li><a target="_blank" rel="noopener" href="https://ticktick.com/home">TickTick</a>: job management
+tools to arrange your day, add todo lists</li>
+<li><a target="_blank" rel="noopener" href="https://typora.io/">Typora</a>: Typora gives you a seamless
+experience as both a reader and a writer. It removes the preview window,
+mode switcher, syntax symbols of markdown source code, and all other
+unnecessary distractions. Instead, it provides a real live preview
+feature to help you concentrate on the content itself.</li>
+<li><a target="_blank" rel="noopener" href="https://pilotmoon.com/scrollreverser/">scroll reverser</a>:
+reverse the mouse direction</li>
+<li><a target="_blank" rel="noopener" href="https://www.xnipapp.com/">xnip</a>: screen shot app, free
+and useful</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ripperhe/Bob">Bob</a>: very handy
+translation and ocr tool on mac</li>
+<li><a target="_blank" rel="noopener" href="https://www.4kdownload.com/products/videodownloader-34">4k
+video downlaoder</a>: download youtube videos and playlists</li>
+<li><a target="_blank" rel="noopener" href="https://www.wps.cn/">wps</a>: office tool, replace of
+microsoft office</li>
+<li><a target="_blank" rel="noopener" href="https://www.caffeine-app.net/">Caffeine</a>: prevent your
+Mac from automatically going to sleep, dimming the screen or starting
+screen savers.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo/releases">picgo</a>: A
+tool for quickly uploading pictures and getting URL links for pictures.
+I recommend you to <strong>avoid the beta version</strong> of picgo,
+because the file may be damaged.</li>
+<li><a target="_blank" rel="noopener" href="https://www.latex-project.org/get/">latex</a>: LaTeX is not
+a stand-alone typesetting program in itself, but document preparation
+software that runs on top of Donald E. Knuth's TeX typesetting system.
+There are 2 ways which I think is convenient to install LaTeX on Mac:
+<ul>
+<li><code>brew install mactex --cask</code></li>
+<li>go to <a
+target="_blank" rel="noopener" href="https://www.tug.org/mactex/mactex-download.html">mactex
+homepage</a>, download the <code>MacTex.pkg</code> file, double click it
+after downloading, the installed is done.</li>
+</ul></li>
+</ol>
+<h1 id="coding-setup">Coding Setup</h1>
+<h2 id="ide">IDE</h2>
+<ol type="1">
+<li>vscode: to enable vim plugin <code>i,j,k,l</code> continue move in
+vscode, type this command in your terminal:
+<code>defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool true</code></li>
+<li>idea</li>
+</ol>
+<h2 id="config-python-env-using-miniconda">Config Python env using
+Miniconda</h2>
+<ol type="1">
+<li>go to <a
+target="_blank" rel="noopener" href="https://docs.conda.io/en/latest/miniconda.html#macos-installers">miniconda
+website</a> to download the installer.</li>
+<li>install: <code>cd ~/Downloads &amp;&amp; bash xxx.sh</code></li>
+<li>config miniconda to use domestic source, following <a
+target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">this
+guide</a></li>
+</ol>
+<h2 id="config-for-nodejs">Config for NodeJS</h2>
+<ol type="1">
+<li>install nvm: nvm is nodejs version manager, use
+<code>brew install nvm</code> to install it.<br />
+After installation, make sure to add nvm to your PATH variable and
+source <code>.bashrc</code> or <code>.zshrc</code> file</li>
+<li><em>Optional</em>: you may need to change nvm source to China if you
+are in China and want to boot up the download speed: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node</span><br><span class="line"><span class="built_in">export</span> NVM_IOJS_ORG_MIRROR=http://npm.taobao.org/mirrors/iojs</span><br></pre></td></tr></table></figure></li>
+<li>install nodejs:
+<ul>
+<li>search all available nodejs: <code>nvm ls-remote</code></li>
+<li>install nodejs: <code>nvm install 18</code>, this command will
+install nodejs 18 on your Mac</li>
+</ul></li>
+<li><em>Optional</em>: config nodejs to use source in China, see the
+current source of nodejs: <code>npm config get registry</code> type the
+following command in your terminal:
+<code>npm config set registry https://registry.npm.taobao.org</code></li>
+<li>test nodejs by setting up <strong>hexo website</strong>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo -g <span class="comment"># install hexo</span></span><br><span class="line">hexo s -g           <span class="comment"># render the blog page locally</span></span><br><span class="line">brew install pandoc <span class="comment"># optional: if blog render step fail</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="config-for-verilog">Config for Verilog</h2>
+<ol type="1">
+<li>gtkwave: in order to install gtkwave on MacOS 14 or later
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install --HEAD randomplum/gtkwave/gtkwave</span><br><span class="line">sudo cpan install Switch</span><br></pre></td></tr></table></figure></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/steveicarus/iverilog">iverilog</a>:
+<code>brew install icarus-verilog</code></li>
+<li><a target="_blank" rel="noopener" href="https://verilator.org/guide/latest/">verilator</a>:
+<code>brew install verilator</code></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/riscv-software-src/homebrew-riscv/blob/main/README.md">RISC-V
+Toolchain</a>: follow the link to install RISC-V Toolchain to mac is
+very easy. The key point is that: <em>if your are using WiFi, it may
+fail, you can use your phone's hotpot instead</em>. <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install riscv-tools <span class="comment"># install Toolchain</span></span><br><span class="line">brew <span class="built_in">test</span> riscv-tools    <span class="comment"># test installation</span></span><br><span class="line"><span class="built_in">which</span> riscv64-unknown-elf-gcc <span class="comment"># if this works fine, the Toolchain is ready on your mac</span></span><br></pre></td></tr></table></figure></li>
+<li>on Ubuntu, go to <a
+target="_blank" rel="noopener" href="https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.08/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14.tar.gz">download</a>
+pre-build riscv-tools and extract it. Then add the <code>bin</code>
+folder to your <code>PATH</code></li>
+</ol>
+<h2 id="config-for-scala-and-chisel">Config for Scala and Chisel</h2>
+<ol type="1">
+<li><p>install scala on mac:</p>
+<p><strong>Don't install scala manually, Don't install scala manually,
+Don't install scala manually!!!</strong>, <u>Skip this step, Skip this
+step, Skip this step</u></p>
+<p>Because we will use <code>mill</code> to manage scala, we don't have
+to install scala by ourself!!!! DON'T install it by yourself!!!</p>
+<p><code>curl -fL https://github.com/VirtusLab/coursier-m1/releases/latest/download/cs-aarch64-apple-darwin.gz | gzip -d &gt; cs &amp;&amp; chmod +x cs &amp;&amp; (xattr -d com.apple.quarantine cs || true) &amp;&amp; ./cs setup</code></p>
+<p>The above command is from <a
+target="_blank" rel="noopener" href="https://www.scala-lang.org/download/">this website</a> and it's
+for <u>Macbook with Apple silicon</u>.</p>
+<ul>
+<li>this will install scala related stuff and
+<strong><u>sbt</u></strong>(scala build tool)</li>
+<li>however, you still have to install <strong>Java Runtime</strong> to
+run scala, using <code>brew install openjdk</code> Test installation:
+<code>scala -version</code><br />
+<strong>😭NOTES</strong>: make sure you have correctly set
+<code>JAVA_HOME</code> to the right directory, otherwise
+<code>sbt</code> or <code>mill</code> will fail to run. In MacOS, you
+can use <code>/usr/libexec/java_home</code> command to show the correct
+<code>JAVA_HOME</code> path.</li>
+</ul></li>
+<li><p>mill: Chisel build tool, faster than sbt, but takes more disk
+space, using <code>brew install mill</code> to install mill.<br />
+After installation, you can use <code>mill version</code> to check if
+mill is correctly installed. There are many ways to install mill on
+mac.</p>
+<ul>
+<li><code>brew install mill</code>, this will install the latest version
+of mill</li>
+<li><code>sh -c "curl -L https://github.com/com-lihaoyi/mill/releases/download/0.9.8/0.9.8 &gt; /usr/local/bin/mill &amp;&amp; chmod +x /usr/local/bin/mill"</code>,
+this will install mill version 0.9.8, it's the mill version used by
+<strong>XiangShan</strong> group.</li>
+</ul></li>
+<li><p>follow <a
+target="_blank" rel="noopener" href="https://github.com/freechipsproject/chisel-bootcamp/blob/master/Install.md">chisel-bootcamp
+guide</a> to install jupyter and scala kernel for python.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install jupyter</span></span><br><span class="line">pip3 install --upgrade pip</span><br><span class="line">pip3 install jupyter --ignore-installed</span><br><span class="line">pip3 install jupyterlab</span><br><span class="line"><span class="comment"># jupyter backend for Scala</span></span><br><span class="line">curl -L -o coursier https://git.io/coursier-cli &amp;&amp; <span class="built_in">chmod</span> +x coursier</span><br><span class="line">SCALA_VERSION=2.12.10 ALMOND_VERSION=0.9.1</span><br><span class="line"></span><br><span class="line">./coursier bootstrap -r jitpack \</span><br><span class="line">-i user -I user:sh.almond:scala-kernel-api_<span class="variable">$SCALA_VERSION</span>:<span class="variable">$ALMOND_VERSION</span> \</span><br><span class="line">sh.almond:scala-kernel_<span class="variable">$SCALA_VERSION</span>:<span class="variable">$ALMOND_VERSION</span> \</span><br><span class="line">--sources --default=<span class="literal">true</span> \</span><br><span class="line">-o almond</span><br><span class="line"></span><br><span class="line">./almond --install</span><br><span class="line"><span class="comment"># after installation, You can delete coursier and almond files if you so desire.</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tools/" rel="tag"># Tools</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/22/riscv-compile-verification/" rel="prev" title="RISC-V编译和验证">
+                  <i class="fa fa-chevron-left"></i> RISC-V编译和验证
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/10/vga/" rel="next" title="VGA笔记">
+                  VGA笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

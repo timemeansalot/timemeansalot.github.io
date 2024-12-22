@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISC-V 5 级流水线设计，支持 RV-32IM 指令集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V 32IM处理器流水线设计">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/03/13/riscv-pipeline/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISC-V 5 级流水线设计，支持 RV-32IM 指令集">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/03/13/7GPzH91tmwkxvEC.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/19/ycgDbujHp4nQJRm.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/19/xOVKMb6Zq9JoDEU.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/19/krpq7IoAci2VBf8.png">
+<meta property="article:published_time" content="2023-03-13T08:02:35.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/03/13/7GPzH91tmwkxvEC.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/03/13/riscv-pipeline/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/13/riscv-pipeline/","path":"2023/03/13/riscv-pipeline/","title":"RISC-V 32IM处理器流水线设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V 32IM处理器流水线设计 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#todo"><span class="nav-number">1.</span> <span class="nav-text">TODO:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A7%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8A%E7%9A%84%E5%8A%9F%E8%83%BD%E9%83%A8%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">5 级流水线上的功能部件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ifinstruction-fetch"><span class="nav-number">2.1.</span> <span class="nav-text">IF(Instruction Fetch)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idinstruction-decode"><span class="nav-number">2.2.</span> <span class="nav-text">ID(Instruction Decode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exeexecution"><span class="nav-number">2.3.</span> <span class="nav-text">EXE(Execution)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memmemory-access"><span class="nav-number">2.4.</span> <span class="nav-text">MEM(Memory Access)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wbwrite-back"><span class="nav-number">2.5.</span> <span class="nav-text">WB(Write Back)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BF%E5%AD%98%E6%8C%87%E4%BB%A4%E7%9A%84%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%98%A0%E5%B0%84"><span class="nav-number">3.</span> <span class="nav-text">访存指令的流水线映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#load-%E6%8C%87%E4%BB%A4"><span class="nav-number">3.1.</span> <span class="nav-text">Load 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#store-%E6%8C%87%E4%BB%A4"><span class="nav-number">3.2.</span> <span class="nav-text">Store 指令</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/13/riscv-pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V 32IM处理器流水线设计 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V 32IM处理器流水线设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-13 16:02:35" itemprop="dateCreated datePublished" datetime="2023-03-13T16:02:35+08:00">2023-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2023/03/13/7GPzH91tmwkxvEC.png"
+alt="Basic five-stage pipeline in a RISC machine" /> RISC-V 5
+级流水线设计，支持 RV-32IM 指令集</p>
+<span id="more"></span>
+<h1 id="todo">TODO:</h1>
+<ul class="task-list">
+<li><label><input type="checkbox" />增加不同类型的 forward
+分析（对流水线的影响、对<span
+class="math inline">\(C_t\)</span>的影响)</label></li>
+</ul>
+<h1 id="级流水线上的功能部件">5 级流水线上的功能部件</h1>
+<p><strong>Total instructions amount = 37+3 = 40</strong></p>
+<h2 id="ifinstruction-fetch">IF(Instruction Fetch)</h2>
+<ol type="1">
+<li><p>2x1 Mux：选择下一条 PC</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 20%" />
+<col style="width: 23%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>nextPC</th>
+<th>相关指令数量</th>
+<th>相关指令</th>
+<th>PC 来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc+signExt(offset)</td>
+<td>7</td>
+<td>branch(6), JAL</td>
+<td>EXE</td>
+</tr>
+<tr>
+<td>x[rs1]+signExt(offset) &amp; ~1</td>
+<td>1</td>
+<td>JALR</td>
+<td>EXE</td>
+</tr>
+<tr>
+<td>pc+4</td>
+<td>29</td>
+<td>others</td>
+<td>IF</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>PC register(IF register): 缓存 mux 的 pc</p></li>
+<li><p>instruction memory</p></li>
+</ol>
+<h2 id="idinstruction-decode">ID(Instruction Decode)</h2>
+<ol type="1">
+<li>data register:
+<ul>
+<li>2 组读端口：任何时刻都可以读出</li>
+<li>1 组写端口: 在时钟上升沿写入</li>
+</ul></li>
+<li>decoder</li>
+<li>extending unit</li>
+<li>ID register: 缓存 IF 需要传递给 ID 的数据，如 instruction, PC, PC+4
+及 decoder 的控制信号</li>
+</ol>
+<h2 id="exeexecution">EXE(Execution)</h2>
+<ol type="1">
+<li>ALU</li>
+<li>3x1 Mux: 实现 bypass</li>
+<li>Adder：计算 Target PC，跳转结果判断可以复用 ALU</li>
+<li>Branch Unit: 判断分支跳转是否发生</li>
+<li>Target PC generator:
+<ul>
+<li>PC=PC+Imm: B-Type and JAL</li>
+<li>PC=(PC+Imm) &amp; ~(-1): JALR</li>
+</ul></li>
+<li>EXE register: 缓存 ID 需要传递给 EXE 的数据</li>
+</ol>
+<h2 id="memmemory-access">MEM(Memory Access)</h2>
+<ol type="1">
+<li>data memory</li>
+<li>MEM register</li>
+<li>MEM register: 缓存 EXE 需要传递给 MEM 的数据</li>
+</ol>
+<h2 id="wbwrite-back">WB(Write Back)</h2>
+<ol type="1">
+<li>4x1 Mxu: 选择写回到 x[rd]的数据(ALU, Imm, PC+4, Memory)</li>
+<li>WB register: 缓存 MEM 需要传递给 WB 的数据</li>
+</ol>
+<p>RV-32I 中设计到的 load/store 指令有如下 8 条:</p>
+<ul>
+<li>LB</li>
+<li>LH</li>
+<li>LW</li>
+<li>LBU</li>
+<li>LHU</li>
+<li>SB</li>
+<li>SH</li>
+<li>SW</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 23%" />
+<col style="width: 6%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Assemble Code Demo</th>
+<th>Type</th>
+<th>Math Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LB</td>
+<td><code>lb rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=signExt(M[x[rs1]+signExt(offset)]_{[7:0]})\)</span></td>
+</tr>
+<tr>
+<td>LH</td>
+<td><code>lh rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=signExt(M[x[rs1]+signExt(offset)]_{[15:0]})\)</span></td>
+</tr>
+<tr>
+<td>LW</td>
+<td><code>lw rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=M[x[rs1]+signExt(offset)]_{[31:0]}\)</span></td>
+</tr>
+<tr>
+<td>LBU</td>
+<td><code>lbu rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=Ext(M[x[rs1]+signExt(offset)]_{[7:0]})\)</span></td>
+</tr>
+<tr>
+<td>LHU</td>
+<td><code>lhu rd, (offset)rs1</code></td>
+<td>I-Type</td>
+<td><span
+class="math inline">\(x[rd]=Ext(M[x[rs1]+signExt(offset)]_{[15:0]})\)</span></td>
+</tr>
+<tr>
+<td>SB</td>
+<td><code>sb rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[7:0]}\)</span></td>
+</tr>
+<tr>
+<td>SH</td>
+<td><code>sh rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[15:0]}\)</span></td>
+</tr>
+<tr>
+<td>SW</td>
+<td><code>sw rs2, offset(rs0)</code></td>
+<td>S-Type</td>
+<td><span
+class="math inline">\(M[x[rs1]+signExt(offset)]=x[rs2]_{[31:0]}\)</span></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>S-Type 里没有 rd 寄存器</p>
+</blockquote>
+<h1 id="访存指令的流水线映射">访存指令的流水线映射</h1>
+<figure>
+<img src="https://s2.loli.net/2023/03/19/ycgDbujHp4nQJRm.png"
+alt="image-20230318092404128" />
+<figcaption aria-hidden="true">image-20230318092404128</figcaption>
+</figure>
+<h2 id="load-指令">Load 指令</h2>
+<figure>
+<img src="https://s2.loli.net/2023/03/19/xOVKMb6Zq9JoDEU.png"
+alt="image-20230318092343421" />
+<figcaption aria-hidden="true">image-20230318092343421</figcaption>
+</figure>
+<p>load 指令有 5 条, load 指令都是 I-Type 的指令，其编码格式为:</p>
+<table>
+<thead>
+<tr>
+<th>31, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>rd</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td>offset[11:0]</td>
+<td>base</td>
+<td>000-&gt;101</td>
+<td>dest</td>
+<td>0000011</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>IF(Instruction Fetch): PC+=4</li>
+<li>ID(Instruction Decode):</li>
+<li>EXE(Execution)</li>
+<li>MEM(Memory Access)</li>
+<li>WB(Write Back): 在 clk 上升沿将 memory 中读到的数据存入到 x[rd]</li>
+</ol>
+<h2 id="store-指令">Store 指令</h2>
+<figure>
+<img src="https://s2.loli.net/2023/03/19/krpq7IoAci2VBf8.png"
+alt="image-20230318092145531" />
+<figcaption aria-hidden="true">image-20230318092145531</figcaption>
+</figure>
+<p>Store 指令有 3 条，都是 S-Type 指令，其编码格式为:</p>
+<table>
+<thead>
+<tr>
+<th>31, 25</th>
+<th>24, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[11:0]</td>
+<td>rs2</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>imm[4:0]</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td>offset[11:5]</td>
+<td>src</td>
+<td>base</td>
+<td>000-&gt;010</td>
+<td>offset[4:0]</td>
+<td>0100011</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/13/ysyx-notes/" rel="prev" title="一生一芯记录">
+                  <i class="fa fa-chevron-left"></i> 一生一芯记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/13/riscv-branch-prediction/" rel="next" title="RISC-V分支预测器设计">
+                  RISC-V分支预测器设计 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Windows利用WSL配置Linux开发环境的详细教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wsl_config">
+<meta property="og:url" content="http://timemeansalot.github.io/2021/03/23/WSL_Config/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="Windows利用WSL配置Linux开发环境的详细教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-23T05:34:43.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.095Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="wsl">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2021/03/23/WSL_Config/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2021/03/23/WSL_Config/","path":"2021/03/23/WSL_Config/","title":"wsl_config"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>wsl_config | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#windows%E4%B8%8B%E9%85%8D%E7%BD%AEwsl-2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">Windows下配置WSL 2开发环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85wsl%E5%88%B0%E9%9D%9E%E7%B3%BB%E7%BB%9F%E7%9B%98"><span class="nav-number">1.1.</span> <span class="nav-text">1 下载安装WSL到非系统盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEwsl"><span class="nav-number">1.2.</span> <span class="nav-text">2 配置WSL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEwsl%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 配置WSL使用国内镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEwsl%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E5%9B%BD%E5%A4%96%E7%BD%91%E7%AB%99"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2
+配置WSL使用代理，访问国外网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85oh-my-zsh"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 安装oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85node"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 安装node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEgithub%E7%9A%84ssh"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 配置GitHub的ssh</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wsl-for-scala"><span class="nav-number">2.</span> <span class="nav-text">wsl for scala</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2021/03/23/WSL_Config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="wsl_config | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          wsl_config
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-23 13:34:43" itemprop="dateCreated datePublished" datetime="2021-03-23T13:34:43+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Windows利用WSL配置Linux开发环境的详细教程</p>
+<span id="more"></span>
+<h1 id="windows下配置wsl-2开发环境">Windows下配置WSL 2开发环境</h1>
+<h2 id="下载安装wsl到非系统盘">1 下载安装WSL到非系统盘</h2>
+<ol type="1">
+<li><p>根据<a
+target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/wsl/install-manual">Microsoft官方教程</a>，在Windows上开始WSL（Windows
+subsystem for
+Linux）功能。最后一步的时候，教程里叫我们在应用商店里安装Linux。<strong><em>不要</em></strong>执行该步骤，因为从应用商店里安装会默认安装到C盘，但是我们不想要安装到系统盘。</p></li>
+<li><p>在Power Shell中控制WSL有如下常用命令：</p>
+<ul>
+<li><p><code>查看WSL状态：wsl -l -v</code></p></li>
+<li><p><code>关闭WSL：wsl shutdown</code></p></li>
+<li><p><code>设置wsl2：wsl --set-version Ubuntu-20.04 2</code></p></li>
+<li><p><code>设置默认为wsl2：wsl --set-default-version 2</code></p></li>
+</ul></li>
+<li><p> 从Microsoft官网下载Linux安装包，比如<a
+target="_blank" rel="noopener" href="https://aka.ms/wslubuntu2004">Ubuntu-20.04的安装包</a>。下载之后将安装包后缀改成<code>.zip</code>并且解压到D盘，此时可以看到Ubuntu20.04的安装文件，点击运行该安装文件，可以将Ubuntu安装到解压包所在的位置。</p>
+<blockquote>
+<p>通过以上步骤，我们实现了在Windows上开始WSL功能，并且安装到D盘</p>
+</blockquote></li>
+<li><p>Linux下挂在Windows硬盘，并且指定硬盘格式的方法：</p>
+<p>在windows 下移动硬盘位 z</p>
+<p>在ubuntu 下输入命令：<br />
+<code>sudo mkdir /mnt/z</code><br />
+(此命令为在 Windows 下新建一个 Z盘,访问 windows 下的文件 cd /mnt/z)</p>
+<p>挂载盘符 z<br />
+<code>sudo mount -t drvfs z: /mnt/z</code></p></li>
+</ol>
+<h2 id="配置wsl">2 配置WSL</h2>
+<h3 id="配置wsl使用国内镜像">2.1 配置WSL使用国内镜像</h3>
+<ol type="1">
+<li><p>更换Ubuntu使用阿里云镜像，从而加快软件下载速度</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 备份之前的源</span></span><br><span class="line">sudo <span class="built_in">cp</span> /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line"><span class="comment"># 2. 替换为阿里云的源</span></span><br><span class="line">sudo vim /etc/apt/source.list</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>将bashrc中替换为如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure></li>
+<li><p>最后更新软件即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="配置wsl使用代理访问国外网站">2.2
+配置WSL使用代理，访问国外网站</h3>
+<p>默认情况下WSL不能访问一下国外的网站，即使我们的Windows主机已经实现了科学上网。所以我们在使用代码安装软件的时候，可能会失败。</p>
+<ol type="1">
+<li><p>在Windows的CMD窗口中获得本机的IP地址，在CMD中使用指令:
+<code>ipconfig</code></p></li>
+<li><p>在WSL中手动开始代理：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&#x27;http://xx.xx.xx.xx:7890&#x27;</span></span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&#x27;http://xx.xx.xx.xx:7890&#x27;</span> <span class="comment"># 其中xx.xx.xx.xx是Windows下在cmd中查看到的ipv4地址，注意替换</span></span><br></pre></td></tr></table></figure></li>
+<li><p>将代理永久配置到.zshrc中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim .zshrc</span><br></pre></td></tr></table></figure>
+<p>在文件末尾添加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &gt;&gt;&gt; set proxy &gt;&gt;&gt;</span></span><br><span class="line">host_ip=$(<span class="built_in">cat</span> /etc/resolv.conf |grep <span class="string">&quot;nameserver&quot;</span> |<span class="built_in">cut</span> -f 2 -d <span class="string">&quot; &quot;</span>)    </span><br><span class="line"><span class="built_in">alias</span> proxy=<span class="string">&quot;export http_proxy=http://<span class="variable">$host_ip</span>:7890 &amp;&amp; export https_proxy=http://<span class="variable">$host_ip</span>:7890&quot;</span></span><br><span class="line"><span class="built_in">alias</span> unproxy=<span class="string">&quot;unset http_proxy &amp;&amp; unset https_proxy&quot;</span></span><br><span class="line"><span class="comment"># &lt;&lt;&lt; set proxy &lt;&lt;&lt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> .zshrc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="安装oh-my-zsh">2.3 安装oh-my-zsh</h3>
+<p><a target="_blank" rel="noopener" href="https://sspai.com/post/56081">参考链接:
+打造高颜值终端——Hyper</a></p>
+<blockquote>
+<p>zsh是跟bash差不多的Linux下的命令行shell，oh-my-zsh在zsh上进行了封装，从而可以打造更加精美的终端</p>
+</blockquote>
+<ol type="1">
+<li><p>备份.bashrc</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">sudo <span class="built_in">cp</span> .bashrc .bashrc_bak</span><br></pre></td></tr></table></figure></li>
+<li><p>安装oh-my-zsh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装zsh</span></span><br><span class="line">sudo apt install zsh</span><br></pre></td></tr></table></figure></li>
+<li><p>安装oh-my-zsh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>在使用了oh-my-zsh之后，就不是使用的bash了，所以以后不要用<code>source .bashrc</code>，而是要用<code>source .zshrc</code></p></li>
+</ol>
+<h3 id="安装node">2.4 安装node</h3>
+<blockquote>
+<p>Linux下很多工具都需要使用到node，比如Hexo，Picgo等。通过nvm来管理node</p>
+</blockquote>
+<ol type="1">
+<li><p>安装nvm并且刷新zsh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -o- &lt;https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh&gt; | bash</span><br><span class="line"><span class="comment"># 刷新.zshrc</span></span><br><span class="line"><span class="built_in">source</span> .zshrc</span><br><span class="line"><span class="comment"># 查看nvm</span></span><br><span class="line">nvm -v</span><br></pre></td></tr></table></figure></li>
+<li><p>更换nvm为国内镜像，在.zshrc中末尾添加如下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node</span><br><span class="line"><span class="built_in">export</span> NVM_IOJS_ORG_MIRROR=http://npm.taobao.org/mirrors/iojs</span><br></pre></td></tr></table></figure>
+<p>刷新zsh: <code>source .zshrc</code></p></li>
+<li><p>安装nodejs</p>
+<ul>
+<li><p>查看所有可以安装的nodejs版本信息：<code>nvm ls-remote</code></p></li>
+<li><p>安装对应版本的nodejs，这里安装nodejs12：<code>nvm install 12</code></p></li>
+<li><p>查看本地的nodejs版本：<code>nvm list</code></p></li>
+</ul></li>
+<li><p>配置npm源
+在第三步中，会安装nodejs12和对应的npm（npm是nodejs的包管理软件）。我们需要配置npm使用淘宝源，这样npm在安装包的时候，会从淘宝镜像下载，从而大幅提高国内的下载速度。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org <span class="comment"># 替换npm使用淘宝镜像</span></span><br><span class="line">npm config get registry <span class="comment"># 查看npm当前使用的镜像，应该会考到npm现在已经使用淘宝镜像了</span></span><br></pre></td></tr></table></figure></li>
+<li><p>测试npm能否从淘宝镜像拉取<br />
+我们这里安装一个nodejs包<strong>hexo</strong>（是一个静态的博客搭建框架）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli <span class="comment"># -g参数表示在全局安装 hexo_cli</span></span><br></pre></td></tr></table></figure></li>
+<li><p>安装PicGO，一个图片上传软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取PicGo</span></span><br><span class="line">npm install picgo -g</span><br><span class="line"><span class="comment"># 设置上传图床</span></span><br><span class="line">picgo <span class="built_in">set</span> uploader</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="配置github的ssh">2.5 配置GitHub的ssh</h3>
+<ol type="1">
+<li><p>创建ssh key并且连接到GitHub</p></li>
+<li><p>在zshrc末尾添加以下文件，这样wsl会默认打开ssh-agent</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &gt;&gt;&gt; ssh initialize &gt;&gt;&gt;</span></span><br><span class="line"><span class="built_in">source</span> ~/.ssh/auto_start_ssh.sh</span><br><span class="line"><span class="comment"># &lt;&lt;&lt; ssh initialize &gt;&gt;&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>其中auto_start<em>ssh.sh文件放在.ssh目录下，它的内容如下：注意将pc_wsl改成自己ssh</em>_key文件的名称</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">ps -aux | grep ssh-agent | grep -v grep &gt; /dev/null</span><br><span class="line"><span class="keyword">if</span> [ $? != 0 ]; <span class="keyword">then</span></span><br><span class="line"><span class="comment">#       echo &quot;ssh-agent is not running, so start it!&quot;</span></span><br><span class="line">        ssh-agent &gt; ~/.ssh/ssh_agent_var.sh</span><br><span class="line">        <span class="built_in">source</span> ~/.ssh/ssh_agent_var.sh &gt; /dev/null</span><br><span class="line">        ssh-add ~/.ssh/pc_wsl &gt; /dev/null 2&gt;&amp;1</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"><span class="comment">#       echo &quot;ssh-agent is already running!&quot;</span></span><br><span class="line">        <span class="built_in">source</span> ~/.ssh/ssh_agent_var.sh &gt; /dev/null</span><br><span class="line">        ssh-add ~/.ssh/pc_wsl &gt; /dev/null 2&gt;&amp;1</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>这样每次打开WSL的时候，会自动打开ssh-agent并且添加ssh-key了，然后就可以直接访问GitHub了。</p></li>
+</ol>
+<h1 id="wsl-for-scala">wsl for scala</h1>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/Nozidoali/article/details/119910487">scala
+install</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/harrytsz/article/details/120032919">use
+scala in jupyter</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/wuicer/article/details/126130987">remove
+scala in jupyter</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/wsl/" rel="tag"># wsl</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/16/HEXO/" rel="prev" title="hexo搭建博客">
+                  <i class="fa fa-chevron-left"></i> hexo搭建博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/09/MySql-install/" rel="next" title="从0开始，手把手教你学会MySQL 5.7安装">
+                  从0开始，手把手教你学会MySQL 5.7安装 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

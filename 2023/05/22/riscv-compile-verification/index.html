@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="riscv-tests 和 verification [TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V编译和验证">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/05/22/riscv-compile-verification/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="riscv-tests 和 verification [TOC]">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/Uum3NIOfts6JAbd.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/NltaFxfTmCyzwLS.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/mFVX7jUxn8KPIgY.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/RPvWopz4nrOIJ2V.png">
+<meta property="article:published_time" content="2023-05-22T03:42:06.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/05/22/riscv-compile-verification/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/05/22/riscv-compile-verification/","path":"2023/05/22/riscv-compile-verification/","title":"RISC-V编译和验证"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V编译和验证 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E7%90%86%E8%AE%BAdebug-theory"><span class="nav-number">1.</span> <span class="nav-text">调试理论(debug theory)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E7%9A%84%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">专业的调试方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#difftset"><span class="nav-number">2.</span> <span class="nav-text">Difftset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5-difftest-%E6%A1%86%E6%9E%B6"><span class="nav-number">3.</span> <span class="nav-text">接入 Difftest 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E5%90%84%E4%BD%8D%E8%80%81%E5%B8%88%E5%90%8C%E5%AD%A6%E6%89%B9%E8%AF%84%E6%8C%87%E6%AD%A3"><span class="nav-number">5.</span> <span class="nav-text">请各位老师同学，批评指正</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/05/22/riscv-compile-verification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V编译和验证 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V编译和验证
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-22 11:42:06" itemprop="dateCreated datePublished" datetime="2023-05-22T11:42:06+08:00">2023-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>riscv-tests 和 verification</p>
+<p>[TOC]</p>
+<span id="more"></span>
+<h2 id="调试理论debug-theory">调试理论(debug theory)</h2>
+<ol type="1">
+<li><p>需求 -&gt; 设计 -&gt;<u> 代码 -&gt; Fault -&gt; Error -&gt;
+Failure</u></p></li>
+<li><p>两类 Bug</p>
+<ol type="1">
+<li>第一类
+bug，实现跟需求不符合：解决的唯一办法是“仔细多次阅读需求”，保证需求理解正确<br />
+少看几句话，可能需要调试好几天</li>
+<li>第二类 bug，代码实现跟需求不一致</li>
+</ol></li>
+<li><p>第二类 bug 中相关的三种“错误”</p>
+<ol type="1">
+<li>Fault - 有 bug 的代码, 例如数组访问越界</li>
+<li>Error - 程序运行时刻的非预期状态, 如某些内存的值被错误改写</li>
+<li>Failure - 可观测的致命结果, 如输出乱码/assert 失败/段错误</li>
+</ol>
+<blockquote>
+<p>调试：从 Failure 回溯到 Fault 的过程，距离越远调试越困难</p>
+</blockquote></li>
+</ol>
+<h3 id="专业的调试方法">专业的调试方法</h3>
+<ol type="1">
+<li><p>添加断言(assert), <u><strong>把 Error 转变成
+Failure</strong></u>：尽可能通过 assert 让 Error 变成可以观测到的
+Failure</p>
+<ul>
+<li>把需求(specification)直接写出来, 运行时检查</li>
+<li>断言背后就是一个 if 语句，关键是条件</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!cond) &#123;</span><br><span class="line">    <span class="comment">// observable failure</span></span><br><span class="line">    <span class="built_in">report_and_exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>进行测试, <u><strong>把 Fault 转变成
+Error</strong></u>：尽可能地运行到 Fault 所在的代码</p>
+<ul>
+<li>单元测试(例如测试
+decoder)，与具体模块相关，一般自行编写单元测试</li>
+<li>集成测试(例如测试 mcu core)，一些测试用例、<u>🌟<a
+target="_blank" rel="noopener" href="https://github.com/riscv-software-src/riscv-tests">riscv-tests</a></u></li>
+<li>随机测试：随机产生测试用例
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/ucb-bar/riscv-torture">riscv-torture</a></li>
+<li>好处：不用自己编写测试用例（编写测试用例很累）</li>
+<li>坏处：对于边界条件的覆盖不是很好，需要添加一些规则进行测试用例生成时的指导</li>
+</ul></li>
+<li>🌟<a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest">Difftest</a>，<u>属于最高级的"step
+and compare"类型的验证方法</u></li>
+</ul></li>
+<li><p>用 lint 工具检查代码, <u><strong>暴露
+Fault</strong></u>：使用编译工具在对代码做静态分析，暴露一些可能存在的
+Fault</p>
+<ul>
+<li>-Wall, -Werror</li>
+<li>gcc，verilator，综合工具都可以对代码进行检测，报告 warning</li>
+<li>规范的芯片设计流程一定要清除工具报告的所有 warning</li>
+</ul></li>
+<li><p>编写可读, 可维护, 易验证的代码(不言自明,
+不言自证)：<u><strong>防御性编程，采用不容易出 Fault
+的编程方式</strong></u></p>
+<ul>
+<li>从源头消灭 bug</li>
+<li>相比于手动编写 rtl，使用工具生成 rtl 会更加避免错误的产生</li>
+</ul>
+<figure>
+<img src="https://s2.loli.net/2023/06/07/nZPKweCO7q4tuSA.png"
+alt="defensive programming" />
+<figcaption aria-hidden="true">defensive programming</figcaption>
+</figure></li>
+</ol>
+<h2 id="difftset">Difftset</h2>
+<figure>
+<img src="https://s2.loli.net/2023/06/07/Uum3NIOfts6JAbd.png"
+alt="Difftest basic verification frame" />
+<figcaption aria-hidden="true">Difftest basic verification
+frame</figcaption>
+</figure>
+<ol type="1">
+<li><p>对 CPU 进行调试，可能的 Failure：结果错误、卡死</p></li>
+<li><p>对 CPU 进行调试的难点：</p>
+<ol type="1">
+<li><p>如何定位到<strong>第一条</strong>出错的指令、地方</p></li>
+<li><p>如果不能定位到第一条出错的指令，则：</p>
+<ul>
+<li>最开始的 Failure 可能发生扩散，导致后续更大的 Failure</li>
+<li>最后反推第一条 Failure 十分困难</li>
+</ul>
+<blockquote>
+<p>思考：能否在每一条指令后面增加一个 assert，这样任何一条指令如果产生了
+Error， 都可以在第一时间被暴露为 failure，从而可以捕捉到第一条导致
+Failure 的指令</p>
+</blockquote></li>
+</ol></li>
+<li><p>assert 时应该检查什么？ 电路视角的计算机 = 组合逻辑电路 +
+时序逻辑电路 = 一个巨大状态机</p>
+<ol type="1">
+<li>我们可以检查计算机的状态!</li>
+<li>状态 = 时序逻辑电路 = <strong><u>寄存器 + PC +
+内存</u></strong></li>
+</ol></li>
+<li><p>如何知道 CPU 正确的状态？</p>
+<ol type="1">
+<li>借鉴软件工程中 Difftest(differential testing)的思想</li>
+<li>核心思想: 对于根据同一规范的两种实现, 给定相同的有定义的输入,
+它们的行为应当一致</li>
+<li>回到处理器设计: 对于根据 riscv 手册的两种实现, 给定相同的正确程序,
+它们的状态变化应当一致</li>
+<li>其中一种实现是我们设计的
+CPU、另一种实现选择一种<strong>简单的模拟机</strong>就可以了</li>
+</ol></li>
+<li><p>与模拟器进行 Difftest</p>
+<ol type="1">
+<li>选择一个模拟器作为参考(REF): QEMU, Spike, NEMU</li>
+<li>为模拟器添加如下的 API： <img
+src="https://s2.loli.net/2023/06/07/QOnc4MG1vqJNLi3.png"
+alt="simulator API" /></li>
+<li>让仿真框架可以获得 CPU 的状态：寄存器 + PC + 内存 + 提交的指令数
+<img src="https://s2.loli.net/2023/06/07/NltaFxfTmCyzwLS.png"
+alt="Difftest process" /></li>
+<li>对模拟器的状态跟 CPU 状态进行比较</li>
+</ol></li>
+<li><p>验证普通指令</p>
+<ol type="1">
+<li>处理器将提交指令数、寄存器堆状态、PC 提交给 Difftest</li>
+<li>模拟器执行相同数量的指令</li>
+<li>比较处理器和模拟器的寄存器堆状态、PC</li>
+</ol>
+<p><img
+src="https://s2.loli.net/2023/06/07/AlNCBKkZj1Y8wOT.png" /></p></li>
+<li><p>验证特殊情况下的指令</p>
+<ol type="1">
+<li>模拟器无法仅靠自己在一些行为上与正确的处理器<u><strong>对齐</strong></u></li>
+<li>无法依靠模拟器直接验证处理器的行为，需要做额外的处理(手动对齐)</li>
+<li>MMIO(memory mapped IO)：
+<ul>
+<li>模拟器不能模拟所有的外部设备，模拟器无法得知这些 load 指令的正确结果
+<img src="https://s2.loli.net/2023/06/07/mFVX7jUxn8KPIgY.png" /></li>
+<li>解决方法：处理器识别出这样的访存指令、将其结果复制到模拟器中、跳过该指令的比较
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (dut.commit[i].skip) &#123;</span><br><span class="line">   proxy-&gt;get_regs(ref_regs_ptr);</span><br><span class="line">   ref.csr.this_pc += dut.commit[i].isRVC ? <span class="number">2</span> : <span class="number">4</span>;</span><br><span class="line">   <span class="keyword">if</span> (dut.commit[i].wen &amp;&amp; dut.commit[i].wdest != <span class="number">0</span>) &#123;</span><br><span class="line">       ref_regs_ptr[dut.commit[i].wdest] = dut.commit[i].wdata;</span><br><span class="line">   &#125;</span><br><span class="line">   proxy-&gt;set_regs(ref_regs_ptr); <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li>中断处理: 处理器检测到中断、处理器传出中断信息,
+模拟器进入相同的处理流程 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (dut.event.interrupt) &#123;</span><br><span class="line">    dut.csr.this_pc = dut.event.exceptionPC; do_interrupt();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(dut.event.exception) &#123;</span><br><span class="line">    dut.csr.this_pc = dut.event.exceptionPC; do_exception();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 正常的处理流程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol></li>
+<li><p>Difftest 的优点</p>
+<ol type="1">
+<li>本质：在线指令级验证方法
+<ul>
+<li>在线：边跑程序边验证</li>
+<li>指令级：对每一条指令功能进行验证</li>
+</ul></li>
+<li>支持把任意程序转化为<em>指令级别的测试</em></li>
+<li>支持<em>不会结束的程序</em></li>
+<li>不用提前知道程序运行的结果：对比的是指令执行的行为,
+而不是程序的语义</li>
+<li>riscv-torture 是离线验证，基于比较 signature，没有上述 Difftest
+的优点</li>
+</ol></li>
+<li><p>为什么不自行维护模拟器，而是使用通用的模拟器？</p>
+<ol type="1">
+<li>现如今，处理器设计时更新迭代十分的迅速，在这种情况下要维护每一版处理器微架构对应的模拟器，
+一方面代码工作量很大、另一方面不满足敏捷开发的需求。</li>
+<li>因此，如果要求处理器设计满足 riscv
+手册的规范，我们只需要保证处理器跟模拟器在指令级层面的一致性即可，
+具体表现就是每一条指令执行之后，对应的“RF, CSR, PC 和内存”都一致。</li>
+</ol></li>
+<li><p>为什么采用 NEME 作为模拟器</p>
+<ol type="1">
+<li>代码复杂度：<code>NEMU &lt; Spike &lt;&lt; QEMU</code></li>
+<li>运行速度快 <img
+src="https://s2.loli.net/2023/06/07/EOIRelTfqA2MtWQ.png" /></li>
+<li>接口 API 提供</li>
+</ol></li>
+<li><p>Difftest验证通过的标志</p>
+<ol type="1">
+<li>通过 Difftest 框架，能够运行结束指定的程序，不报错</li>
+<li>通过 Difftest
+框架，执行相当数量的随机指令流（几亿条）、或者执行不会结束的程序一段足够长的时间</li>
+</ol></li>
+</ol>
+<h2 id="接入-difftest-框架">接入 Difftest 框架</h2>
+<ol type="1">
+<li><p>为 Difftest 提供如下的目录结构： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line"> ├── build</span><br><span class="line"> │   └── SimTop.v // 处理器 verilog 源代码</span><br><span class="line"> ├── Difftest // Difftest 仓库, 可以作为 submodule 引入</span><br><span class="line"> └── ......</span><br></pre></td></tr></table></figure></p></li>
+<li><p>配置 NEMU_HOME，Difftest 默认使用 NEMU 作为对比的模拟器</p></li>
+<li><p>在设计中将关键信号传递给 Difftest 框架</p>
+<ol type="1">
+<li>Difftest 采用 DPI-C 来将仿真中的信号传递到
+Difftest，框架中在仿真程序执行的过程中会调用 DPI-C 函数, 将 Difftest
+感兴趣的信号写入到对应的结构体中.</li>
+<li>需要传递的信息的最小子集包括: instrCommit, IntRegState,
+CSRState</li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Difftest</span>._</span><br><span class="line"> <span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">WBU</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (!env.<span class="type">FPGAPlatform</span>) &#123; <span class="comment">// 只有在仿真时才需要 Difftest 的 module</span></span><br><span class="line">     <span class="keyword">val</span> <span class="type">Difftest</span> = <span class="type">Module</span>(<span class="keyword">new</span> <span class="type">DifftestArchEvent</span>)</span><br><span class="line">     <span class="type">Difftest</span>.io.clock := clock</span><br><span class="line">     <span class="comment">// ......</span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>注意：乱序处理器在 commit 的时候、顺序处理器在 write back
+的时候将信息传递给 Difftest 框架 <img
+src="https://s2.loli.net/2023/06/07/l1hs4mLfeiYN5IJ.png"
+alt="transfer data to Difftest at WB" /></li>
+<li>运行仿真，在线验证:
+<code>./build/emu -b 0 -e 0 -i ./ready-to-run/coremark-2-iteration.bin</code>
+<img src="https://s2.loli.net/2023/06/07/RPvWopz4nrOIJ2V.png" /></li>
+</ol></li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/usage.md">Difftest:
+detailed usage (Chinese)</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/example-xiangshan.md">Example:
+Difftest in XiangShan project (Chinese)</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/Difftest/blob/master/doc/example-nutshell.md">Example:
+Difftest in NutShell project (Chinese)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/crvf2019/crvf2019.github.io">crvf2019:
+The First China RISC-V Forum</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/XiangShan-doc">香山的官方文档仓库</a></li>
+</ol>
+<h2 id="请各位老师同学批评指正">请各位老师同学，批评指正</h2>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/05/16/memory-notes/" rel="prev" title="计算机内存">
+                  <i class="fa fa-chevron-left"></i> 计算机内存
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/06/20/macos-develop/" rel="next" title="MacOS and Linux搭建开发和学习环境">
+                  MacOS and Linux搭建开发和学习环境 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISC-V 异常和中断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V 异常和中断">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/03/23/riscv-trap/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISC-V 异常和中断">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/OPh4UF7y2omE1eb.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/aXxWAZvdCMG27Jc.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/uPfw2QeCHzgtx9Y.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/xqfVg12akrvCAZS.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/Y82P9EAnswXF5BV.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/3ybHP1gahorA2I4.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/HEDia3btNIQVgoF.png">
+<meta property="article:published_time" content="2023-03-23T06:58:33.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/27/OPh4UF7y2omE1eb.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/03/23/riscv-trap/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/23/riscv-trap/","path":"2023/03/23/riscv-trap/","title":"RISC-V 异常和中断"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V 异常和中断 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#risc-v-exception-interrupt"><span class="nav-number">1.</span> <span class="nav-text">RISC-V Exception &amp;
+Interrupt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#csr-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">CSR 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trap-%E7%9B%B8%E5%85%B3%E6%8E%A7%E5%88%B6%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">Trap 相关控制寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#trap-setup"><span class="nav-number">1.2.1.</span> <span class="nav-text">Trap Setup:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#trap-handling"><span class="nav-number">1.2.2.</span> <span class="nav-text">Trap Handling:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#timecounter"><span class="nav-number">1.2.3.</span> <span class="nav-text">Time&#x2F;Counter</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trap-%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">Trap 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trap-%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">Trap 处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trap%E5%A4%84%E7%90%86%E5%8A%A0%E9%80%9F"><span class="nav-number">2.</span> <span class="nav-text">Trap处理加速</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">3.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/23/riscv-trap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V 异常和中断 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V 异常和中断
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-23 14:58:33" itemprop="dateCreated datePublished" datetime="2023-03-23T14:58:33+08:00">2023-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RISC-V 异常和中断</p>
+<span id="more"></span>
+<p>[TOC]</p>
+<h2 id="risc-v-exception-interrupt">RISC-V Exception &amp;
+Interrupt</h2>
+<p>RISC-V 特权等级：</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Encoding</th>
+<th>Name</th>
+<th>Abbreviation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>00</td>
+<td>User/Application</td>
+<td>U</td>
+</tr>
+<tr>
+<td>1</td>
+<td>01</td>
+<td>Supervisor</td>
+<td>S</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td>Reserved</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td>Machine</td>
+<td>M</td>
+</tr>
+</tbody>
+</table>
+<p>RISC-V 支持的特权模式组合：</p>
+<table>
+<thead>
+<tr>
+<th>组合序号</th>
+<th>支持的模式</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>M</td>
+<td>简单的嵌入式系统</td>
+</tr>
+<tr>
+<td>2</td>
+<td>M, U</td>
+<td>有安全支持的嵌入式系统</td>
+</tr>
+<tr>
+<td>3</td>
+<td>M, S, U</td>
+<td>能跑操作系统如 Linux(支持虚拟内存)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="csr-指令">CSR 指令</h3>
+<table>
+<thead>
+<tr>
+<th>CSR 指令格式</th>
+<th>31, 20</th>
+<th>19, 15</th>
+<th>14, 12</th>
+<th>11, 7</th>
+<th>6, 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>CSR</td>
+<td>rs1</td>
+<td>funct3</td>
+<td>rd</td>
+<td>opcode</td>
+</tr>
+<tr>
+<td><code>CSRRW</code></td>
+<td>CSR Index</td>
+<td>source</td>
+<td>001</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+<tr>
+<td><code>CSRRS</code></td>
+<td>CSR Index</td>
+<td>source</td>
+<td>010</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+<tr>
+<td><code>CSRRC</code></td>
+<td>CSR Index</td>
+<td>source</td>
+<td>011</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+<tr>
+<td><code>CSRRWI</code></td>
+<td>CSR Index</td>
+<td>unsigned imm</td>
+<td>101</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+<tr>
+<td><code>CSRRSI</code></td>
+<td>CSR Index</td>
+<td>unsigned imm</td>
+<td>110</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+<tr>
+<td><code>CSRRCI</code></td>
+<td>CSR Index</td>
+<td>unsigned imm</td>
+<td>111</td>
+<td>rd</td>
+<td>1110011</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 60%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+<th>数学表达</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSRRW(Write)</td>
+<td>取出 csr 寄存器里的值，零拓展为 32 位后存到 rd 寄存器里；将 rs1
+寄存器里的值存到 crs 寄存器里</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\ csr[index]
+= x[rs1]\)</span></td>
+</tr>
+<tr>
+<td>CSRRS(Set)</td>
+<td>取出 csr 寄存器里的值，零拓展为 32 位后存到 rd 寄存器里；若 rs1
+寄存器里某一位是 1，则将 crs 寄存器对应位<u>置 1</u>，负责 csr
+对应位不变</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\
+csr[index]                    \| = x[rs1]\)</span></td>
+</tr>
+<tr>
+<td>CSRRC(Clear)</td>
+<td>取出 csr 寄存器里的值，零拓展为 32 位后存到 rd 寄存器里；若 rs1
+寄存器里某一位是 1，则将 crs 寄存器对应位<u>清零</u>，负责 csr
+对应位不变</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\
+csr[index]\&amp;= !x[rs1]\)</span></td>
+</tr>
+<tr>
+<td>CSRRWI</td>
+<td>将 rs1 寄存器替换成无符号立即数</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\ csr[index]
+= zeroExt(imm)\)</span></td>
+</tr>
+<tr>
+<td>CSRRSI</td>
+<td>将 rs1 寄存器替换成无符号立即数</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\
+csr[index]                    \| = zeroExt(imm)\)</span></td>
+</tr>
+<tr>
+<td>CSRRCI</td>
+<td>将 rs1 寄存器替换成无符号立即数</td>
+<td><span class="math inline">\(x[rd]=zeroExt(crs[index]),\\
+csr[index]\&amp;= !zeroExt(imm)]\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="trap-相关控制寄存器">Trap 相关控制寄存器</h3>
+<h4 id="trap-setup">Trap Setup:</h4>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 90%" />
+<col style="width: 3%" />
+</colgroup>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>描述</th>
+<th>长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mstatus</td>
+<td>跟踪和控制 hart 的当前运行状态</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mtvec</td>
+<td>(trap vector base address): 表明 trap 发生的时候，PC
+需要跳转的地址</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mie</td>
+<td>(interrupt enable): 用于进一步控制（打开和关闭）software
+interrupt/timer interrupt/external interrupt</td>
+<td>XLEN</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://s2.loli.net/2023/06/27/OPh4UF7y2omE1eb.png"
+alt="image-20230627132133032" /> <code>mstatus</code>寄存器中的:</p>
+<ul>
+<li><code>xIE</code>字段用于控制全局中断使能；高级模式的中断关闭之后，比它等级低的中断都会关闭、低级模式的中断打开之后，比它等级高的中断都会打开</li>
+<li><code>xPIE</code>(previous interrupt enable)字段用于存储 trap
+发上之前 hart 的中断使能</li>
+<li><code>xPP</code>(previous privilege)字段存储进入 trap 之前 hart
+所处的特权模式</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/06/27/aXxWAZvdCMG27Jc.png"
+alt="image-20230627132143581" /> <code>mtvec</code>寄存器中的:</p>
+<ul>
+<li><p><code>BASE</code>字段必须是 4byte 对齐</p></li>
+<li><p><code>MODE</code></p>
+<ul>
+<li>0 for direct: <code>pc=BASE</code>,
+中断发生的时候会跳到这个固定的地址</li>
+<li>1 for vectored: <code>pc=BASE+4*cause</code>,
+中断发生的时候，会根据中断类型，跳到不同的地址 例：当<strong>machine
+time interrupt</strong>发生的时候，已知其对应的
+mcause=111，故<code>pc=BASE+(111&lt;&lt;2)=BASE+0x1C</code></li>
+<li><span class="math inline">\(\ge 2\)</span>: Reserved</li>
+</ul>
+<blockquote>
+<p>PS: RISC-V 中的指令都是 little endian</p>
+</blockquote></li>
+</ul>
+<p><img src="https://s2.loli.net/2023/06/27/uPfw2QeCHzgtx9Y.png"
+alt="image-20230627132155502" /> <code>mie</code>(ie for interrupt
+enable)寄存器中的每 bit 指定 mcause 中的各种类型的 trap 是否打开</p>
+<h4 id="trap-handling">Trap Handling:</h4>
+<blockquote>
+<p>在 RISC-V
+架构中，并没有定义进入和退出中断处理时硬件自动保存和恢复现场的机制，
+用户需要用软件主动保护和恢复程序现场。在发生中断时，拉低 mstatus
+寄存器的 MIE 域屏蔽全局中断， 也是为了软件保存和恢复现场的过程不
+会被更高级别的中断打断，导致数据的丢失。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 86%" />
+<col style="width: 4%" />
+</colgroup>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>描述</th>
+<th>长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mcause</td>
+<td>(trap cause): 记录导致 trap 的原因</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mtval</td>
+<td>(trap value): 补充 trap 发生 的额外信息</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mepc</td>
+<td>(exception pc): 保存 trap 发生时的 PC 到该寄存器里, 32 处理器下其
+lsm[1:0]=00</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mip</td>
+<td>(interrupt pending): 它列出目前已发生等待处理的中断</td>
+<td>XLEN</td>
+</tr>
+<tr>
+<td>mscratch</td>
+<td>(scratch): 一般用于指向某 M 模式的上下文空间</td>
+<td>XLEN</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://s2.loli.net/2023/06/27/xqfVg12akrvCAZS.png"
+alt="image-20230627132214997" /> <code>mip</code>(ip for interrupt
+pending)寄存器中的每 bit 判断 mcause 中的各种类型的 trap 是否
+pending</p>
+<p><img src="https://s2.loli.net/2023/06/27/Y82P9EAnswXF5BV.png"
+alt="image-20230627132224817" /> <code>mcause</code>最高位=1，表明 trap
+是 interrupt，否则 trap 是 exception</p>
+<h4 id="timecounter">Time/Counter</h4>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 83%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>描述</th>
+<th>长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mcycle</td>
+<td>(machine cycle counter): 记录该 hard 运行的 cycle 数</td>
+<td>64</td>
+</tr>
+<tr>
+<td>minstret</td>
+<td>(machine instruction retired counter): 记录执行完毕的指令数</td>
+<td>64</td>
+</tr>
+<tr>
+<td>mtime</td>
+<td>M 模式按时自增的计时器</td>
+<td>64</td>
+</tr>
+<tr>
+<td>mtimecmp</td>
+<td>比较计时器，当 mtime<span class="math inline">\(/ge\)</span>mtimecmp
+时会触发 timer interrupt</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<h3 id="trap-类型">Trap 类型</h3>
+<blockquote>
+<p>Trap 类型有<code>mcause</code>寄存器指出，其中最高位为 1 表明是
+interrupt，为 0 表示是 exception</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 20%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr>
+<th>Interrupt</th>
+<th>Exception Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1<br />1<br />1<br />1</td>
+<td>0<br />1<br />2<br />3</td>
+<td>Reserved<br /> Supervisor software interrupt<br /> Reserved<br />
+Machine software interrupt</td>
+</tr>
+<tr>
+<td>1<br />1<br />1<br />1</td>
+<td>4<br />5<br />6<br />7</td>
+<td>Reserved<br /> Supervisor timer interrupt<br /> Reserved<br />
+Machine timer interrupt</td>
+</tr>
+<tr>
+<td>1<br />1<br />1<br />1</td>
+<td>8<br />9<br />10<br />11</td>
+<td>Reserved<br /> Supervisor external interrupt<br /> Reserved<br />
+Machine external interrupt</td>
+</tr>
+<tr>
+<td>1<br />1</td>
+<td>12–15<br /> ≥16</td>
+<td>Reserved<br /> Designated for platform use</td>
+</tr>
+<tr>
+<td>0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br />0<br /></td>
+<td>0<br /> 1<br /> 2<br /> 3<br /> 4<br /> 5<br /> 6<br /> 7<br />
+8<br /> 9<br /> 10<br /> 11<br /> 12<br /> 13<br /> 14<br /> 15<br />
+16–23<br /> 24–31<br /> 32–47<br /> 48–63<br /> ≥64</td>
+<td>Instruction address misaligned<br /> Instruction access fault<br />
+Illegal instruction<br /> Breakpoint &lt;- <code>EBREAK</code><br />
+Load address misaligned<br /> Load access fault<br /> Store/AMO address
+misaligned<br /> Store/AMO access fault <br /> Environment call from
+U-mode &lt;- <code>ECALL</code><br /> Environment call from S-mode &lt;-
+<code>ECALL</code><br /> Reserved<br /> Environment call from M-mode
+&lt;- <code>ECALL</code><br /> Instruction page fault<br /> Load page
+fault<br /> Reserved<br /> Store/AMO page fault<br /> Reserved<br />
+Designated for custom use<br /> Reserved<br /> Designated for custom
+use<br /> Reserved</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>Illegal Instruction Exception:
+<ul>
+<li>访问不存在的 CSR</li>
+<li>Write to read only CSR</li>
+<li>低特权级别尝试访问高级别的 CSR</li>
+</ul></li>
+</ol>
+<p>通过上表可以看出：</p>
+<ul>
+<li>interrupt 主要有三种，分别是：<code>software interrupt</code>,
+<code>timer interrupt</code>和<code>external interrupt</code>，在三种模式<code>M</code>,
+<code>S</code>, <code>U</code>下都有对应的 interrupt.</li>
+<li>exception 主要有五种，分别是：<code>instruction</code>,
+<code>load/store</code>, <code>environment call</code>,
+<code>page fault</code>和<code>breakpoint</code><br />
+exception 的优先级从上到下依次递减，如果同时发生了多个
+exception，则优先级高的被处理</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 19%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Exc. Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest</td>
+<td>3</td>
+<td>Instruction address breakpoint</td>
+</tr>
+<tr>
+<td></td>
+<td>12, 1</td>
+<td>During instruction address translation:First encountered page fault
+or access fault</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>With physical address for instruction:Instruction access fault</td>
+</tr>
+<tr>
+<td></td>
+<td>2<br />0<br />8, 9, 11<br />3<br />3</td>
+<td>Illegal instruction<br /> Instruction address misaligned<br />
+Environment call<br /> Environment break<br /> Load/store/AMO address
+breakpoint</td>
+</tr>
+<tr>
+<td></td>
+<td>4, 6</td>
+<td>Optionally:Load/store/AMO address misaligned</td>
+</tr>
+<tr>
+<td></td>
+<td>13, 15, 5, 7</td>
+<td>During address translation for an explicit memory access:First
+encountered page fault or access fault</td>
+</tr>
+<tr>
+<td></td>
+<td>5, 7</td>
+<td>With physical address for an explicit memory access:Load/store/AMO
+access fault</td>
+</tr>
+<tr>
+<td>Lowest</td>
+<td>4, 6</td>
+<td>If not higher priority:Load/store/AMO address misaligned</td>
+</tr>
+</tbody>
+</table>
+<h3 id="trap-处理流程">Trap 处理流程</h3>
+<p><img src="https://s2.loli.net/2023/06/27/3ybHP1gahorA2I4.png"
+alt="image-20230627132243657" /> 1. 初始化:
+将trap_vector的地址存储到<code>mtvec</code>，这样当trap发生的时候，pc可以自动跳转到该地址去执行trap处理程序
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">trap_vector:</span><br><span class="line">  # save context(registers).</span><br><span class="line">  csrrw	t6, mscratch, t6	# swap t6 and mscratch</span><br><span class="line">  reg_save t6</span><br><span class="line">    </span><br><span class="line">  # Save the actual t6 register, which we swapped into</span><br><span class="line">  # mscratch</span><br><span class="line">  mv	t5, t6		# t5 points to the context of current task</span><br><span class="line">  csrr	t6, mscratch	# read t6 back from mscratch</span><br><span class="line">  sw	t6, 120(t5)	# save t6 with t5 as base</span><br><span class="line">    </span><br><span class="line">  # Restore the context pointer into mscratch</span><br><span class="line">  csrw	mscratch, t5</span><br><span class="line">    </span><br><span class="line">  # call the C trap handler in trap.c</span><br><span class="line">  csrr	a0, mepc</span><br><span class="line">  csrr	a1, mcause</span><br><span class="line">  call	trap_handler # call C functions to solve trap</span><br><span class="line">    </span><br><span class="line">  # trap_handler will return the return address via a0.</span><br><span class="line">  csrw	mepc, a0</span><br><span class="line">    </span><br><span class="line">  # restore context(registers).</span><br><span class="line">  csrr	t6, mscratch</span><br><span class="line">  reg_restore t6</span><br><span class="line">    </span><br><span class="line">  # return to whatever we were doing before trap.</span><br><span class="line">  MRET</span><br><span class="line">    </span><br></pre></td></tr></table></figure></p>
+<ol start="2" type="1">
+<li><p>TOP Half, 一些硬件自动做的工作，更新 csr 的信息</p>
+<ul>
+<li>针对<code>mstatus</code>: <span class="math inline">\(MPIE=MIE,
+MIE=0\)</span></li>
+<li>如果 trap 是 interrupt 则<code>mepc=pc+1</code>; 如果 trap 是
+exception 则<code>mepc=pc</code></li>
+<li><u><code>pc=mtvec</code></u></li>
+<li>根据 trap 发生之前所处的特权等级去设置<code>mstatus</code>的 MPP
+字段，进入到 M 模式</li>
+</ul></li>
+<li><p>Botton Half: 执行 trap_handler</p>
+<ul>
+<li>保存（save）当前控制流的上下文信息（利用 mscratch）</li>
+<li>调用 C 语言的 trap_handler</li>
+<li>从 trap_handler 函数返回， mepc 的值有可能需要调整</li>
+<li>恢复（restore）上下文的信息</li>
+<li>执行 MRET 指令返回到 trap 之前的状态。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">reg_t</span> <span class="title function_">trap_handler</span><span class="params">(<span class="type">reg_t</span> epc, <span class="type">reg_t</span> cause)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">reg_t</span> return_pc = epc;</span><br><span class="line">  <span class="type">reg_t</span> cause_code = cause &amp; <span class="number">0xfff</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (cause &amp; <span class="number">0x80000000</span>) &#123;</span><br><span class="line">    <span class="comment">/* Asynchronous trap - interrupt */</span></span><br><span class="line">    <span class="keyword">switch</span> (cause_code) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">      uart_puts(<span class="string">&quot;software interruption!\n&quot;</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">      uart_puts(<span class="string">&quot;timer interruption!\n&quot;</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">11</span>:</span><br><span class="line">      uart_puts(<span class="string">&quot;external interruption!\n&quot;</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      uart_puts(<span class="string">&quot;unknown async exception!\n&quot;</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* Synchronous trap - exception */</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Sync exceptions!, code = %d\n&quot;</span>, cause_code);</span><br><span class="line">    panic(<span class="string">&quot;OOPS! What can I do!&quot;</span>);</span><br><span class="line">    <span class="comment">//return_pc += 4;</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> return_pc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>返回：执行 xRET 指令</p>
+<ul>
+<li>在不同特权模式下退出有对应的 ret 指令，如: mret, sret, uret</li>
+<li>mret 硬件将会执行如下操作：
+<ul>
+<li>更改当前 hart 的特权模式为 mstatus.MPP</li>
+<li><code>mstatus.MIE=mstatus.MPIE, mstatus.MPIE=1</code></li>
+<li><u><code>pc=mepc</code></u></li>
+</ul></li>
+</ul></li>
+</ol>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/HEDia3btNIQVgoF.png"
+alt="image-20230627132301742" />
+<figcaption aria-hidden="true">image-20230627132301742</figcaption>
+</figure>
+<h2 id="trap处理加速">Trap处理加速</h2>
+<blockquote>
+<p>中断响应是嵌入式微控制器的关键特性之一。
+中断响应时间指的是从中断设备产生中断信号到处理器开始执行中断服务程序（Interrupt
+Service Routine, ISR） 中的第一条指令所花费的时间。
+拥有快速的中断响应对于嵌入式处理器而言至关重要。</p>
+</blockquote>
+<ol type="1">
+<li><p>加速中断的方法</p>
+<ul>
+<li>扩展了<u>硬件自动</u>保存和恢复现场和全局中断硬件屏蔽设计</li>
+<li>支持自动的<u>中断嵌套</u>缩短了中断响应时间，减少了软件的开销</li>
+<li>除此之外，还增加了<u>中断尾链</u>设计，进一步提升了处理器响应中断的性能</li>
+</ul></li>
+<li><p>RISC-V 中断为什么慢？</p>
+<ul>
+<li>RISC-V
+硬件不会自动保存现场，需要使用软件去手动保存现场，增加了很多的
+cycle</li>
+<li>RISC-V 默认不支持中断嵌套，如果需要支持中断嵌套，需要使用软件对 CSR
+寄存器进行操作，增加了 cycle</li>
+</ul>
+<blockquote>
+<p>将软件的工作用硬件来实现，可以降低中断整体的时间近 1/3</p>
+</blockquote>
+<p><img
+src="https://s2.loli.net/2023/05/17/HSfWF1qGo7iVuKx.png" /></p></li>
+</ol>
+<h2 id="references">References</h2>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://five-embeddev.com/riscv-isa-manual/latest/csr.html">The
+RISC-V Instruction Set Manual Volume I: Unprivileged ISA, Chapter 9
+“Zicsr”, Control and Status Register (CSR)</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.five-embeddev.com/riscv-isa-manual/latest/machine.html">The
+RISC-V Instruction Set Manual Volume II: Privileged Architecture,
+Chapter 3 Machine-Level ISA</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://book.rvemu.app/hardware-components/03-csrs.html#:~:text=RISC%2DV%20calls%20the%206,5%2Dbit%20zero%2Dextended.">Writing
+a RISC-V Emulator in Rust: Control and Status Register</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://danielmangum.com/posts/risc-v-bytes-privilege-levels/">RISC-V
+Bytes: Privilege Levels</a></li>
+<li>用于计量的嵌入式 RISC-V 处理器设计及 MCU 实现</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/13/riscv-memory/" rel="prev" title="RISC-V存储设计">
+                  <i class="fa fa-chevron-left"></i> RISC-V存储设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/27/riscv-IF/" rel="next" title="RISC-V 5级流水线取指级设计">
+                  RISC-V 5级流水线取指级设计 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

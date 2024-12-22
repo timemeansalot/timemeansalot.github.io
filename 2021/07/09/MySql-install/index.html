@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="新手从0开始，手把手教你学会安装MySQL 5.7 到Windows10，只要能看懂中文，就能安装成功。    image-20210709080219153">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0开始，手把手教你学会MySQL 5.7安装">
+<meta property="og:url" content="http://timemeansalot.github.io/2021/07/09/MySql-install/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="新手从0开始，手把手教你学会安装MySQL 5.7 到Windows10，只要能看懂中文，就能安装成功。    image-20210709080219153">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/GvQxoNTuRBLIyez.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/7NvwJC8eA6Fcz9m.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/mY8eMPS27DX64Hv.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/Aa8kI9CQdUPbqVz.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/BzoWdGjHQ24VPhp.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/NsgoDekaqt7zRVK.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/8B3IkMhPzlVjs12.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/ly4cMfWP5hrB2XJ.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/uyQLIiMe85Y36qb.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/cf6PdJ3Cb7lMD5N.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/aAkL1GOf4ejSMwy.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/QiSEnsfcp7hD3dM.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/lWQX27hTAG39CNa.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/HlOPhMTNFSGoZLq.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/SDrz4yst8LWkboJ.png">
+<meta property="og:image" content="https://i.loli.net/2021/07/09/GvaESJ4xspTziIh.png">
+<meta property="article:published_time" content="2021-07-08T23:47:10.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.095Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/07/09/GvQxoNTuRBLIyez.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2021/07/09/MySql-install/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2021/07/09/MySql-install/","path":"2021/07/09/MySql-install/","title":"从0开始，手把手教你学会MySQL 5.7安装"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从0开始，手把手教你学会MySQL 5.7安装 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDmysql-5.7%E8%A7%A3%E5%8E%8B%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E8%A7%A3%E5%8E%8B%E5%88%B0%E7%94%B5%E8%84%91"><span class="nav-number">1.</span> <span class="nav-text">1 下载MySQL
+5.7解压文件，并且解压到电脑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96mysql5.7%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 获取MySQL5.7安装包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEmysql"><span class="nav-number">2.</span> <span class="nav-text">2 配置mysql</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2021/07/09/MySql-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从0开始，手把手教你学会MySQL 5.7安装 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从0开始，手把手教你学会MySQL 5.7安装
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-09 07:47:10" itemprop="dateCreated datePublished" datetime="2021-07-09T07:47:10+08:00">2021-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>新手从0开始，手把手教你学会安装MySQL 5.7
+到Windows10，只要能看懂中文，就能安装成功。</p>
+</blockquote>
+<figure>
+<img src="https://i.loli.net/2021/07/09/GvQxoNTuRBLIyez.png"
+alt="image-20210709080219153" />
+<figcaption aria-hidden="true">image-20210709080219153</figcaption>
+</figure>
+<span id="more"></span>
+<h1 id="下载mysql-5.7解压文件并且解压到电脑">1 下载MySQL
+5.7解压文件，并且解压到电脑</h1>
+<p>MySQL可以下载在线安装程序，也可以下载离线安装包进行安装，相比之下，我认为直接下载离线安装包到本地会更加的方便，对于不能科学上网的人来说，速度也会更快一点（因为采用在线安装的方式，如果不能科学上网，下载MySQL对应的文件会十分的慢，甚至不能下载）。</p>
+<h2 id="获取mysql5.7安装包">1.1 获取MySQL5.7安装包</h2>
+<p>可以选择百度MySQL，进入到MySQL官网进行下载，也可以访问这个<a
+target="_blank" rel="noopener" href="https://pan.baidu.com/s/1w89e1j4P0jN0bBsJa1kggg">百度网盘链接</a>(提取码是：x8v4)进行下载。下载到本地之后，会获得一个MySQL的压缩包，选择将其解压到本机任意目录即可。</p>
+<figure>
+<img src="https://i.loli.net/2021/07/09/7NvwJC8eA6Fcz9m.png"
+alt="image-20210709071747083" />
+<figcaption aria-hidden="true">image-20210709071747083</figcaption>
+</figure>
+<h2 id="配置环境变量">1.2 配置环境变量</h2>
+<p>本步需要将MySQL的bin文件的绝对路径，配置到Windows10的Path中去：</p>
+<figure>
+<img src="https://i.loli.net/2021/07/09/mY8eMPS27DX64Hv.png"
+alt="image-20210709072440047" />
+<figcaption aria-hidden="true">image-20210709072440047</figcaption>
+</figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/Aa8kI9CQdUPbqVz.png"
+alt="image-20210709072638230" />
+<figcaption aria-hidden="true">image-20210709072638230</figcaption>
+</figure>
+<h1 id="配置mysql">2 配置mysql</h1>
+<ol type="1">
+<li><p>使用管理员身份打开CMD</p>
+<figure>
+<img src="https://i.loli.net/2021/07/09/BzoWdGjHQ24VPhp.png"
+alt="image-20210709072814764" />
+<figcaption aria-hidden="true">image-20210709072814764</figcaption>
+</figure></li>
+<li><p>编辑<code>my.ini</code>配置文件</p>
+<p>如果在MySQL的安装目录下，没有此文件，需要自己手动创建。<strong>注意：后缀名需要是ini而不是txt</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">basedir</span>=D:\Programming\mysql_5.<span class="number">7</span></span><br><span class="line"><span class="attr">datadir</span>=D:\Programming\mysql_5.<span class="number">7</span>\data\</span><br><span class="line"><span class="attr">port</span>=<span class="number">3306</span></span><br><span class="line">skip-grant-tables</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/NsgoDekaqt7zRVK.png"
+alt="image-20210709073545221" />
+<figcaption aria-hidden="true">image-20210709073545221</figcaption>
+</figure></li>
+<li><p>进入到MySQL bin目录所在文件夹下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /d D:\Programming\mysql_5.7\bin</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/8B3IkMhPzlVjs12.png"
+alt="image-20210709073005532" />
+<figcaption aria-hidden="true">image-20210709073005532</figcaption>
+</figure></li>
+<li><p>注册MySQL service</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld -install</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/ly4cMfWP5hrB2XJ.png"
+alt="image-20210708234552361" />
+<figcaption aria-hidden="true">image-20210708234552361</figcaption>
+</figure></li>
+<li><p>初始化数据文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --initialize-insecure --user=mysql</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/uyQLIiMe85Y36qb.png"
+alt="image-20210708234612431" />
+<figcaption aria-hidden="true">image-20210708234612431</figcaption>
+</figure></li>
+<li><p>启动MySQL数据库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net start mysql</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/cf6PdJ3Cb7lMD5N.png"
+alt="image-20210708234640646" />
+<figcaption aria-hidden="true">image-20210708234640646</figcaption>
+</figure></li>
+<li><p>进入MySQL</p>
+<p>第一次进入到MySQL，由于我们在配置文件中，最后一行配置了<code>skip-grant-tables</code>.所以此时进入MySQL可以无密码进入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql –u root –p</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/aAkL1GOf4ejSMwy.png"
+alt="image-20210708234756231" />
+<figcaption aria-hidden="true">image-20210708234756231</figcaption>
+</figure></li>
+<li><p>更改root密码</p>
+<p>其中<strong>password('123456')</strong>可以设置成自己的密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update mysql.user <span class="built_in">set</span> authentication_string=password(<span class="string">&#x27;123456&#x27;</span>) <span class="built_in">where</span> user=<span class="string">&#x27;root&#x27;</span> and Host = <span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/QiSEnsfcp7hD3dM.png"
+alt="image-20210708234814899" />
+<figcaption aria-hidden="true">image-20210708234814899</figcaption>
+</figure></li>
+<li><p>刷新权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/lWQX27hTAG39CNa.png"
+alt="image-20210708234840671" />
+<figcaption aria-hidden="true">image-20210708234840671</figcaption>
+</figure></li>
+<li><p>退出MySQL</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit;</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/HlOPhMTNFSGoZLq.png"
+alt="image-20210708234856950" />
+<figcaption aria-hidden="true">image-20210708234856950</figcaption>
+</figure></li>
+<li><p>注释掉MySQL配置文件my.ini最后一行的<code>skip-grant-tables</code></p>
+<figure>
+<img src="https://i.loli.net/2021/07/09/SDrz4yst8LWkboJ.png"
+alt="image-20210708234930160" />
+<figcaption aria-hidden="true">image-20210708234930160</figcaption>
+</figure></li>
+<li><p>重启MySQL服务，输入配置好的密码进入到MySQL</p>
+<p>需要强调的是，-p后面直接输入自己的密码，不要加空格（因为空格也算一个字符，如果加了空格，肯定就和自己设置的真正的密码不能匹配了）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net stop mysql</span><br><span class="line">net start mysql</span><br><span class="line">mysql -u root -p123456</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://i.loli.net/2021/07/09/GvaESJ4xspTziIh.png"
+alt="image-20210708235006013" />
+<figcaption aria-hidden="true">image-20210708235006013</figcaption>
+</figure></li>
+</ol>
+<p>到此，MySQL 5.7所有的安装步骤就结束了，感谢大家的阅读。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/23/WSL_Config/" rel="prev" title="wsl_config">
+                  <i class="fa fa-chevron-left"></i> wsl_config
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/09/AnacondaNotes/" rel="next" title="anaconda">
+                  anaconda <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

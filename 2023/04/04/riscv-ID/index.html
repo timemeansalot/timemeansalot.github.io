@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISC-V 译码级设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V 译码级设计">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/04/04/riscv-ID/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISC-V 译码级设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/04/10/cMZH3xzBy5aDSeK.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/3CeBNiWkn24PvUq.png">
+<meta property="article:published_time" content="2023-04-04T02:11:49.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.097Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/04/10/cMZH3xzBy5aDSeK.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/04/04/riscv-ID/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/04/04/riscv-ID/","path":"2023/04/04/riscv-ID/","title":"RISC-V 译码级设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V 译码级设计 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#riscv-id-stage-%E5%90%84%E4%B8%AA%E5%8A%9F%E8%83%BD%E9%83%A8%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">RISCV ID Stage
+各个功能部件设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4%E8%AF%91%E7%A0%81compress-decoder"><span class="nav-number">1.1.</span> <span class="nav-text">压缩指令译码(compress
+decoder)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%91%E7%A0%81%E6%8E%A7%E5%88%B6decoder"><span class="nav-number">1.2.</span> <span class="nav-text">译码控制(Decoder)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B-sbpstatic-branch-predictor"><span class="nav-number">1.3.</span> <span class="nav-text">静态分支预测 SBP(Static
+Branch Predictor)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rfregister-file"><span class="nav-number">1.4.</span> <span class="nav-text">RF(Register File)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%8B%E5%8D%B3%E6%95%B0%E6%89%A9%E5%B1%95%E5%8D%95%E5%85%83-euextending-unit"><span class="nav-number">1.5.</span> <span class="nav-text">立即数扩展单元 EU(Extending
+Unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1-mux"><span class="nav-number">1.6.</span> <span class="nav-text">4x1 Mux</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/04/riscv-ID/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V 译码级设计 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V 译码级设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-04 10:11:49" itemprop="dateCreated datePublished" datetime="2023-04-04T10:11:49+08:00">2023-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2023/04/10/cMZH3xzBy5aDSeK.png"
+alt="Decode" /> RISC-V 译码级设计</p>
+<span id="more"></span>
+<h2 id="riscv-id-stage-各个功能部件设计">RISCV ID Stage
+各个功能部件设计</h2>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/3CeBNiWkn24PvUq.png"
+alt="image-20230627134737366" />
+<figcaption aria-hidden="true">image-20230627134737366</figcaption>
+</figure>
+<h3 id="压缩指令译码compress-decoder">压缩指令译码(compress
+decoder)</h3>
+<p>用于将压缩指令恢复成 32 bits 的正常指令，再送往 decoder
+进行译码，压缩指令详细说明见<a
+href="https://timemeansalot.github.io/2023/04/10/RISCV-compressISA/">压缩指令</a></p>
+<h3 id="译码控制decoder">译码控制(Decoder)</h3>
+<ol type="1">
+<li><p>输入接口</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instruction[31:0]</td>
+<td>IR</td>
+<td>待译码的指令</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出接口</p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 25%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th>Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immType[2:0]</td>
+<td>EU</td>
+<td>立即数类型</td>
+</tr>
+<tr>
+<td>rs1[4:0]</td>
+<td>RF</td>
+<td>register source1 index</td>
+</tr>
+<tr>
+<td>rs2[4:0]</td>
+<td>RF</td>
+<td>register source2 index</td>
+</tr>
+<tr>
+<td>branchType[2:0]</td>
+<td>SBP, ID/EXE pipeline</td>
+<td>分支类型</td>
+</tr>
+<tr>
+<td>rd[4:0]</td>
+<td>ID/EXE pipeline</td>
+<td>register destination index</td>
+</tr>
+<tr>
+<td>aluOp[4:0]</td>
+<td>ID/EXE pipeline</td>
+<td>ALU 执行的操作</td>
+</tr>
+<tr>
+<td>dMemWriteEn</td>
+<td>ID/EXE pipeline</td>
+<td>ALU 执行的操作</td>
+</tr>
+<tr>
+<td>dMemType[3:0]</td>
+<td>ID/EXE pipeline</td>
+<td>ALU 执行的操作</td>
+</tr>
+<tr>
+<td>regWBEn</td>
+<td>ID/EXE pipeline</td>
+<td>写使能</td>
+</tr>
+<tr>
+<td>regWBSrc[1:0]</td>
+<td>ID/EXE pipeline</td>
+<td>一直传递到 WB stage，用于选择写回的数据来源</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>模块功能</p>
+<p>Decoder 对输入的指令进行译码，生成流水线上其它模块的控制信号</p>
+<ol type="1">
+<li><p>根据 instruction 的 opcode, funct3 和 funct7
+得到指令的类型：opcode -&gt; funct3 -&gt; funct7</p>
+<ul>
+<li><code>opcode=instr[6:2], funct3=instr[14:12], funct7=instr[30]</code></li>
+</ul>
+<blockquote>
+<p>opcode 一共 7bits，其中低 2bits 恒为 11，只有高 5bits 不同</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 15%" />
+<col style="width: 11%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr>
+<th><span class="math inline">\(opcode_{[6:0]}\)</span></th>
+<th>Instruction Opcode Type</th>
+<th>Instruction Amount</th>
+<th>Relative Instructions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0000011</td>
+<td>OPCODE_LOAD</td>
+<td>5</td>
+<td>LB, BH, LW, LBU, LHU</td>
+</tr>
+<tr>
+<td>0010011</td>
+<td>OPCODE_OP_IMM</td>
+<td>9</td>
+<td>ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI</td>
+</tr>
+<tr>
+<td>0010111</td>
+<td>OPCODE_AUIPC</td>
+<td>1</td>
+<td>AUIPC</td>
+</tr>
+<tr>
+<td>0100011</td>
+<td>OPCODE_STORE</td>
+<td>3</td>
+<td>SB, SH, SW</td>
+</tr>
+<tr>
+<td>0110011</td>
+<td>OPCODE_RTYPE</td>
+<td>18</td>
+<td>ADD, SUB, SLT, SLTU, XOR, OR, AND, SLL, SRL, SRA, MUL, MULH, MULHSU,
+MULHU, DIV, DIVU, REM, REMU</td>
+</tr>
+<tr>
+<td>0110111</td>
+<td>OPCODE_LUI</td>
+<td>1</td>
+<td>LUI</td>
+</tr>
+<tr>
+<td>1100011</td>
+<td>OPCODE_BRANCH</td>
+<td>6</td>
+<td>BEQ, BNE, BLT, BGE, BLTU, BGEU</td>
+</tr>
+<tr>
+<td>1100111</td>
+<td>OPCODE_JALR</td>
+<td>1</td>
+<td>JALR</td>
+</tr>
+<tr>
+<td>1101111</td>
+<td>OPCODE_JAL</td>
+<td>1</td>
+<td>JAL</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>由指令类型得到 immType, branchType, aluOp, dMemType, dMemWriteEn,
+regWBEn, regWBSrc</p>
+<ol type="1">
+<li><p>immType:</p>
+<table>
+<thead>
+<tr>
+<th>immType</th>
+<th>Amount</th>
+<th>Instruction opcode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IMM_U</td>
+<td>2</td>
+<td>OPCODE_LUI, OPCODE_AUIPC</td>
+</tr>
+<tr>
+<td>IMM_J</td>
+<td>1</td>
+<td>OPCODE_JAL</td>
+</tr>
+<tr>
+<td>IMM_I</td>
+<td>15</td>
+<td>OPCODE_OP_IMM, OPCODE_LOAD, OPCODE_JALR</td>
+</tr>
+<tr>
+<td>IMM_B</td>
+<td>6</td>
+<td>OPCODE_BRANCH</td>
+</tr>
+<tr>
+<td>IMM_S</td>
+<td>3</td>
+<td>OPCODE_STORE</td>
+</tr>
+<tr>
+<td>IMM_NO</td>
+<td>18</td>
+<td>OPCODE_RTYPE</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>dMemType, dMemWriteEn</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 29%" />
+<col style="width: 44%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instructions opcode</th>
+<th>funct3</th>
+<th>dMemType</th>
+<th>dMemWriteEn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01000</td>
+<td>000<br/>001<br/>010</td>
+<td>MEM_SB<br/>MEM_SH<br/>MEM_SW</td>
+<td>1</td>
+</tr>
+<tr>
+<td>00000</td>
+<td>000<br/>001<br/>010<br/>100<br/>101</td>
+<td>MEM_LH<br/>MEM_LB<br/>MEM_LW<br/>MEM_LBU<br/>MEM_LHU</td>
+<td>0</td>
+</tr>
+<tr>
+<td>others</td>
+<td>xxx</td>
+<td>MEM_NO</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>regWBEn</p>
+<table>
+<thead>
+<tr>
+<th>regWBEn</th>
+<th>Amount</th>
+<th>Instruction opcode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>9</td>
+<td>01000, 11000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>36</td>
+<td>others</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>regWBSrc</p>
+<table>
+<thead>
+<tr>
+<th>regWBSrc</th>
+<th>Amount</th>
+<th>Instruction opcode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WBSrc_aluResult</td>
+<td>37</td>
+<td>others</td>
+</tr>
+<tr>
+<td>WBSrc_dMemReadData</td>
+<td>5</td>
+<td>00000</td>
+</tr>
+<tr>
+<td>WBSrc_extendedImm</td>
+<td>1</td>
+<td>01101</td>
+</tr>
+<tr>
+<td>WBSrc_pcPlus4</td>
+<td>2</td>
+<td>11001, 11011</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>branchType</p>
+<ul>
+<li>branchBType: OPCODE_BRANCH</li>
+<li>branchJAL: OPCODE_JAL</li>
+<li>branchJALR: OPCODE_JALR</li>
+</ul></li>
+<li><p>aluOp</p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 21%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Instruction Opcode Type</th>
+<th>funct3(funct7)</th>
+<th>Relative Instructions</th>
+<th>aluOp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPCODE_LOAD</td>
+<td>000<br />001<br /><br />010<br />100<br />101</td>
+<td>LB<br />BH<br />LW<br />LBU<br />LHU</td>
+<td>ALUOP_ADD</td>
+</tr>
+<tr>
+<td>OPCODE_OP_IMM</td>
+<td>000<br />010<br />011<br />100<br />110<br />111<br />001<br />101(0)<br />101(1)</td>
+<td>ADDI<br/>SLTI<br/>SLTIU<br/>XORI<br/>ORI<br/>ANDI<br/>SLLI<br/>SRLI<br/>SRAI</td>
+<td>ALUOP_ADD<br />ALUOP_SLT<br />ALUOP_SLTU<br />ALUOP_XOR<br />ALUOP_OR<br />ALUOP_AND<br />ALUOP_SLL<br />ALUOP_SRL<br />ALUOP_SRA</td>
+</tr>
+<tr>
+<td>OPCODE_AUIPC<br/><code>rs1=pc</code></td>
+<td></td>
+<td>AUIPC</td>
+<td>ALUOP_ADD</td>
+</tr>
+<tr>
+<td>OPCODE_STORE</td>
+<td>000<br/>001<br/>010</td>
+<td>SB<br/>SH<br/>SW</td>
+<td>ALUOP_ADD</td>
+</tr>
+<tr>
+<td>OPCODE_RTYPE(instr[25]==0)<br/> <code>rd2=register file</code></td>
+<td>000(0)<br/>000(1)<br/>001<br/>010<br/>011<br/>100<br/>101(0)<br/>101(1)<br/>110<br/>111</td>
+<td>ADD<br/>SUB<br/>SLL<br/>SLT<br/>SLTU<br/>XOR<br/>SRL<br/>SRA<br/>OR<br/>AND</td>
+<td>ALUOP_ADD<br />ALUOP_SUB<br />ALUOP_SLL<br />ALUOP_SLT<br />ALUOP_SLTU<br />ALUOP_XOR<br />ALUOP_SRL<br />ALUOP_SRA<br />ALUOP_OR<br />ALUOP_AND</td>
+</tr>
+<tr>
+<td>OPCODE_RTYPE(instr[25]==1)<br/> <code>rd2=register file</code></td>
+<td>000<br/>001<br/>010<br/>011<br/>100<br/>101<br/>110<br/>111</td>
+<td>MUL<br/>MULH<br/>MULHSU<br/>MULHU<br/>DIV<br/>DIVU<br/>REM<br/>REMU</td>
+<td>ALUOP_MUL<br/>ALUOP_MULH<br/>ALUOP_MULHSU<br/>ALUOP_MULHU<br/>ALUOP_DIV<br/>ALUOP_DIVU<br/>ALUOP_REM<br/>ALUOP_REMU</td>
+</tr>
+<tr>
+<td>OPCODE_LUI</td>
+<td></td>
+<td>LUI</td>
+<td>ALUOP_ADD</td>
+</tr>
+<tr>
+<td>OPCODE_BRANCH<br/><code>rs2=register file</code></td>
+<td>000<br/>001<br/>100<br/>101<br/>110<br/>111</td>
+<td>BEQ<br/>BNE<br/>BLT<br/>BGE<br/>BLTU<br/>BGEU</td>
+<td>ALUOP_SUB<br />ALUOP_SUB<br />ALUOP_SLT<br />ALUOP_SLT<br />ALUOP_SLTU<br />ALUOP_SLTU</td>
+</tr>
+<tr>
+<td>OPCODE_JALR</td>
+<td></td>
+<td>JALR</td>
+<td>ALUOP_ADD</td>
+</tr>
+<tr>
+<td>OPCODE_JAL<br/></td>
+<td></td>
+<td>JAL</td>
+<td>ALUOP_ADD</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>JAL, JALR, Branch 设计到的计算部件</p>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 27%" />
+<col style="width: 30%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>跳转预测</th>
+<th>跳转确认</th>
+<th>跳转 PC 计算</th>
+<th>pc=pc+4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JAL</td>
+<td>SBP</td>
+<td>不需要确认</td>
+<td>SBP</td>
+<td>IF-&gt;ID-&gt;EXE</td>
+</tr>
+<tr>
+<td>JALR</td>
+<td>SBP</td>
+<td>不需要确认</td>
+<td>PC=alu_result &amp; ~1</td>
+<td>IF-&gt;ID-&gt;EXE</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>SBP</td>
+<td>ALU 确认跳转方向</td>
+<td>SBP</td>
+<td>IF-&gt;ID-&gt;EXE</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>JAL 指令: SBP 可以 100%预测其跳转的方向和 PC，ALU
+不需要做额外的计算</li>
+<li>JALR 指令: 当 rd 为 x0、x1 或者是没有数据依赖时，SBP 可以
+100%判断跳转方向和 PC；若 rd 存在数据依赖，则 SBP 知道 JALR
+跳转，但是不会判断它跳转，也不会计算目的 PC，需要由 ALU 计算跳转的 PC
+和判断跳转，发送给 IF。</li>
+<li>Branch 指令: SBP 不可以 100%预测跳转方向，但是可以 100%计算出重定向
+PC，需要 ALU 判断跳转方向是否正确</li>
+</ul></li>
+</ol></li>
+<li><p>根据 instruction 得到 rs1, rs2 和 rd:
+<code>rs2=instr[24:20], rs1=[19:15], rd=instr[11:7]</code></p></li>
+</ol></li>
+</ol>
+<h3 id="静态分支预测-sbpstatic-branch-predictor">静态分支预测 SBP(Static
+Branch Predictor)</h3>
+<ol type="1">
+<li><p>RF(register File)异步读出、同步写入</p></li>
+<li><p>静态分支预测 SBP(static branch prediction)</p>
+<ul>
+<li><code>JAL</code>: SBP
+预测<code>taken=1</code>，且<code>pc=pc+offset</code>，ID 需要输出 flush
+信号来清楚 prefetch 的 2 条指令，<strong>具体表现为设置 IF/ID, ID/EXE
+pipeline register flush=1</strong></li>
+<li><code>b-type</code>: 采取 BTFN(backward taken, forward not taken),
+且<code>pc=pc+offset</code></li>
+<li><code>JALR</code>: 分情况讨论
+<ul>
+<li>如果 rs1 是 x0,或者 rs1 没有数据依赖：SBP
+预测<code>taken=1</code>，且<code>pc=(rd+offset)&amp;~1</code></li>
+<li>如果 rs1 有数据依赖：SBP 预测<code>taken=0</code> <img
+src="/Users/fujie/Pictures/typora/pipeline/jalr.svg" /></li>
+</ul></li>
+</ul></li>
+<li><p>bypass: ID 级根据 Hazard 的信号，在需要 bypass 的时候，选择合适的
+bypass 信号取代 RF 里读出去的运算数</p></li>
+<li><p>输入接口</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr>
+<th>Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC[31:0]</td>
+<td>IF/ID pipeline</td>
+<td>用于计算重定向 PC</td>
+</tr>
+<tr>
+<td>rs1[31:0]</td>
+<td>4x1 Mux</td>
+<td>用于计算重定向 PC</td>
+</tr>
+<tr>
+<td>offset[31:0]</td>
+<td>EU</td>
+<td>用于计算重定向 PC</td>
+</tr>
+<tr>
+<td>branchType[2:0]</td>
+<td>Decoder</td>
+<td><code>branchType[0]==1 -&gt; JAL</code><br/><code>branchType[1]==1 -&gt; JALR</code><br/><code>branchType[2]==1 -&gt; B-Type</code></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出接口</p>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 25%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr>
+<th>Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RPC[31:0]</td>
+<td>IF Stage</td>
+<td>Redirection PC</td>
+</tr>
+<tr>
+<td>taken</td>
+<td>IF Stage, ID/EXE pipeline</td>
+<td>预测跳转是否发生, ALU
+会计算实际跳转是否发生并且与此预测结果比较</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>模块功能</p>
+<p>若 decoder 译码之后判断指令是分支指令，则 SBP
+需要根据静态分支预测的规则，生成重定向 PC，发送给 IF 级。SBP
+具体做了如下两个任务：</p>
+<ol type="1">
+<li><p>判断是否需要跳转 prediction</p>
+<ul>
+<li>JAL, JALR: <code>taken=1</code></li>
+<li>B-TYpe: forward not taken, backward taken, 根据 offset 正负号来判断,
+<code>taken=offset[31]</code></li>
+</ul></li>
+<li><p>计算跳转的方向 calculation</p>
+<ul>
+<li>JAL, B-Type: <code>RPC=PC+offset</code></li>
+<li>JALR: <code>RPC=(rs1+offset) &amp; 0xfffffffe</code></li>
+</ul></li>
+<li><p>** 在计算 JARL 指令的新的 pc
+地址的时候，需要访问寄存器，但是寄存器的值可能会跟前面的指令存在数据依赖，此时有两种方法**来解决：</p>
+<ul>
+<li>利用 bypass 来结局数据依赖问题之后，再在 SBP 中计算目的
+pc，该方法可能会导致 ID 关键路径太长</li>
+<li>仅在 rs1=x0, x1 的时候计算 JALR 的目的
+pc，其余情况下若存在数据依赖，则预判 JALR 不跳转，在 EXE
+中计算正确的目的 pc</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>前者 JALR 指令预测准确率 100%，但是 ID 级关键路径长；后者 JALR
+指令预测率稍低但是 ID 关键路径短</p>
+</blockquote></li>
+</ol>
+<h3 id="rfregister-file">RF(Register File)</h3>
+<ol type="1">
+<li><p>输入接口</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rs1[4:0]</td>
+<td>Decoder</td>
+<td>register source1 index</td>
+</tr>
+<tr>
+<td>rs2[4:0]</td>
+<td>Decoder</td>
+<td>register source2 index</td>
+</tr>
+<tr>
+<td>rd[4:0]</td>
+<td>WB pipeline</td>
+<td>register destination index</td>
+</tr>
+<tr>
+<td>regWBData[31:0]</td>
+<td>WB pipeline</td>
+<td>待写回到 RF 的数据</td>
+</tr>
+<tr>
+<td>regWBEn</td>
+<td>WB pipeline</td>
+<td>写使能</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出接口</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rs1</td>
+<td>4x1 Mux</td>
+<td>从 RF 中读出的操作数 1</td>
+</tr>
+<tr>
+<td>RD2</td>
+<td>4x1 Mux</td>
+<td>从 RF 中读出的操作数 2</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>模块功能</p>
+<p>RF
+支持在任意时刻读出数据，它有两个读端口，一个写端口（写数据的时候必须在
+clk 上升沿且写使能）</p></li>
+</ol>
+<h3 id="立即数扩展单元-euextending-unit">立即数扩展单元 EU(Extending
+Unit)</h3>
+<ol type="1">
+<li><p>输入接口</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instruction[31:0]</td>
+<td>IF/ID pipeline</td>
+<td>取值得到的 32bits 指令</td>
+</tr>
+<tr>
+<td>immType[2:0]</td>
+<td>Decoder</td>
+<td>立即数种类｜</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>输出接口</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 28%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Name</th>
+<th>Target</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm[31:0]</td>
+<td>SBP, ID/EXE pipeline</td>
+<td>32bits 的立即数，送给 SBP 和下一级流水线</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>模块功能</p>
+<p>该模块是纯组合电路，其根据输入的 immType 字段从 instruction
+中摘取对应字段生成 32bits 的扩展立即数</p>
+<ol type="1">
+<li>IMM_U: <code>imm_o=&#123;instr_i[31:12], 12'h000&#125;;</code></li>
+<li>IMM_J:
+<code>imm_o=&#123;&#123;11&#123;instr_i[31]&#125;&#125;, instr_i[31], instr_i[19:12], instr_i[20], instr_i[30:21], 1'b0&#125;;</code></li>
+<li>IMM_I: <code>imm_o=&#123;&#123;20&#123;instr_i[31]&#125;&#125;, instr_i[31:20]&#125;;</code></li>
+<li>IMM_B:
+<code>imm_o=&#123;&#123;19&#123;instr_i[31]&#125;&#125;, instr_i[31], instr_i[7], instr_i[30:25], instr_i[11:8], 1'b0&#125;;</code></li>
+<li>IMM_S:
+<code>imm_o=&#123;&#123;20&#123;instr_i[31]&#125;&#125;, instr_i[31:25], instr_i[11:7]&#125;;</code></li>
+<li>IMM_NO: no immediate ==&gt; <code>imm_o = 32'h00000000;</code></li>
+</ol></li>
+</ol>
+<h3 id="x1-mux">4x1 Mux</h3>
+<ol type="1">
+<li>输入接口</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   | Name            | Source    | Description                    |</span><br><span class="line">   | --------------- | --------- | ------------------------------ |</span><br><span class="line">   | rs1[31:0]       | RF        | 从 RF 读出的操作数 1           |</span><br><span class="line">   | RD2[31:0]       | RF        | 从 RF 读出的操作数 2           |</span><br><span class="line">   | exeBypass[31:0] | EXE stage | data forwarding from EXE stage |</span><br><span class="line">   | memBypass[31:0] | MEM stage | data forwarding from MEM stage |</span><br><span class="line">   | wbBypass[31:0]  | WB stage  | data forwarding from WB stage  |</span><br><span class="line">2. 输出接口</span><br><span class="line">   | Name       | Target          | Description           |</span><br><span class="line">   | ---------- | --------------- | --------------------- |</span><br><span class="line">   | rs1D[31:0] | ID/EXE pipeline | 送给 ALU 的 operand 1 |</span><br><span class="line">   | RD2D[31:0] | ID/EXE pipeline | 送给 ALU 的 operand 2 |</span><br><span class="line">3. 模块功能: 根据 forwarding 选择信号，选择合适的 forward 数据，将选择的数据输送到 EXE Stage</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/04/riscv-WB/" rel="prev" title="RISC-V写回级">
+                  <i class="fa fa-chevron-left"></i> RISC-V写回级
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/04/riscv-EXE/" rel="next" title="RISC-V执行级设计">
+                  RISC-V执行级设计 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

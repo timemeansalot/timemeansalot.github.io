@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1 bit predictor   分支预测器的作用 主流的分支预测器 开源项目中使用的分支预测器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V分支预测器设计">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/03/13/riscv-branch-prediction/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="1 bit predictor   分支预测器的作用 主流的分支预测器 开源项目中使用的分支预测器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/03/15/ABW43YhqrETUZgJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/15/74SaG9DQpFMXn5h.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/15/F4uTR8pC5cMwDWg.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/27/wIE19XqW8dpJlLR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/17/32mjZwOb61SdtnD.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/17/RiulW7f1bzwVYA6.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/17/HK7wRZy3sE1DSFx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/17/LeiHRzIpqPmUay3.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/15/HIDYNUkJPX1K5Qu.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/18/bspUwoWaF5tTvhl.png">
+<meta property="article:published_time" content="2023-03-13T08:15:33.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.098Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/03/15/ABW43YhqrETUZgJ.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/03/13/riscv-branch-prediction/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/03/13/riscv-branch-prediction/","path":"2023/03/13/riscv-branch-prediction/","title":"RISC-V分支预测器设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V分支预测器设计 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">分支预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E4%B8%8D%E8%B7%B3%E8%BD%ACalways-not-taken"><span class="nav-number">1.1.</span> <span class="nav-text">预测不跳转(always not taken)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%AF%91%E7%A0%81%E7%BA%A7%E5%88%A4%E6%96%AD%E5%88%86%E4%B9%8B%E7%BB%93%E6%9E%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">在译码级判断分之结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%99%A8%E5%AF%B9%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">2.</span> <span class="nav-text">分支预测器对流水线性能的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpi-%E8%AE%A1%E7%AE%97"><span class="nav-number">2.1.</span> <span class="nav-text">CPI 计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%91%A8%E6%9C%9Ft_c"><span class="nav-number">2.2.</span> <span class="nav-text">流水线周期\(T_c\)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%BD%95%E6%97%B6%E5%81%9A%E5%88%86%E4%B9%8B%E5%88%A4%E6%96%ADid-or-exe"><span class="nav-number">2.3.</span> <span class="nav-text">在何时做分之判断，ID or EXE？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E7%9A%84%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%98%A0%E5%B0%84"><span class="nav-number">2.4.</span> <span class="nav-text">分支预测的流水线映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B"><span class="nav-number">2.4.1.</span> <span class="nav-text">动态分支预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#id-%E9%98%B6%E6%AE%B5%E9%9D%99%E6%80%81%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B"><span class="nav-number">2.4.2.</span> <span class="nav-text">ID 阶段静态分支预测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E6%B5%81%E7%9A%84%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%99%A8-%E9%A2%84%E6%B5%8B%E5%87%86%E7%A1%AE%E7%8E%87%E5%92%8C%E5%85%B6%E5%AF%B9-cpi-%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">3.</span> <span class="nav-text">主流的分支预测器:
+预测准确率和其对 CPI 的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">静态预测器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">动态预测器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BD%8D%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="nav-number">3.2.1.</span> <span class="nav-text">一位预测器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E4%BD%8D%E9%A2%84%E6%B5%8B%E5%99%A8bimodal-prediction"><span class="nav-number">3.2.2.</span> <span class="nav-text">两位预测器(bimodal
+prediction)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E9%AB%98%E7%BA%A7%E7%9A%84%E5%8A%A8%E6%80%81%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="nav-number">3.3.</span> <span class="nav-text">更高级的动态预测器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%85%A8%E5%B1%80%E5%88%86%E6%94%AF%E5%8E%86%E5%8F%B2global-history"><span class="nav-number">3.3.1.</span> <span class="nav-text">利用全局分支历史(Global
+History)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%B1%80%E9%83%A8%E5%88%86%E6%94%AF%E5%8E%86%E5%8F%B2local-history"><span class="nav-number">3.3.2.</span> <span class="nav-text">利用局部分支历史(Local
+History)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8Bhybrid-branch-predictor"><span class="nav-number">3.3.3.</span> <span class="nav-text">混合分支预测(hybrid branch
+predictor)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tage"><span class="nav-number">3.3.4.</span> <span class="nav-text">TAGE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-accuracy-and-cpi-improve-that-a-better-bp-can-get-over-our-simple-static-predictor"><span class="nav-number">3.4.</span> <span class="nav-text">What
+accuracy and CPI improve that a better BP can get over our simple static
+predictor</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E9%87%87%E7%94%A8%E7%9A%84%E9%A2%84%E6%B5%8B%E5%99%A8-%E5%87%86%E7%A1%AE%E7%8E%87%E5%92%8C-cpi"><span class="nav-number">4.</span> <span class="nav-text">开源项目采用的预测器:
+准确率和 CPI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9C%E5%A3%B3"><span class="nav-number">4.1.</span> <span class="nav-text">果壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%9C%82%E9%B8%9F-e203"><span class="nav-number">4.2.</span> <span class="nav-text">蜂鸟 E203</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arm-m552021"><span class="nav-number">4.3.</span> <span class="nav-text">ARM M55(2021)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arm-a76"><span class="nav-number">4.4.</span> <span class="nav-text">ARM A76</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.</span> <span class="nav-text">我们的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#to-do-lists"><span class="nav-number">6.</span> <span class="nav-text">To Do Lists</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/03/13/riscv-branch-prediction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V分支预测器设计 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V分支预测器设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-13 16:15:33" itemprop="dateCreated datePublished" datetime="2023-03-13T16:15:33+08:00">2023-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <figure>
+<img src="https://s2.loli.net/2023/03/15/ABW43YhqrETUZgJ.png"
+alt="1 bit predictor" />
+<figcaption aria-hidden="true">1 bit predictor</figcaption>
+</figure>
+<ul>
+<li>分支预测器的作用</li>
+<li>主流的分支预测器</li>
+<li>开源项目中使用的分支预测器</li>
+</ul>
+<span id="more"></span>
+<p><strong>目录</strong> [TOC]</p>
+<h1 id="分支预测">分支预测</h1>
+<h2 id="预测不跳转always-not-taken">预测不跳转(always not taken)</h2>
+<ol type="1">
+<li>PC+=4</li>
+<li>尽快检测分⽀结果 -&gt; 减少错误预测惩罚
+<ul>
+<li>如果在 EXE 阶段已知分⽀结果，则必须刷新 2 条后续指令</li>
+<li>如果在 ID 阶段已知分⽀结果，则必须刷新 1 条后续指令</li>
+</ul></li>
+</ol>
+<h3 id="在译码级判断分之结果">在译码级判断分之结果</h3>
+<ol type="1">
+<li><p>优点：减少误预测惩罚(misprediction penalty) -&gt; 减少 CPI(clock
+per instruction)</p></li>
+<li><p>缺点：</p>
+<ul>
+<li><u>可能</u>增加时钟周期<span class="math inline">\(T_c\)</span></li>
+<li>译码阶段的额外硬件成本
+<ul>
+<li>判断分之结果：需要比较器、bypass to ID stage</li>
+<li>计算目的 PC: 额外的加法器</li>
+</ul></li>
+</ul></li>
+</ol>
+<h1 id="分支预测器对流水线性能的影响">分支预测器对流水线性能的影响</h1>
+<p>程序中各种类型的指令概率如下:</p>
+<ul>
+<li>25% loads</li>
+<li>10% stores</li>
+<li>11% branches</li>
+<li>2% jumps</li>
+<li>52% R-type or I-type</li>
+</ul>
+<p>假设:</p>
+<ul>
+<li>40%的<code>lw</code>指令的结果会被下一条指令用到</li>
+<li>25%的 branch 指令预测错误</li>
+<li>所有的 JAL, JALR 会导致其下一条指令刷新-&gt; <span
+class="math inline">\(CPI_{jump}=2\)</span></li>
+</ul>
+<h2 id="cpi-计算">CPI 计算</h2>
+<blockquote>
+<p>理想的流水线处理器的 CPI= <u><strong>1</strong></u>.</p>
+</blockquote>
+<ol type="1">
+<li>Load/Branch CPI = 1 when no stall/flush, 2 when stall/flush. <span
+class="math display">\[
+CPI_{lw}=1*0.6+2*0.4 = 1.4\\
+CPI_{branch}=1*0.75+2*0.25=1.25
+\]</span></li>
+<li>平均 CPI 是所有类型指令 CPI 的加权平均 <span class="math display">\[
+CPI_{average}=0.25*1.4+0.1*1+0.11*1.25+0.02*2+0.52*1 = 1.15
+\]</span></li>
+</ol>
+<figure>
+<img src="https://s2.loli.net/2023/03/15/74SaG9DQpFMXn5h.png"
+alt="cpi over bp accuracy" />
+<figcaption aria-hidden="true">cpi over bp accuracy</figcaption>
+</figure>
+<h2 id="流水线周期t_c">流水线周期<span
+class="math inline">\(T_c\)</span></h2>
+<p><img src="https://s2.loli.net/2023/03/15/F4uTR8pC5cMwDWg.png"
+alt="Time delay for each component" /> <img
+src="https://s2.loli.net/2023/03/15/2FCHaxsKAmQfO6X.png"
+alt="Includes always-taken br prediction, early branch resolution, forwarding, stall logic" /></p>
+<p><span class="math display">\[
+\begin{align*}
+T_c = max\{&amp;T_{IF}, T_{ID}, T_{EXE}, T_{MEM}, T_{WB}\}\\
+=max\{\\
+&amp;t_{pcq}+t_{mem}+t{setup}\\
+&amp;\mathbf{\underline{2(t_{RFread}+t_{mux}+t_{eq}+t_{AND}+t_{mux}+t_{setup})}}\\
+&amp;t_{pcq}+t_{mux}+t_{mux}+t_{ALU}+t_{setup}\\
+&amp;t_{pcq}+t_{mem}+t_{setup}\\
+&amp;2(t_{pcq}+t_{mux}+t_{RFwrite}+t_{setup})\}\\
+\mathbf{T_c}=\mathbf{T_{ID}}&amp;=550ps
+\end{align*}
+\]</span></p>
+<p><strong>重要提示：<u>ID</u> 不应该是关键路径，通常<u>IF</u>
+或<u>MEM</u> 可能是关键路径。可以轻松地将 ID 分解为多个 cycle，但很难将
+MEM 分解为多个 cycle。</strong></p>
+<p>在此设计中，我们犯了 2 个错误，导致 ID 成为关键路径：</p>
+<p>1.我们在 ID 中做分支决策</p>
+<ul>
+<li><strong>Nutshell</strong> 在 EXE 中做分支决策，它的 BRU
+可以是一个单独的单元，也可以复用 ALU 来计算分支决策和目标 PC。</li>
+<li><strong>Nutshell</strong> 将分支决策从 EXE 传递给 WB（WB 还从 CSR 和
+MOU 收集其他重定向信息），然后 WB 将目标 PC 发送到 IF</li>
+</ul>
+<ol start="2" type="1">
+<li>RF 在前半个周期写入、后半个周期读出 -&gt; ID
+只有一半的时钟周期来完成它的工作，所以它的 CPI 需要乘 2</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/georgeyhere/Toast-RV32i">Toast-RV32i</a>
+在 clk 的 posedge 上写入 RF，使用组合逻辑读取 RF，当 i_addr == o_addr
+通过一个 2 选 1 选择器直接选择 write_data 作为 read_data</li>
+</ul>
+<h2 id="在何时做分之判断id-or-exe">在何时做分之判断，ID or EXE？</h2>
+<p>如果不在 ID 做分支判读，而是在 EXE 做分支判断，则得到的平均 CPI
+如下：</p>
+<p><span class="math display">\[
+\begin{align*}
+CPI_{branch}&amp;=1*0.75+3*0.25=1.5\\
+CPI_{average}&amp;=0.25*1.4+0.1*1+0.11*1.5+0.02*2+0.52*1 = 1.175
+\end{align*}
+\]</span></p>
+<p>是之前平均 CPI 的 <code>1.175/1.5</code>=1.02 倍，并没有显著增加<span
+class="math inline">\(CPI_{average}\)</span>.<br />
+<del>但是在 EXE 做分支判断可以<u><strong>复用 ALU
+的硬件</strong></u>并且<u><strong>缩短 critical path 从而降低<span
+class="math inline">\(T_c\)</span></strong></u></del></p>
+<p>但是在 EXE 做分支判断可以<u><strong>复用 ALU
+的硬件</strong></u>并且<u><strong>critical path 从 ID 变成 EXE,
+可能会降低<span
+class="math inline">\(T_c\)</span></strong></u>，因此建议在 EXE
+做分支判断。</p>
+<p><span class="math display">\[
+T_{program}=Amount_{instructions}*CPI_{average}*T_{c}
+\]</span></p>
+<h2 id="分支预测的流水线映射">分支预测的流水线映射</h2>
+<h3 id="动态分支预测">动态分支预测</h3>
+<blockquote>
+<p>使用 BTB, RAS, PHT 在 IF 的时候做动态分支预测，在 EXE
+经过计算判断分支指令实际的跳转方向和目的
+PC，用于判断是否需要冲刷流水线&amp;更新 IF 级的分支预测器</p>
+</blockquote>
+<p>动态分支预测器的优缺点如下：</p>
+<ol type="1">
+<li><p>优点：</p>
+<ul>
+<li>由于使用了<em>BTB</em>，可以直接在 BTB 中存储指令的类型，则 IF
+不用通过 pre-decode 就可以判断当前指令的类型</li>
+<li>由于使用了<em>BTB</em>，则可以直接根据预判的指令类型，配合 RAS 和
+PHT 得到对应的跳转地址，避免了<strong>计算 target
+pc</strong>、也避免了<strong>delay slot 的引入</strong></li>
+<li>预测情况的判断很简单：只存在<u>预测正确</u>&amp;<u>预测错误</u>两种情况
+&lt;- 所有的指令的类型、是否跳转、target pc 都在 IF
+得到，所有指令实际的跳转结果、target pc 都在 EXE 阶段得到</li>
+</ul></li>
+<li><p>缺点：</p>
+<ul>
+<li>如果要保证预测的准确率，需要维护一个 BTB、RAS、PHT，在 IF
+会带来额外的硬件、功耗开销</li>
+<li>BTB 是 content addressable memory，根据 PC
+在其中遍历时间延迟较高，可能会导致 IF 成为 critical path</li>
+<li>分支预测器需要根据 EXE 的结果进行更新，如果预测错误会需要冲刷后续 2
+条流水线，则 miss penalty 是 2 个 cycle</li>
+</ul></li>
+</ol>
+<p>动态分支预测器有如下两种可能预测的情况:</p>
+<ol type="1">
+<li>预测错误：
+<ul>
+<li>预测分支指令跳转、但是经过计算得到结果之后发现其不跳转</li>
+<li>预测分支指令不跳转、但是经过计算得到结果之后发现其跳转</li>
+</ul></li>
+<li>预测正确：
+<ul>
+<li>预测分支指令跳转、但是经过计算得到结果之后发现其跳转</li>
+<li>预测分支指令不跳转、但是经过计算得到结果之后发现其不跳转</li>
+</ul></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>实际跳转</th>
+<th>实际不跳转</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预测跳转(PC=Target PC)</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>预测不跳转(PC+=4)</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>✅：预测正确(Prediction Success)</li>
+<li>❌：预测错误(Prediction Fail)</li>
+</ul>
+<ol type="1">
+<li><p>在 EXE 判断分支预测<strong>错误</strong></p>
+<ul>
+<li>redirection PC</li>
+<li>flush <strong>ID Pipeline Register</strong></li>
+<li>flush <strong>EXE Pipeline Register</strong></li>
+</ul>
+<figure>
+<img src="https://s2.loli.net/2023/06/27/wIE19XqW8dpJlLR.png"
+alt="image-20230627132542526" />
+<figcaption aria-hidden="true">image-20230627132542526</figcaption>
+</figure></li>
+<li><p>在 EXE 判断分支预测<strong>正确</strong> <img
+src="https://s2.loli.net/2023/06/27/v5DHrlupi2XEIBh.png"
+alt="image-20230627132552894" /></p></li>
+</ol>
+<h3 id="id-阶段静态分支预测">ID 阶段静态分支预测</h3>
+<blockquote>
+<p>静态分支预测器首先通过译码判断当前指令是否是分支指令，如果是分支指令则采用固定的分支跳转策略做分支处理；在
+EXE
+阶段计算得到真是的分支结果之后，判断分支预测器是否错误，如果错误再进行重定向处理</p>
+</blockquote>
+<p>静态分支预测器的优缺点如下：</p>
+<ol type="1">
+<li><p>优点：硬件实现简单</p>
+<ul>
+<li>可以复用 ID 阶段的译码器来判断指令的类型</li>
+<li>如果实现了到 ID 的 bypass，则 bypass 的结果也可以复用</li>
+<li>只需要在 ID 阶段添加计算 target pc 的加法器即可</li>
+</ul></li>
+<li><p>缺点：</p>
+<ul>
+<li>如果当前指令在 ID 阶段预测跳转，则其后面那条指令必须被冲刷掉 &lt;-
+因为 IF 阶段没有 BP 的功能，BP 的功能被后移到了 ID 阶段</li>
+</ul></li>
+</ol>
+<p>静态分支预测器针对不同的分支指令其指令流水线是不同的</p>
+<ol type="1">
+<li><p>针对 JAL 和 JALR 指令：其必定会发生跳转; 在 ID
+阶段会计算到下一条指令真实的 target pc、会冲刷到此时 IF 阶段的指令<br />
+JAL, JALR 的 miss penalty 恒为 1 个 cycle <img
+src="https://s2.loli.net/2023/06/27/2IErlj3aYTWyFKv.png"
+alt="image-20230627132608772" /></p></li>
+<li><p>针对条件分支 B-Type 指令，其流水线有如下四种情况：</p>
+<ol type="1">
+<li>ID 预测跳转、EXE 判断 BP 正确(实际上跳转) -&gt; flush掉instruction
+2, penalty cycle = 1 <img
+src="https://s2.loli.net/2023/06/27/YCOLWG8Spw2zHTv.png"
+alt="image-20230627132630807" /></li>
+<li>ID 预测跳转、EXE 判断 BP 错误(实际不跳转) -&gt; flush掉instruction
+3, penalty cycle = 1 <img
+src="https://s2.loli.net/2023/06/27/QZ6FcelEtxiVJAv.png"
+alt="image-20230627132649447" /></li>
+<li>ID 预测不跳转、EXE 判断 BP 正确(实际不跳转) -&gt; 不用flush流水线,
+penalty cycle = 0 <img
+src="https://s2.loli.net/2023/06/27/r4phIq7sXiFE2mT.png"
+alt="image-20230627132706336" /></li>
+<li>ID 预测不跳转、EXE 判断 BP 错误(实际上跳转) -&gt; flush掉instruction
+2, 3, penalty cycle = 2 <img
+src="https://s2.loli.net/2023/06/27/iXs8NyMA2DLaecu.png"
+alt="image-20230627132720722" /></li>
+</ol></li>
+</ol>
+<h1 id="主流的分支预测器-预测准确率和其对-cpi-的影响">主流的分支预测器:
+预测准确率和其对 CPI 的影响</h1>
+<blockquote>
+<p>准确的分支预测器 -&gt; 减少错误预测 -&gt; 减少 pipeline flush -&gt;
+减少 CPI</p>
+</blockquote>
+<h2 id="静态预测器">静态预测器</h2>
+<blockquote>
+<p>静态预测器不会根据指令实际执行的情况，调整其预测的结果，所有预测在程序执行之前就已经做好了</p>
+</blockquote>
+<ol type="1">
+<li>始终不跳转(always not token): PC+=4
+<ul>
+<li>预测准确率：~30%-40%</li>
+<li>正确预测：0 misprediction penalty</li>
+<li>错误预测：3 misprediction penalty(branch decision make in EXE)</li>
+</ul></li>
+<li>始终跳转(always-taken)
+<ul>
+<li>预测准确率：~60%-70%</li>
+</ul></li>
+<li>后向分支跳转，前向分支不跳转 BTFN(backward taken, forward not
+taken): 对于 B-Type 指令，如果 offset[31] 为 1，则 offset 为负,
+代表其是向后分支，否则向前</li>
+</ol>
+<h2 id="动态预测器">动态预测器</h2>
+<blockquote>
+<p>动态预测器会根据指令实际执行的结果、历史信息来做跳转判断</p>
+</blockquote>
+<h3 id="一位预测器">一位预测器</h3>
+<p>Last time prediction(single-bit)</p>
+<ol type="1">
+<li>记录上次跳转的结果</li>
+<li>accuracy <u>for loop</u> = (N-2)/N
+<ul>
+<li>第一次、最后一次都会判断错误</li>
+<li>N(循环深度) 很大时，准确率 100%</li>
+</ul></li>
+</ol>
+<figure>
+<img src="https://s2.loli.net/2023/03/17/32mjZwOb61SdtnD.png"
+alt="LTP with BTB" />
+<figcaption aria-hidden="true">LTP with BTB</figcaption>
+</figure>
+<ol start="3" type="1">
+<li>BTB
+<ul>
+<li>对于 B-Type 指令，跳转如果发生的时候，其目的地址(target
+PC)是不变的，因此可以将目的地址保存到 BTB(branch target buffer)中,
+这样只用判断跳转是否发生，不用计算跳转目的地址了。</li>
+<li>此外，如果某个 PC 在 BTB 里有其对应的表项，则也能判断该 PC
+对应一条分支指令</li>
+</ul></li>
+</ol>
+<h3 id="两位预测器bimodal-prediction">两位预测器(bimodal
+prediction)</h3>
+<blockquote>
+<p>1bit 预测器当 N 很小时，会出现震荡</p>
+</blockquote>
+<ol type="1">
+<li>记录上次跳转的结果，85%~90% accuracy</li>
+<li>accuracy <u>for loop</u> = (N-1)/N
+<ul>
+<li>N 很小时，准确率也有 50%</li>
+</ul></li>
+</ol>
+<h2 id="更高级的动态预测器">更高级的动态预测器</h2>
+<h3 id="利用全局分支历史global-history">利用全局分支历史(Global
+History)</h3>
+<p>可以利用<em>其他分支指令是否跳转</em>来提高分支预测的准确率：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(cond1) <span class="comment">// branch 1</span></span><br><span class="line">  xxx;</span><br><span class="line"><span class="keyword">if</span>(cond2) <span class="comment">// branch 2</span></span><br><span class="line">  xxx;</span><br><span class="line"><span class="keyword">if</span>(cond1 &amp;&amp; cond2) <span class="comment">// branch 3</span></span><br><span class="line">  xxx;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 1、2 都跳转-&gt;3 一定跳转</li>
+<li>如果 1、2 有一个不跳转-&gt;3 一定不跳转 <img
+src="https://s2.loli.net/2023/03/16/hgawQA75So6LuEf.png"
+alt="BTB without GBH" /> <img
+src="https://s2.loli.net/2023/03/17/C9htizkV2sce4Sp.png"
+alt="BTB with GBH" /></li>
+</ul>
+<h3 id="利用局部分支历史local-history">利用局部分支历史(Local
+History)</h3>
+<p>利用<em>当前分支指令的前几次</em>结果来进一步提高预测的准确率:
+记录每条分支指令的<u>历史跳转记录</u>，用该历史跳转记录去访问
+PHT(Direction Predictor)，来判断是否跳转</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line">  xxx;</span><br></pre></td></tr></table></figure>
+<p>记录跳转记录<code>TTTN</code>，则当该分支指令出现<code>TTT</code>之后，可以判断当前分支是不跳转
+<img src="https://s2.loli.net/2023/03/17/RiulW7f1bzwVYA6.png"
+alt="BTB with local branch history" /></p>
+<h3 id="混合分支预测hybrid-branch-predictor">混合分支预测(hybrid branch
+predictor)</h3>
+<p>不同的分支指令类型适合不同的预测器：1 bit、2 bits、global branch
+histor、local branch history.</p>
+<ul>
+<li>优点：准确率(90%-97%)、更短的 warmup time</li>
+<li>缺点：需要选择预测器、更长的访问延迟</li>
+</ul>
+<h3 id="tage">TAGE</h3>
+<p><a
+target="_blank" rel="noopener" href="http://www.irisa.fr/caps/people/seznec/JILP-COTTAGE.pdf">TAGE</a>
+(Tagged Geometric History Branch Predictor) was introduced in a 2006
+paper.</p>
+<blockquote>
+<p>不同类型的分支指令，需要不同长度的分支历史表来预测 -&gt; TAGE
+展示了一种方法来“针对不同的 branch 选择不同的分支历史长度进行预测”</p>
+</blockquote>
+<p>how long should the branch history be?</p>
+<ul>
+<li>On the one hand, longer histories enable accurate predictions for
+some <strong>harder-to-predict branches</strong>.</li>
+<li>On the other hand, with a longer history, the predictor must track
+more branch scenarios and thus spend more time <u>warming up</u>,
+reducing accuracy for <strong>easier-to-predict branches</strong>.</li>
+</ul>
+<p>This fundamental branch prediction tradeoff was the inspiration
+behind <strong>hybrid branch predictors</strong> which use multiple
+branch histories</p>
+<p>TAGE 的优点来自于如下设计：</p>
+<ol type="1">
+<li>entry 使用了 tag，避免了 aliasing(不同的指令映射到 PHT 中的同一个
+entry，导致 entry 不具有参考性)</li>
+<li>在用 useful 计数器来表示 entry 的有用程度、选择较短的 history
+插入新的 entry</li>
+<li>采用几何级数的历史记录，从而使得在分支预测过程中对各个预测表中的表项选择过程的粒度得到了很大的提升</li>
+</ol>
+<h2
+id="what-accuracy-and-cpi-improve-that-a-better-bp-can-get-over-our-simple-static-predictor">What
+accuracy and CPI improve that a better BP can get over our simple static
+predictor</h2>
+<h1 id="开源项目采用的预测器-准确率和-cpi">开源项目采用的预测器:
+准确率和 CPI</h1>
+<h2 id="果壳">果壳</h2>
+<p><img src="https://s2.loli.net/2023/03/17/HK7wRZy3sE1DSFx.png"
+alt="Nutshell branch predictor" /> 果壳的分支预测器工作工程如下：</p>
+<ol type="1">
+<li>根据 PC 索引 BTB 得到 BTB 的一个表项 entry，表项的格式如下： <img
+src="https://oscpu.github.io/NutShell-doc/%E5%8A%9F%E8%83%BD%E9%83%A8%E4%BB%B6/pic/BTB-NutShell.jpg"
+alt="Nutshell BTB" /></li>
+<li>判断指令类型，如果是 JAL, JALR 指令，则根据表项中的 target pc
+进行跳转</li>
+<li>如果是 B-Type 指令，则需要根据 PHT 判断跳转与否</li>
+<li>如果是 ret 指令，需要跳转到 RAS 栈顶的地址</li>
+<li>分支预测器的更新：当 EXE
+得到确定的分支跳转结果之后，需要返回“分支结果”和“PC”来更新分支预测器</li>
+</ol>
+<h2 id="蜂鸟-e203">蜂鸟 E203</h2>
+<p><img src="https://s2.loli.net/2023/03/17/LeiHRzIpqPmUay3.png"
+alt="E203 IF Schematic" />
+蜂鸟面向低功耗场景，它的取指过程如上图所示，其采用静态分支预测来做分支预测，预测规则如下：</p>
+<ol type="1">
+<li>取指之后使用 mini-decode
+对指令进行预译码，判断指令的类型、得到指令的立即数字段</li>
+<li>对于 JAL 指令，100%跳转，计算 PC=PC+imm</li>
+<li>对于 B-Type 指令，采用 BTFN 进行跳转预测, 计算跳转地址
+PC=PC+imm</li>
+<li>对于 JALR 指令，其 100%跳转，计算 PC
+的时候需要考虑<strong>数据依赖问题，得用到 bypass 或者 stall
+如果出现了数据依赖</strong></li>
+<li>静态预测器，不用更新状态</li>
+</ol>
+<h2 id="arm-m552021">ARM M55(2021)</h2>
+<ul>
+<li>pipeline 是 4cycle，分支延迟是 1 个 cycle，不需要分支预测器</li>
+<li>在一些特定情况下，可以主动设置支持 <a
+target="_blank" rel="noopener" href="https://armkeil.blob.core.windows.net/developer/Files/pdf/white-paper/introduction-to-armv8-1-m-architecture.pdf">LOB</a>(low
+overhead branch) extension: low overhead loops and additional branch
+instructions -&gt; 通过硬件处理 loop 地址和 loop
+count，减少了<code>LE</code>指令的执行</li>
+</ul>
+<p><a
+target="_blank" rel="noopener" href="https://developer.arm.com/documentation/107564/0100/Low-Overhead-Branch--LOB--performance-analysis/EEMBC-TeleBench-LOB-performance-analysis">EEMBC-TeleBench
+LOB performance analysis</a> <img
+src="https://documentation-service.arm.com/static/62710b867e121f01fd22e838?token=" />
+上述基准测试主要基于循环，当引入 LOB
+时，通过优化循环执行和减少分支开销来提高性能.<br />
+使用高端处理器的分支预测特性也可以获得类似的性能提升。然而，分支预测硬件通常对处理器设计有更大的面积和功耗影响.</p>
+<p>Execution overhead cycle for the loop:</p>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>LE (loop end) with LOB cache enabled</th>
+<th>LE (loop end) without LOB cache enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.04%</td>
+<td>5.12%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arm-a76">ARM A76</h2>
+<figure>
+<img src="https://s2.loli.net/2023/03/15/HIDYNUkJPX1K5Qu.png"
+alt="A76 BPU" />
+<figcaption aria-hidden="true">A76 BPU</figcaption>
+</figure>
+<ul>
+<li>pipeline 是 13 个 cycle，misprediction penalty 是 11 个 cycle</li>
+<li>小的 BTB 返回的速度更快，大的 BTB 准确度更高</li>
+</ul>
+<h1 id="我们的设计">我们的设计</h1>
+<ol type="1">
+<li>拟采用<u>静态分支预测</u>或者<u>简单的动态分支预测器</u>如（2bit
+分支预测器）
+<ul>
+<li>静态分支预测：IF 需要 mini-decoder、加法器计算 target pc、JALR
+的数据依赖</li>
+<li>动态分支预测：BTB, PHT 的硬件消耗、EXE 得到分支结果之后对 branch
+predictor 的更新</li>
+</ul></li>
+<li>尽管分支预测器比较简单，其预测准确率也能满足要求（不会显著增加<span
+class="math inline">\(CPI_{average}\)</span>）
+<ul>
+<li>流水线级数很浅，misprediction penalty 最多是 2</li>
+<li>非超标量（每周期取指一条），分之判断错误需要冲刷的指令条数顶多 2
+条</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>针对单发射 5
+级流水线处理器，分支预测器准确率的差异(10%~20%)并不会导致 CPI
+的差异很大，因此设计分支预测器时主要考虑其硬件实现的难度和对<span
+class="math inline">\(T_c\)</span>的影响</p>
+</blockquote>
+<p>分支预测器准确率对平均 CPI 的影响如下：</p>
+<p><span class="math display">\[
+CPI_{B}=P_B[a*1+(1-a)*penalty]=P_B*penalty+\underline{\mathbf{P_B*(1-penalty)}}*a
+\]</span></p>
+<ul>
+<li><span
+class="math inline">\(P_B\)</span>：分支指令占所有指令的比重</li>
+<li>a: 分支预测器预测正确的概率</li>
+<li>penalty：分支预测器预测失败，冲刷流水线的代价</li>
+<li><span class="math inline">\(CPI_B\)</span>：分支指令对平均 CPI
+的贡献</li>
+</ul>
+<figure>
+<img src="https://s2.loli.net/2023/03/18/bspUwoWaF5tTvhl.png"
+alt="CPI compare over 65% accuracy" />
+<figcaption aria-hidden="true">CPI compare over 65%
+accuracy</figcaption>
+</figure>
+<h1 id="to-do-lists">To Do Lists</h1>
+<ul class="task-list">
+<li><label><input type="checkbox" />Branch Prediction Pipeline
+demenstrate: dynamical prediction</label></li>
+<li><label><input type="checkbox" />Branch Prediction Pipeline
+demenstrate: static prediction</label></li>
+<li><label><input
+type="checkbox" />具体比较设计方案中的“静态预测”和“简单动态预测”的代价，敲定最终的方案</label></li>
+<li><label><input
+type="checkbox" />添加静态分支预测、动态分支预测的微结构图</label></li>
+<li><label><input type="checkbox" checked="" />参考 C910, xs, rocket
+chip, nutshell, e203 的分之预测设计</label></li>
+<li><label><input type="checkbox" checked="" />performance analysis:
+digital design and computer architecture: riscv edition page 476, 7.5.4;
+lecture 14 page 45, Pipelined performance Example</label></li>
+<li><label><input type="checkbox"
+checked="" />了解一些有名的分支预测器的设计，如 TAGE</label></li>
+<li><label><input type="checkbox"
+checked="" />看分支预测设计的论文</label></li>
+<li><label><input type="checkbox" checked="" />数学公式:
+分之指令的频率和预测失败的概率以及整体的预测水平;
+不同预测准确度的分支预测器的效果： 不同的分支预测准确率从 50%到
+95%，预测的效果差距是否很大</label></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/13/riscv-pipeline/" rel="prev" title="RISC-V 32IM处理器流水线设计">
+                  <i class="fa fa-chevron-left"></i> RISC-V 32IM处理器流水线设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/13/riscv-memory/" rel="next" title="RISC-V存储设计">
+                  RISC-V存储设计 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

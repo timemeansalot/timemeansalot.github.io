@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="[TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mcu_verification">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/07/27/mcu-verification/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="[TOC]">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/E6OMZoNX5QpG2vk.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/12/FPkCghplBJEYzTA.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/e8URhdaPM4lTC6z.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/12/r1K576pbits3qCI.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/hjYRv8Ps32GOZTV.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/QD8nlf1BTNMxYGo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/07/nmXbVy69HxjOtwJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/14/Pq9FQUvcLDKTZIp.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/12/EHPlZIyu97b6ojk.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/12/vE7Z2KzFRsWgcAL.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/2y8uST9NoA4f3CJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/H6QN21tXJFbnf7s.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/11/51tApYiDzWBdG2b.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/11/J8up1q76ohKHRBf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/14/kQGqA64f9TXx1tH.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/14/TdfOKtmP6jwe18i.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/ayvf7q5Zsjb24WB.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/XtVMlsZwGNq6Juj.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/uQ1PjDWF38kH6Ic.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/R5YbuGZrDVf6cgj.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/QPRkNrMflacEoAj.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/VCwrtB6vZhkdTNR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/26/SfJrbcljPNHFBTR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/JwRvtHl2V1dYMZo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/02/xVch8pouNJ6RsCf.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/6r1gowdD5TSCKZ7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/W8MKySYt6eAOnI1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/25/PMqymGolJQxSETR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/dKxV53SpoQHMfn8.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/ETkQMaBeq9cjwhD.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/kfzSRQiMFbYZLt2.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/25/peKc3EVj7LxQBzb.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/25/JaV15uRe96OHKwl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/25/YszPN56nKEIgFdv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/QxT6GH43MXylE1w.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/7HYzR6fXwOIryGT.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/wj5VzZHxKMgQpSn.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/jGwqcSdVulAJOyv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/G6EBYmbxyl7Ic9H.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/CQvgmxMZNwYy4SG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/UTrBvMqkwiHxjOo.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/Wzwnx47I5bdjsZG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/5pUa9qBZWfG4J1N.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/03/IJfoeUpvZEyKPiS.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/27/uc3dSQDjxvnhGAO.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/10/lGqOvfeuZWAxYLQ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/14/ILasCBXG41m3lM9.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/14/f8kbUcHMoQiCVRz.png">
+<meta property="og:image" content="https://s2.loli.net/2023/08/14/fsXcdFi2QNan6BT.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/01/PgHoDackpyq5jlU.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/01/JRcsUmGWtadbI4p.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/01/wTJSViA4HcXqPD5.png">
+<meta property="og:image" content="https://s2.loli.net/2023/09/02/huytiDNSjUmgw7A.png">
+<meta property="article:published_time" content="2023-07-27T07:31:31.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.097Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta property="article:tag" content="DIFFTEST">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/07/27/E6OMZoNX5QpG2vk.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/07/27/mcu-verification/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/07/27/mcu-verification/","path":"2023/07/27/mcu-verification/","title":"mcu_verification"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>mcu_verification | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BE%E5%BC%83%E4%BD%BF%E7%94%A8%E9%A6%99%E5%B1%B1%E5%AE%98%E6%96%B9%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%80%E6%96%B0%E7%9A%84-difftest-%E7%89%88%E6%9C%AC"><span class="nav-number">1.</span> <span class="nav-text">放弃使用香山官方提供的最新的
+Difftest 版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5-difftest-%E6%A1%86%E6%9E%B6%E5%81%9A%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">接入 Difftest 框架做的修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcu_core-%E6%8E%A5%E5%85%A5-difftest-%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">MCU_Core 接入 Difftest 结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E7%8E%B0%E5%92%8C%E4%BF%AE%E5%A4%8D%E7%9A%84-bug"><span class="nav-number">4.</span> <span class="nav-text">发现和修复的 bug</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9A%E8%BF%87%E7%9A%84-riscv-tests"><span class="nav-number">4.1.</span> <span class="nav-text">测试通过的 riscv-tests</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9A%E8%BF%87%E6%88%AA%E5%9B%BE"><span class="nav-number">4.1.1.</span> <span class="nav-text">测试通过截图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#immdiate-type"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">Immdiate-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#register-type"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">Register-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#branch-type"><span class="nav-number">4.1.1.3.</span> <span class="nav-text">Branch-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#memory-type"><span class="nav-number">4.1.1.4.</span> <span class="nav-text">Memory-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multiple"><span class="nav-number">4.1.1.5.</span> <span class="nav-text">Multiple</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compressed"><span class="nav-number">4.1.1.6.</span> <span class="nav-text">Compressed</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132-bits%E7%9A%84reference-model"><span class="nav-number">5.</span> <span class="nav-text">编译32 bits的reference model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#q-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%8132-bits%E7%9A%84reference-model"><span class="nav-number">5.1.</span> <span class="nav-text">Q: 为什么需要32
+bits的reference model?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132bits-reference-model%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">编译32bits reference
+model遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%97reference-model%E5%AF%BC%E8%87%B4%E6%B5%8B%E8%AF%95%E4%B8%8D%E9%80%9A%E8%BF%87%E7%9A%84%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-number">5.3.</span> <span class="nav-text">受reference
+model导致测试不通过的测试集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%9132%E7%89%88%E6%9C%AC%E7%9A%84spike%E4%BD%9C%E4%B8%BAreference-model"><span class="nav-number">5.4.</span> <span class="nav-text">编译32版本的spike作为reference
+model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95"><span class="nav-number">6.</span> <span class="nav-text">回归测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">6.1.</span> <span class="nav-text">目录结构介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%B1%87%E7%BC%96%E6%96%87%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">编译汇编文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">6.3.</span> <span class="nav-text">仿真测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E6%B5%8B%E8%AF%95"><span class="nav-number">6.4.</span> <span class="nav-text">语法测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spyglass%E6%A3%80%E6%9F%A5%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF"><span class="nav-number">6.4.1.</span> <span class="nav-text">Spyglass检查语法错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#verilator%E6%A3%80%E6%9F%A5%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF"><span class="nav-number">6.4.2.</span> <span class="nav-text">Verilator检查语法错误</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#benchmarks"><span class="nav-number">7.</span> <span class="nav-text">Benchmarks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-number">7.0.1.</span> <span class="nav-text">什么是基准测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coremark"><span class="nav-number">7.0.2.</span> <span class="nav-text">CoreMark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#microbench"><span class="nav-number">7.0.3.</span> <span class="nav-text">Microbench</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#source-code"><span class="nav-number">7.0.4.</span> <span class="nav-text">Source Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mcu%E7%A7%BB%E6%A4%8Dcoremark"><span class="nav-number">7.0.5.</span> <span class="nav-text">MCU移植CoreMark：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benchmark-vs-cpi"><span class="nav-number">7.1.</span> <span class="nav-text">Benchmark vs &#x3D;&#x3D;CPI&#x3D;&#x3D;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8Dbenchmark%E5%BE%97%E5%88%86%E7%9A%84%E5%9B%A0%E7%B4%A0"><span class="nav-number">7.1.1.</span> <span class="nav-text">影响Benchmark得分的因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%B8%8A%E8%B7%91%E5%88%86%E7%9A%84%E6%97%B6%E5%80%99%E9%80%9A%E8%BF%87cpi%E6%9B%B4%E8%83%BD%E4%BD%93%E7%8E%B0%E6%80%A7%E8%83%BD"><span class="nav-number">7.1.2.</span> <span class="nav-text">在模拟器上跑分的时候，通过CPI更能体现性能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spyglass-license-failure"><span class="nav-number">7.2.</span> <span class="nav-text">Spyglass License Failure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">7.3.</span> <span class="nav-text">参考文献</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5difftest"><span class="nav-number">8.</span> <span class="nav-text">异步Difftest</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/07/27/mcu-verification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="mcu_verification | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mcu_verification
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-27 15:31:31" itemprop="dateCreated datePublished" datetime="2023-07-27T15:31:31+08:00">2023-07-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>32k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>29 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2023/07/27/E6OMZoNX5QpG2vk.png"
+alt="difftest" /> [TOC]</p>
+<span id="more"></span>
+<h1
+id="放弃使用香山官方提供的最新的-difftest-版本">放弃使用香山官方提供的最新的
+Difftest 版本</h1>
+<p>放弃使用最新版本 Difftest 的原因如下：</p>
+<ol type="1">
+<li>香山最新版本的 Github 仓库里 Difftest 只有 Scala 的版本，无法直接在
+Verilog 中引用</li>
+<li>目前最新版本的
+Difftest<strong>过于复杂</strong>：它支持多核、Cache、Uart、Trap
+等模块，导致移植 MCU_Core 到最新版本的 Difftest
+时，需要保证这些模块都真确连线，十分复杂。 一开始尝试接入最新版本的
+Difftest，结果调试了一两天还是报错无法看到<em>有进展的结果</em>，因此预测将
+MCU_Core 接入到最新版本的 Difftest 框架中将消耗很久的时间</li>
+<li>目前由于没有 CSR 模块，其实我们的 MCU_Core
+的状态仅有<strong>“PC+Register”</strong>表征，因此 Difftest
+框架只需要在指令提交之后比较 PC 跟 Register 即可。 <u>Difftest
+核心思想：MCU_Core 执行一条指令-&gt;Reference Model
+执行一条指令-&gt;比较二者的状态(PC + Register)</u></li>
+</ol>
+<blockquote>
+<p>因此选择了“老版本的 Difftest”版本，其实现的效果是：将单周期 RISC-V
+处理器接入到 Difftest 框架中，比较其每次提交指令后，Register 是否跟
+Reference Model
+相同，比较符合我们目前的测试需求，接入的难度相当于接入最新版本的
+Difftest 也更加可控。</p>
+</blockquote>
+<h1 id="接入-difftest-框架做的修改">接入 Difftest 框架做的修改</h1>
+<figure>
+<img src="https://s2.loli.net/2023/07/12/FPkCghplBJEYzTA.png"
+alt="image-20230707211721928" />
+<figcaption aria-hidden="true">image-20230707211721928</figcaption>
+</figure>
+<p>为了将 MCU_Core 接入到 Difftest 框架，主要做了如下修改：</p>
+<ol type="1">
+<li><p>修改 Verilog 代码接入 Difftest 框架之后的
+Warning，主要包括代码中的“隐式变量声明、信号位宽不匹配、模块重定义”等
+Warning。因为 Verilator 相较于 Iverilog
+对于语法检查更加严格一些。</p></li>
+<li><p>在 top.v 中增加接口，因为：</p>
+<ul>
+<li>Difftest 框架需要知道 MCU_Core 的一些内部信号，如 pc,
+instruction</li>
+<li>将一些重要的信号从 top 引出来，可以在 Difftest
+的时候进行打印，方便判断</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mcu_core/top.v</span></span><br><span class="line"><span class="keyword">module</span> top(</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>        clk,</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>        resetn,</span><br><span class="line">    <span class="comment">// signals used by difftest</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] pc,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] instr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>        wb_en,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [ <span class="number">4</span>:<span class="number">0</span>] wb_idx,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] wb_data,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] id_instr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">20</span>:<span class="number">0</span>] op_code,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] src1,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] src2,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [ <span class="number">3</span>:<span class="number">0</span>] wb_src,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] alu_result</span><br><span class="line">    <span class="comment">// signals used by difftest</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// difftest/csrc/cpu_exec.c</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">execute</span><span class="params">(<span class="type">uint64_t</span> n)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (;n &gt; <span class="number">0</span>; n --) &#123;</span><br><span class="line">    g_nr_guest_inst ++;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Top: instr = 0x%x\n&quot;</span>, top-&gt;instr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ID Stage: id_instr=0x%x, opcode = %d, src1 = 0x%x, src2 = 0x%x, wb_src= %d\n&quot;</span>, top-&gt;id_instr, top-&gt;op_code, top-&gt;src1, top-&gt;src2, top-&gt;wb_src);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;EXE stage: alu_result = 0x%x\n&quot;</span>, top-&gt;alu_result);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;WB Stage: wb_en=%d, idx=%d, data=%x\n&quot;</span>, top-&gt;wb_en,</span><br><span class="line">           top-&gt;wb_idx, top-&gt;wb_data);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> Difftest仿真输出</span><br><span class="line">Top: instr = 0x413</span><br><span class="line">ID Stage: id_instr=0x413, opcode = 1, src1 = 0x0, src2 = 0x0, wb_src= 1</span><br><span class="line">EXE stage: alu_result = 0x0</span><br><span class="line">WB Stage: wb_en=0, idx=0, data=0</span><br><span class="line">npc <span class="built_in">read</span> instr</span><br><span class="line">Read I-Memory: addr = 0x80000004, ins= 0x00009117</span><br><span class="line">NO.2-&gt; pc: 0x80000004, instr: 0x9117, asm: auipc        sp, 9</span><br><span class="line">NO.2-&gt; pc: 0x80000004, instr: 0x9117, asm: auipc        sp, 9</span><br><span class="line">C-&gt; pmem_read 80000000: 0x0</span><br><span class="line">Read I-Memory: addr = 0x80000000, ins= 0x00000413</span><br><span class="line">pmem_read_rtl: raddr = 0x80000000, rdata= 413</span><br></pre></td></tr></table></figure>
+<p>如上所示，我们在 top 的接口中定义了一些信号，我们在 Difftest
+框架中就可以打印相应的信号值</p></li>
+<li><p>确定 MCU_Core 提交到 difftest 的时机</p></li>
+</ol>
+<p><img src="https://s2.loli.net/2023/07/21/e8URhdaPM4lTC6z.png" />
+<strong>我们不能简单的以<code>wb_en</code>来判断一条指令是否提交</strong>，因为
+branch 指令其 wb_en 是 0，但是正常情况下 branch
+指令是需要提交的，因此需要通过 hazard 以及 reset
+来判断指令提交，具体如下：</p>
+<ol type="1">
+<li>判断第一条指令的提交： <code>resetn</code>触发之后，2 个 cycle
+才可以读出第一条指令，第一条指令经过 5 个 cycle 才能提交</li>
+<li>后续指令需要根据 hazard unit
+的<code>flush</code>信号来判断是否会被冲刷，hazard unit 只对 ID
+进行冲刷</li>
+<li>流水线 stall 的时候，需要暂停提交</li>
+</ol>
+<p>主要在 top.v 里增加了如下内容</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">ifdef</span> DIFFTEST</span></span><br><span class="line"><span class="comment">// instruction commit</span></span><br><span class="line"><span class="keyword">reg</span> resetn_d, resetn_d_d;</span><br><span class="line"><span class="keyword">reg</span> commit_en_exe, commit_en_mem, commit_en_wb, commit_en_delay;</span><br><span class="line"><span class="keyword">wire</span> commit_en_id;</span><br><span class="line"><span class="keyword">assign</span> id_instr=instruction_f_o;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">    resetn_d &lt;= resetn;</span><br><span class="line">    resetn_d_d &lt;= resetn_d;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> commit_en_id = ~flush_d_i &amp; resetn_d_d;</span><br><span class="line"><span class="keyword">assign</span> commit_en    = commit_en_delay;</span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn) <span class="keyword">begin</span></span><br><span class="line">        commit_en_exe &lt;= <span class="number">0</span>;</span><br><span class="line">        commit_en_mem &lt;= <span class="number">0</span>;</span><br><span class="line">        commit_en_wb  &lt;= <span class="number">0</span>;</span><br><span class="line">        commit_en_delay &lt;= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        commit_en_exe   &lt;= commit_en_id;</span><br><span class="line">        commit_en_mem   &lt;= commit_en_exe;</span><br><span class="line">        commit_en_wb    &lt;= commit_en_mem;</span><br><span class="line">        commit_en_delay &lt;= commit_en_wb;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p><del>- 由于 Reference Model 是单周期的处理器，其每个 Cycle
+就会提交一条指令；我们的 MCU_Core 是 5
+级流水线处理器，第一条指令必须等到 5 个 Cycle 之后其结果才会写入到
+Register</del> <del>- 我们的 MCU
+由于分支预测器的存在，可能会取一条指令，但是这条指令会被冲刷，因此其不会写入到
+Register</del></p>
+<p><del>可见<strong>MCU_Core 中的指令，并不是每一个 Cycle 都会写入到
+Register，但是 Reference Model 一旦执行一条指令，则会在一个 Cycle 写入到
+Register</strong>，因此：</del></p>
+<p><del>- MCU_Core 必须告诉 Difftest 框架，其在某时刻写入到了
+Register</del> <del>- Difftest 框架在收到该信号之后，令 Reference Model
+执行一步，并且将其结果写入到 Register</del></p>
+<p><del>经过分析发现，我们的 MCU_Core 不论指令流是何种情况，其在写入
+Register 的时候，都会有 wb_en 信号为高，因此<strong>我们在 top
+中加入该信号，并且在 Difftest 中根据该信号来控制 Reference Model 执行和
+Difftest 比较</strong>。</del></p>
+<p><del><code>c~~ ~~// difftest/csrc/cpu_exec.c~~ ~~/_ difftest begin _/~~ ~~cpu.pc = top-&gt;pc; // pc 存入 cpu 结构体~~ ~~dump_gpr(); // 寄存器值存入 cpu 结构体~~ ~~if(top-&gt;wb_en)&#123; // &lt;- 判断指令提交再进入 Difftest~~ ~~ difftest*step(top-&gt;pc);~~ ~~&#125;~~ ~~/* difftest end \_/~~ ~~</code></del></p>
+<ol start="4" type="1">
+<li><p>增加ecall指令</p>
+<p>在decoder.v里通过DPI-C函数增加ecall指令，这样在译码到ecall指令的时候，会通知DIFFTEST，riscv-test也是一ecall来表明测试结束的</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">ifdef</span> DIFFTEST</span></span><br><span class="line"><span class="keyword">wire</span> inst_ecall;</span><br><span class="line"><span class="keyword">assign</span> inst_ecall = instruction_i == <span class="number">32&#x27;h00000073</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">if</span> (inst_ebreak) ecall();</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>增加 MCU 的 I-Memory 的读取逻辑，从 Difftest
+框架里读取指令、加载到 MCU 中</p>
+<ul>
+<li><p>不同于用 verilog 写的 testbench，Difftest 框架里初始化都是通过 c
+函数来将编译好的二进制文件读入内存的。</p>
+<ul>
+<li><p>在 Difftest 代码里，定义了一块内存<code>pmem</code>用于存储
+MCU_Core 的指令</p></li>
+<li><p>通过 load_img 函数来初始化 pmem，实现 I-Memory 的初始化；在
+verilog 写的 testbench 中，我们是通过 readmemh
+函数来读入二进制文件到内存的</p></li>
+<li><p>在 verilog 文件中，<strong>指令的读取是通过 DPI-C
+函数，读取<code>pmem</code>对应地址的值</strong>；在 verilog 写的
+testbench
+中，指令的读取是直接通过<code>assign instr = i-memory[addr];</code>来实现的</p></li>
+<li><p>在 top 文件中添加 I-memory
+的<code>sram_output</code>、<code>mem_addr</code>端口，在进行 Difftest
+的时候，通过这两个端口读取指令数据（而不是通过 imemory
+模块读取指令数据）</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> pipelineIF</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>        clk,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>        resetn,</span><br><span class="line"> <span class="comment">// ....</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// DIFFTEST</span></span><br><span class="line">    <span class="meta">`<span class="keyword">ifdef</span> DIFFTEST</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] imemory_output,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] imem_addr,</span><br><span class="line">    <span class="meta">`<span class="keyword">endif</span></span></span><br><span class="line">    <span class="comment">/* output signals to ID stage */</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] instruction_f_o</span><br><span class="line"></span><br><span class="line">);</span><br><span class="line">    <span class="meta">`<span class="keyword">ifdef</span> DIFFTEST</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] sram_output_reg;</span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// delay one cycle because I-Memory has 1 cycle read delay but c function don&#x27;t has delay</span></span><br><span class="line">        sram_output_reg &lt;= imemory_output;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// read I-Memory through DPI-C, TOOD: fix this reorder</span></span><br><span class="line">    <span class="keyword">assign</span> sram_output = &#123;sram_output_reg[<span class="number">15</span>:<span class="number">0</span>], sram_output_reg[<span class="number">31</span>:<span class="number">16</span>]&#125;;</span><br><span class="line">    <span class="keyword">assign</span> imem_addr   = mem_addr;</span><br><span class="line">    <span class="keyword">assign</span> if_ir = instruction_f_o;</span><br><span class="line">    <span class="meta">`<span class="keyword">else</span></span></span><br><span class="line">    <span class="comment">// I-Memory instance</span></span><br><span class="line">    imemory u_imemory(</span><br><span class="line">        <span class="comment">//ports</span></span><br><span class="line">        <span class="variable">.clk</span>    		( clk    		),</span><br><span class="line">        <span class="variable">.resetn</span> 		( resetn 		),</span><br><span class="line">        <span class="variable">.ceb</span>    		( ~ceb    		),</span><br><span class="line">        <span class="variable">.web</span>    		( web    		),</span><br><span class="line">        <span class="variable">.A</span>      		( sram_addr  	),</span><br><span class="line">        <span class="variable">.Q</span>      		( sram_output  	) <span class="comment">// read instruction from imemory in MCU</span></span><br><span class="line">    );</span><br><span class="line">    <span class="meta">`<span class="keyword">endif</span></span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></li>
+<li><p>在 c 文件中，通过上述 top
+文件的端口，实现从<code>pmem</code>读取指令、加载到 IF Stage</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/12/r1K576pbits3qCI.png"
+alt="image-20230712153213765" />
+<figcaption aria-hidden="true">image-20230712153213765</figcaption>
+</figure></li>
+</ul></li>
+</ul></li>
+<li><p>在 Register 中增加 DPI-C 函数将 CPU 的 register 传递给 Difftest
+模块</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> <span class="keyword">void</span> set_gpr_ptr(<span class="keyword">input</span> <span class="keyword">logic</span> [<span class="number">63</span>:<span class="number">0</span>] a []); <span class="comment">// add DPI-C function</span></span><br><span class="line"><span class="keyword">module</span> regfile</span><br><span class="line">    (</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>                              clk_i,</span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>                              resetn_i,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>    [REG_DATA_WIDTH-<span class="number">1</span> :<span class="number">0</span>]     rs1_data_o, <span class="comment">// rd1</span></span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">    );</span><br><span class="line">	<span class="comment">//.....</span></span><br><span class="line">    <span class="comment">// regfile其余部分均保持不变即可</span></span><br><span class="line">    <span class="comment">//.....</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> set_gpr_ptr(regfile_data); <span class="comment">// &lt;- 使用该DPI-C函数将mcu_core的register状态传递给Difftest模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/hjYRv8Ps32GOZTV.png"
+alt="image-20230707210809687" />
+<figcaption aria-hidden="true">image-20230707210809687</figcaption>
+</figure></li>
+<li><p>适配 32 bit MCU MCU 是 32 bit 的，其 gpr 宽度为 32，但是 Difftest
+框架默认是 64bits，如果不修改 difftest 中读取 MCU gpr 的 C
+函数，则会读到错误的数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">--- a/npc/csrc/npc_cpu/npc_exec.c</span><br><span class="line">+++ b/npc/csrc/npc_cpu/npc_exec.c</span><br><span class="line">@@ -24,13 +24,13 @@ const char *regs[] = &#123;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> // 一个输出RTL中通用寄存器的值的示例</span><br><span class="line">-uint64_t *cpu_gpr = NULL;</span><br><span class="line">+uint32_t *cpu_gpr = NULL;</span><br><span class="line"> void set_gpr_ptr(const svOpenArrayHandle r) &#123;</span><br><span class="line">-  cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)-&gt;datap());</span><br><span class="line">+  cpu_gpr = (uint32_t *)(((VerilatedDpiOpenVar*)r)-&gt;datap());</span><br><span class="line"> &#125;</span><br><span class="line"> void <span class="function"><span class="title">dump_gpr</span></span>() &#123;</span><br><span class="line">   <span class="keyword">for</span> (int i = 0; i &lt; 32; i++) &#123;</span><br><span class="line">-    cpu.gpr[i] = cpu_gpr[i-1]; // i-1 to make index correct <span class="keyword">in</span> DPI-C</span><br><span class="line">+    cpu.gpr[i] = cpu_gpr[i]; // i-1 to make index correct <span class="keyword">in</span> DPI-C</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">--- a/npc/vsrc/regfile.v</span><br><span class="line">+++ b/npc/vsrc/regfile.v</span><br><span class="line">@@ -5,7 +5,7 @@ file: register file <span class="keyword">in</span> ID stage</span><br><span class="line"> author: fujie</span><br><span class="line"> time: 2023年 4月28日 星期五 16时16分32秒 CST</span><br><span class="line"> */</span><br><span class="line">-import <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> void set_gpr_ptr(input logic [63:0] a []); // add DPI-C <span class="keyword">function</span></span><br><span class="line">+import <span class="string">&quot;DPI-C&quot;</span> <span class="keyword">function</span> void set_gpr_ptr(input logic [31:0] a []); // add DPI-C <span class="keyword">function</span></span><br></pre></td></tr></table></figure></li>
+<li><p>修复函数 <code>dump_gpr</code> in <code>csrc/cpu_exec</code>
+该函数的作用是利用 DPI-C 函数将 MCU 的 registers 的数值读取读取到 c
+结构体里(cpu.gpr)，后续 Difftest 会比较该结构体的值跟 Reference Model
+是否匹配.</p>
+<p>运行 Difftest 的时候发现，cpu.gpr[i]的值，实际上对应的是寄存器
+r[i+1]，导致 Difftest 报错，因此将 cpu_gpr[i]更改为 cpu_gpr[i-1]。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint64_t</span> *cpu_gpr = <span class="literal">NULL</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">set_gpr_ptr</span><span class="params">(<span class="type">const</span> svOpenArrayHandle r)</span> &#123;</span><br><span class="line">  cpu_gpr = (<span class="type">uint64_t</span> *)(((VerilatedDpiOpenVar*)r)-&gt;datap());</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">dump_gpr</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">    cpu.gpr[i] = cpu_gpr[i<span class="number">-1</span>]; <span class="comment">// i-1 to make index correct in DPI-C</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>riscv-tests更改load测试集</p>
+<ul>
+<li><p>问题描述：spike初始化的时候，其Data Memory不是初始化为0,
+riscv-tests的load相关的测试集在执行load指令之前，都没有往对应的Data
+Memory地址写入数据， 导致spike执行load之后会取出spike初始化的Data
+Memory的值，mcu执行load之后会取出0，二者对不上 <img
+src="https://s2.loli.net/2023/08/03/xTF8kvfjhaWwoKV.png" /></p></li>
+<li><p>问题解决：修改riscv-tests测试集，在执行之前，执行相应的Store指定往对应地址写入数据，避免spike初始化跟MCU初始化不同，导致load指令读出的结果不同</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/code/asm/riscvtest/test_macros.h b/code/asm/riscvtest/test_macros.h</span><br><span class="line">index 7375715..c748749 100644</span><br><span class="line">--- a/code/asm/riscvtest/test_macros.h</span><br><span class="line">+++ b/code/asm/riscvtest/test_macros.h</span><br><span class="line">@@ -219,6 +219,7 @@ test_ <span class="comment">## testnum: \</span></span><br><span class="line">     TEST_CASE( testnum, x14, result, \</span><br><span class="line">       li  x15, result; /* Tell the exception handler the expected result. */ \</span><br><span class="line">       la  x1, base; \</span><br><span class="line">+      sh x15, offset(x1); \</span><br><span class="line">       inst x14, offset(x1); \</span><br><span class="line">     )</span><br><span class="line"></span><br><span class="line">@@ -227,7 +228,7 @@ test_ <span class="comment">## testnum: \</span></span><br><span class="line">       la  x1, base; \</span><br><span class="line">       li  x2, result; \</span><br><span class="line">       la  x15, 7f; /* Tell the exception handler how to skip this <span class="built_in">test</span>. */ \</span><br><span class="line">-      sw x0, offset(x1); \</span><br><span class="line">+      sw x0, 0(x1); \</span><br><span class="line">       store_inst x2, offset(x1); \</span><br><span class="line">       load_inst x14, offset(x1); \</span><br><span class="line">       j 8f; \</span><br><span class="line">@@ -242,6 +243,8 @@ test_ <span class="comment">## testnum: \</span></span><br><span class="line">     li  TESTNUM, testnum; \</span><br><span class="line">     li  x4, 0; \</span><br><span class="line"> 1:  la  x1, base; \</span><br><span class="line">+    li x15, result; \</span><br><span class="line">+    sh x15, offset(x1);\</span><br><span class="line">     inst x14, offset(x1); \</span><br><span class="line">     TEST_INSERT_NOPS_ <span class="comment">## nop_cycles \</span></span><br><span class="line">     addi  x6, x14, 0; \</span><br><span class="line">@@ -257,6 +260,8 @@ test_ <span class="comment">## testnum: \</span></span><br><span class="line">     li  x4, 0; \</span><br><span class="line"> 1:  la  x1, base; \</span><br><span class="line">     TEST_INSERT_NOPS_ <span class="comment">## nop_cycles \</span></span><br><span class="line">+    li x15, result; \</span><br><span class="line">+    sh x15, offset(x1);\</span><br><span class="line">     inst x14, offset(x1); \</span><br><span class="line">     li  x7, result; \</span><br><span class="line">     bne x14, x7, fail; \</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>riscv-tests更改store测试集 <img
+src="https://s2.loli.net/2023/08/03/ykcImVd7DbUCwYl.png" /></p>
+<ul>
+<li><p>问题描述：spike初始化的时候，其Data
+Memory不是初始化为0，因此在测试<code>SH</code>,
+<code>SB</code>等riscv-tests测试集的时候，会出错，如下所示： <img
+src="https://s2.loli.net/2023/08/05/tI2ZE5Nb6gahmeD.png" /></p></li>
+<li><p>问题解决：修改riscv-tests测试集，在执行<code>SH</code>,
+<code>SB</code>之前，将<code>0x00000000</code>通过<code>SW</code>写入到Data
+Memory对应行，避免spike初始化跟MCU初始化不同，导致<code>LW</code>读出的结果不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#define TEST_ST_OP( testnum, load_inst, store_inst, result, offset, base ) \</span><br><span class="line">    TEST_CASE( testnum, x14, result, \</span><br><span class="line">      la  x1, base; \</span><br><span class="line">      li  x2, result; \</span><br><span class="line">      la  x15, 7f; /* Tell the exception handler how to skip this test. */ \</span><br><span class="line">      sw x0, 0(x1); /*write 0 to target location first*/ \</span><br><span class="line">      store_inst x2, offset(x1); \</span><br><span class="line">      load_inst x14, offset(x1); \</span><br><span class="line">      j 8f; \</span><br><span class="line">      7:    \</span><br><span class="line">      /* Set up the correct result for TEST_CASE(). */ \</span><br><span class="line">      mv x14, x2; \</span><br><span class="line">      8:    \</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ol>
+<h1 id="mcu_core-接入-difftest-结果">MCU_Core 接入 Difftest 结果</h1>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/QD8nlf1BTNMxYGo.png"
+alt="image-20230707210706875" />
+<figcaption aria-hidden="true">image-20230707210706875</figcaption>
+</figure>
+<p>目前 MCU_Core 已经接入到了 Difftest 框架，Difftest 检测到 MCU_Core
+运行的结果跟 Reference Model
+的结果不同，会报错，并且给出报错的信息，如上图所示。</p>
+<ol type="1">
+<li><p>后续会陆续根据 Difftest 的提示，陆续修改 MCU_Core 中的
+bug，直到通过所有的测试，达到如下图所示效果，出现<code>HIT GOOD TRAP</code>字样：</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/07/nmXbVy69HxjOtwJ.png"
+alt="image-20230707210602556" />
+<figcaption aria-hidden="true">image-20230707210602556</figcaption>
+</figure></li>
+<li><p>也会预先研究如何在 Difftest 中测试一些复杂事件的比较，例如
+Trap、CSR 比较</p></li>
+</ol>
+<h1 id="发现和修复的-bug">发现和修复的 bug</h1>
+<ol type="1">
+<li><p>每条指令与其对应的 PC 差了 4</p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug 描述：由 ID Stage 来保证每一条指令跟其对应的 pc
+相匹配，但是当某条指令计算需要用到 pc 的值时，错误的将 next_pc
+的值给了源操作数，导致结果大了 4</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/14/Pq9FQUvcLDKTZIp.png"
+alt="image-20230714103303910" />
+<figcaption aria-hidden="true">image-20230714103303910</figcaption>
+</figure></li>
+<li><p>bug 修复：将当前 pc 的值赋值给源操作数<code>rs1_d_o</code></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">// rs1_d_o &lt;= pc_next; // alu source from pc+4</span></span><br><span class="line">    rs1_d_o &lt;= pc_instr; <span class="comment">// alu source from pc</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>reset 之后第一条指令的 pc 时序问题</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：resetn 触发之后，ID 会强制跳转到初始 PC，但是之前 MCU 初始
+PC 是 0x00000000，因此每次 resetn 之后 pc 跳转都会出错</li>
+<li>bug 修复：将 resetn 之后的 redirection_d_o 修复为 0x80000000
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file: pipelineID.v</span></span><br><span class="line"><span class="keyword">assign</span> redirection_d_o = (&#123;<span class="number">32</span>&#123;~resetn_delay | flush_i&#125;&#125; &amp; <span class="number">32&#x27;h80000000</span>)|        <span class="comment">// &lt;- fix bug</span></span><br><span class="line">                         (&#123;<span class="number">32</span>&#123;ptnt_e_i &amp; ~branchJAL_o&#125;&#125; &amp; pc_next)| <span class="comment">// sbp taken, alu not taken</span></span><br><span class="line">                         (&#123;<span class="number">32</span>&#123;ptnt_e_i &amp;  branchJAL_o&#125;&#125; &amp; redirection_pc)| <span class="comment">// sbp taken, alu not taken, following by JAL</span></span><br><span class="line">                         (&#123;<span class="number">32</span>&#123; redirection_e_i&#125;&#125;  &amp; redirection_pc_e_i)| <span class="comment">// pc from EXE</span></span><br><span class="line">                         (&#123;<span class="number">32</span>&#123;~redirection_e_i&#125;&#125;  &amp; redirection_pc);  <span class="comment">// pc from SBP</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>MCU 内存跟 riscv 内存存储方式不一致</p>
+<ul>
+<li><p><label><input type="checkbox" />bug 已修复</label></p></li>
+<li><p>bug 描述：MCU 跟 Difftest 的二进制程序，其大小端方向不一致，因此
+Difftest 得到的镜像文件加载之后，需要调换其顺序才可以得到指令</p>
+<blockquote>
+<p>PS: riscv 采用小端存放的格式，对于 32bits 的指令一条指令
+aabbccdd，其存储为 ccddaabb</p>
+</blockquote></li>
+<li><p>bug 修复：跟 MCU 之前测试时二进制程序编译有关、跟 Difftest
+二进制程序编译有关、跟 MCU imemory 设计有关</p>
+<figure>
+<img src="https://s2.loli.net/2023/07/12/EHPlZIyu97b6ojk.png"
+alt="image-20230712170217686" />
+<figcaption aria-hidden="true">image-20230712170217686</figcaption>
+</figure></li>
+</ul></li>
+<li><p>NOP 指令导致错误的<code>wb_en</code></p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug 描述：需要被冲刷的指令，其行为会被翻译成一条 NOP 指令，但是
+NOP
+指令本质上是<code>addi x0, x0, 0</code>，译码单元对于<code>addi</code>指令会判断其<code>wb_en=1</code>，因此当系统
+resetn 出发时，其面几条 NOP 指令会导致<code>wb_en=1</code>，进而导致
+Difftest 开始比较 MCU 跟 Reference Model，进而导致比较失败</p></li>
+<li><p>bug 修复：译码的时候，如果发现指令是 NOP
+指令，则<code>wb_en=0</code>，即<code>assign wb_en_o = instruction_i != 32'h00000013;</code></p>
+<figure>
+<img src="https://s2.loli.net/2023/07/12/vE7Z2KzFRsWgcAL.png"
+alt="image-20230712171228993" />
+<figcaption aria-hidden="true">image-20230712171228993</figcaption>
+</figure></li>
+</ul></li>
+<li><p>RV32 R-Type 指令跟 RV32 M 指令译码错误</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：R-Type 指令<code>instruction[25]==0</code>，M
+指令<code>instruction[25]==1</code>，在<code>decoder.v</code>文件里，把该条件写反了</li>
+<li>bug 修复：如果<code>instruction[25]==0</code>则按照 R-Type
+指令进行译码</li>
+</ul></li>
+<li><p>EXE Stage
+在<code>redirection_e_o</code>信号对<code>JAL</code>指令判断错误</p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug 描述：EXE Stage 需要判断 SBP 对于 Branch
+的分支预测是否正确；但是 EXE Stage 不需要判断 SBP
+对于<code>JAL</code>指令判断是否正确</p></li>
+<li><p>bug 修复：EXE Stage 在判断的时候，首先判断是否是 Branch
+指令，再判断 SBP
+预测是否正确；从而避免多此一举的对<code>JAL</code>是否预测正确判断</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/npc/vsrc/pipelineEXE.v b/npc/vsrc/pipelineEXE.v</span><br><span class="line">index 8f44516..407184c 100644</span><br><span class="line">--- a/npc/vsrc/pipelineEXE.v</span><br><span class="line">+++ b/npc/vsrc/pipelineEXE.v</span><br><span class="line">@@ -21,6 +21,7 @@ module pipelineEXE (</span><br><span class="line">+    input wire        btype_d_i,       // instruction is branch <span class="built_in">type</span> instruction</span><br><span class="line"></span><br><span class="line">@@ -128,7 +129,7 @@ module pipelineEXE (</span><br><span class="line">     end</span><br><span class="line">     assign redirection_e_o = st_e_i? redirection_r :</span><br><span class="line">-                                    (taken_d_i^alu_taken)|(jalr_d_i&amp;~taken_d_i);</span><br><span class="line">+                                    ( btype_d_i &amp; taken_d_i^alu_taken)|(jalr_d_i&amp;~taken_d_i);</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>lui 指令需要 bypass 的时候，bypass 了错误的值</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：当一条指令的源寄存器跟它上一条指令的目的寄存器想同时，则会存在
+EXE-&gt;ID 的 bypass，将 alu_result bypass 到 ID Stage. 目前 EXE Stage
+的代码只会 bypass
+alu_result，但是对于<code>LUI</code>指令，其写回到寄存器的指不是 alu
+的计算结果，而是<code>extended_imm</code> <img
+src="https://s2.loli.net/2023/07/21/ZKWGEwJUb9A8poO.png" /></li>
+<li>bug 修复：在 bypass
+的时候，需要根据写回到寄存器的来源，选择正确的源进行 bypass，一共有 4
+种写会到寄存器的源：
+<ol type="1">
+<li>alu_result</li>
+<li>extended_imm</li>
+<li>next_pc</li>
+<li>load_data &lt;- only in MEM stage bypass</li>
+</ol></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/npc/vsrc/pipelineEXE.v b/npc/vsrc/pipelineEXE.v</span><br><span class="line">index b81fbbe..62bb8e2 100644</span><br><span class="line">--- a/npc/vsrc/pipelineEXE.v</span><br><span class="line">+++ b/npc/vsrc/pipelineEXE.v</span><br><span class="line">-    assign bypass_e_o=alu_calculation;</span><br><span class="line">+    assign bypass_e_o = &#123;32&#123;result_src_d_i[0]&#125;&#125; &amp; alu_calculation |</span><br><span class="line">+                        &#123;32&#123;result_src_d_i[1]&#125;&#125; &amp; extended_imm_d_i|</span><br><span class="line">+                        &#123;32&#123;result_src_d_i[3]&#125;&#125; &amp; pc_plus4_d_i;</span><br></pre></td></tr></table></figure></li>
+<li><p>Store指令错误选择src1当作写回的数据</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：Store指令选择将src2写入到Data
+Memory，当前的MCU错误的选择了将src1写回到Data Memory <img
+src="https://s2.loli.net/2023/07/27/lOGdqNX4bHM58Za.png" /></li>
+<li>bug 修复：EXE Stage -&gt; MEM Stage都选择src2作为写回到Data
+Memory的数据</li>
+</ul></li>
+<li><p>针对Store指令，ID需要将src2的两种可能传递给EXE</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：Store指令需要两个操作：
+<ol type="1">
+<li>计算地址: <code>addr=src1+imm</code></li>
+<li>将src2写回
+当前代码里ID-&gt;EXE对于src的选择，要么是寄存器读出的数，要么是立即数拓展，<br />
+导致<strong>地址计算正确跟取到正确的写回数据只能同时满足一个</strong>
+<img src="https://s2.loli.net/2023/07/27/2y8uST9NoA4f3CJ.png"
+alt="rs2_sel_o wrong" /> <img
+src="https://s2.loli.net/2023/07/27/r5ZiuoNtmBE7sSO.png"
+alt="wrong addr" /></li>
+</ol></li>
+<li>bug
+修复：对于ID来说，针对src2需要同时将RF读取值跟立即数拓展同时传递给EXE
+<ol type="1">
+<li>EXE利用立即数拓展计算地址</li>
+<li>将RF读取值传递给MEM</li>
+</ol></li>
+</ul></li>
+<li><p>MEM写入读出必须提前一个周期</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：由于Data
+Memory写入需要一个周期的延迟，因此EXE必须提前一个cycle给出地址到Data
+Memory才可以保证Data Memory在MEM State完成数据的写入</li>
+<li>bug 修复：EXE在遇到Store类型指令时，将其addr, src2,
+dmem_type都直接给到MEM，不通过pipeline register</li>
+</ul></li>
+<li><p>非访存指令（除load/store）之外的指令，decoder为设置其访存类型为<code>DMEM_NO</code></p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：decoder没有设置非访存指令的访存类型，导致一条访存指令后面的所有非访存指令都可以写入到Data
+Memory，从而导致写入的数据是错误的数据 <img
+src="https://s2.loli.net/2023/07/27/qU2CM1Da5Hi64Rl.png"
+alt="lw" /></li>
+<li>bug 修复：在decoder中设置非访存指令不能够访问Data Memory
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/npc/vsrc/decoder.v b/npc/vsrc/decoder.v</span><br><span class="line">index e607eca..66b45f8 100644</span><br><span class="line">--- a/npc/vsrc/decoder.v</span><br><span class="line">+++ b/npc/vsrc/decoder.v</span><br><span class="line">@@ -83,6 +83,7 @@ module decoder(</span><br><span class="line">         instr_illegal_o = 1<span class="string">&#x27;b0; // suppose instruction is legal by default.</span></span><br><span class="line"><span class="string">         wb_src_o = `WBSRC_ALU;  // suppose write back source is from ALU</span></span><br><span class="line"><span class="string">         wb_en_o = 1&#x27;</span>b0; // suppose write back is not <span class="built_in">enable</span></span><br><span class="line">+        dmem_type_o = `DMEM_NO;</span><br><span class="line">         <span class="keyword">case</span>(opcode)</span><br><span class="line">             `OPCODE_LOAD  : begin</span><br><span class="line">                 imm_type_o = `IMM_I;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>移位器msb计算错误</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：移位器默认是右移，左移是通过将<code>din</code>对折、取反、再对折来实现的；用右移来实现左移的时候，alu里shifter32的例化方式会导致左移恒补1，进而出错
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// alu.v</span></span><br><span class="line">    shifter32 <span class="variable">#(32,5)</span> sft(</span><br><span class="line">     <span class="variable">.d_in</span>(ain),</span><br><span class="line">     <span class="variable">.shift</span>(bin[<span class="number">4</span>:<span class="number">0</span>]),</span><br><span class="line">     <span class="variable">.arithOrLogic</span>(srl_op), <span class="comment">// SRA or SRL</span></span><br><span class="line">     <span class="variable">.leftOrRight</span>(sra_op|srl_op), <span class="comment">// shift left or right</span></span><br><span class="line">     <span class="variable">.d_out</span>(sft_ans));</span><br><span class="line"><span class="comment">// shifter32.v</span></span><br><span class="line"> <span class="keyword">assign</span> msbFill=arithOrLogic?<span class="number">0</span>:d_in[DATA_WIDTH-<span class="number">1</span>];</span><br></pre></td></tr></table></figure></li>
+<li>bug 修复：msbFill在左移的时候，必须置0 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// shifter32.v</span></span><br><span class="line">    <span class="keyword">assign</span> msbFill=leftOrRight ? (arithOrLogic?<span class="number">0</span>:d_in[DATA_WIDTH-<span class="number">1</span>]) : <span class="number">0</span>;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>ID
+Stage没有在译码到Load指令时，未将<code>is_load</code>信号发送给hazard
+unit，导致Load Stall失败</p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug 描述：ID Stage没有给到hazard unit对应的信号，导致hazard
+unit无法识别load指令 <img
+src="https://s2.loli.net/2023/08/03/hYQG37NiyAHgnW1.png"
+alt="lw stall failed" /></p></li>
+<li><p>bug 修复：ID需要将对应的信号给到hazard unit</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// pipelineID.v</span></span><br><span class="line"><span class="comment">// decode instance</span></span><br><span class="line">decoder u_decoder(</span><br><span class="line">    <span class="comment">//ports</span></span><br><span class="line">    <span class="variable">.instruction_i</span>  		( instru_32bits  	),</span><br><span class="line">    <span class="variable">.alu_op_o</span>        		( aluOperation_o 		),</span><br><span class="line">    <span class="variable">.rs1_sel_o</span>       		( rs1_sel_o       		),</span><br><span class="line">    <span class="variable">.rs2_sel_o</span>       		( rs2_sel_o       		),</span><br><span class="line">    <span class="variable">.imm_type_o</span>      		( imm_type_o      		),</span><br><span class="line">    <span class="variable">.branchBType_o</span>  		( branchBType_o  		),</span><br><span class="line">    <span class="variable">.branchJAL_o</span>    		( branchJAL_o    		),</span><br><span class="line">    <span class="variable">.branchJALR_o</span>   		( branchJALR_o   		),</span><br><span class="line">    <span class="variable">.is_load_o</span>              ( is_load_d_o           ),</span><br><span class="line">    <span class="variable">.dmem_type_o</span>     		( dmem_type_o     		),</span><br><span class="line">    <span class="variable">.wb_src_o</span>        		( wb_src_o        		),</span><br><span class="line">    <span class="variable">.wb_en_o</span>         		( wb_en_o         		),</span><br><span class="line">    <span class="variable">.instr_illegal_o</span> 		( decoder_instr_illegal )</span><br><span class="line">   );</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>ID Stage计算指令pc的时候，没有考虑stall的情况</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：ID Stage负责计算每条指令对应的pc，流水线stall的时候，ID
+Stage依然错误地增加了pc的值，pc的值被打乱之后，所有需要pc进行计算的指令都会出错
+<img src="https://s2.loli.net/2023/08/03/H6QN21tXJFbnf7s.png"
+alt="pc should stall too" /></li>
+<li>bug 修复：ID需要输入流水线stall的信号，在stall的时候，将当前的pc固定
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(~resetn) <span class="keyword">begin</span></span><br><span class="line">        pc_instr &lt;= <span class="number">32&#x27;h80000000</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(taken_reg) <span class="keyword">begin</span></span><br><span class="line">        pc_instr &lt;= pc_taken;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(~stall_i)<span class="keyword">begin</span> <span class="comment">// pc don&#x27;t change when stall signal is high</span></span><br><span class="line">        pc_instr &lt;= pc_next;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>ID Stage被flush的指令，错误地导致了重定向</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：ID 需要计算重定向pc跟taken，目前ID
+Stage在计算taken的时候，没有考虑ID Stage的flush信号，
+导致被flush的指令，其静态分支预测的地址，被作为重定向pc，取到了错误的指令
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line"><span class="keyword">assign</span> taken_d_o = ~resetn_delay | ptnt_e_i | redirection_e_i | taken;</span><br></pre></td></tr></table></figure> <img
+src="https://s2.loli.net/2023/08/09/rzw7EYG4XlmuSbZ.png" /></li>
+<li>bug 修复：在计算taken的时候，必须考虑flush信号 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line"><span class="keyword">assign</span> taken_d_o = ~resetn_delay | ptnt_e_i | redirection_e_i | (~flush_i &amp; taken );</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法指令产生的stall，没有正确地被拉低</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：乘法指令执行4个周期，因此需要stall流水线，目前代码里乘法指令stall不能够正确的
+被拉低，导致后续指令一直stall。 其原因在于hazard
+unit的代码里，通过<code>is_m</code>跟<code>fin</code>来判断乘法执行的执行状态，
+但是<code>fin</code>为高的时候，前面的<code>is_m</code>也是为高，所以<code>Linst_st_keep</code>一直为高
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// hazard.v</span></span><br><span class="line"><span class="keyword">if</span>((~flush)&amp;(is_d|is_m))</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  Linst_st_keep&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(fin)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  Linst_st_keep&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>bug
+修复：将<code>fin</code>的判断放到前面去，这样<code>Linst_st_keep</code>可以被正确地拉低
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// hazard.v</span></span><br><span class="line"><span class="keyword">if</span>(fin)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  Linst_st_keep&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>((~flush)&amp;(is_d|is_m))</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  Linst_st_keep&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法状态机不是从0开始，从1开始，导致周期错误</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：如下面波形图所示，执行完一个乘法之后，其下一次乘法的状态机不是从0开始，
+是从1开始的，导致下次乘法只执行了3个周期 <img
+src="https://s2.loli.net/2023/08/10/SeQXcm3iGvxhZlP.png" /></li>
+<li>bug
+修复：将判断条件从<code>11</code>变成<code>10</code>，这样每个乘法都是4个周期
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(aluOperation_o [<span class="number">10</span>]|aluOperation_o [<span class="number">11</span>]|aluOperation_o [<span class="number">12</span>]|aluOperation_o [<span class="number">13</span>])</span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">      mul_state&lt;=mul_next_state;</span><br><span class="line">      <span class="keyword">if</span>(mul_state==<span class="number">2&#x27;b10</span>) <span class="comment">// bug fix</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">begin</span></span><br><span class="line">          fin&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法运算<code>mulh</code>错误，错误选择了低32bits结果</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：alu错误地选择了乘法器的结果，应该选择高32bits，但是选择了低32bits
+<img src="https://s2.loli.net/2023/08/11/51tApYiDzWBdG2b.png" /></li>
+<li>bug 修复：对于<code>mulh</code>,<code>mulhu</code>,
+<code>mulhsu</code>指令，需要选择乘法器高32bits结果 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// alu.v</span></span><br><span class="line"> <span class="keyword">assign</span> ALUout=  (&#123;<span class="number">32</span>&#123;sub_op|add_op&#125;&#125;&amp;add_ans[<span class="number">31</span>:<span class="number">0</span>])|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;rem_op|remu_op&#125;&#125;&amp;rem_ans)|</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;div_op|divu_op&#125;&#125;&amp;div_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mul_op&#125;&#125;&amp;mul_low) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;mulh_op|mulhsu_op|mulhu_op&#125;&#125;&amp;mul_high) | <span class="comment">// bug fix: choose msb, not lsb</span></span><br><span class="line">         (&#123;<span class="number">32</span>&#123;or_op|and_op|xor_op&#125;&#125;&amp;log_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sll_op|srl_op|sra_op&#125;&#125;&amp;sft_ans) |</span><br><span class="line">         (&#123;<span class="number">32</span>&#123;sltu_op|slt_op&#125;&#125;&amp;&#123;<span class="number">31&#x27;b0</span>,add_ans[<span class="number">32</span>]&#125;);</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>alu判断乘法指令类型错误</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：alu错误的判断了<code>mulhu</code>跟<code>mulhsu</code>，把二者搞反了
+<img src="https://s2.loli.net/2023/08/11/J8up1q76ohKHRBf.png" /></li>
+<li>bug 修复：将判断逻辑替换即可 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/alu<span class="variable">.v</span> b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> index c86bb04.<span class="variable">.29cd15a</span> <span class="number">100644</span></span><br><span class="line"> --- a/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> +++ b/src/verification/vsrc/alu<span class="variable">.v</span></span><br><span class="line"> @@ -<span class="number">41</span>,<span class="number">8</span> +<span class="number">41</span>,<span class="number">8</span> @@ <span class="keyword">assign</span> slt_op=		ALUop[<span class="number">8</span>];</span><br><span class="line">  <span class="keyword">assign</span> sltu_op= 	ALUop[<span class="number">9</span>];</span><br><span class="line">  <span class="keyword">assign</span> mul_op=		ALUop[<span class="number">10</span>];</span><br><span class="line">  <span class="keyword">assign</span> mulh_op= 	ALUop[<span class="number">11</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> -<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">13</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhu_op=	ALUop[<span class="number">12</span>];</span><br><span class="line"> +<span class="keyword">assign</span> mulhsu_op=	ALUop[<span class="number">13</span>];</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法多计算了一个周期</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：乘法本来应该在四个周期内计算出结果，但是目前乘法由于其state在ID计算，再通过pipeline
+register传递给EXE stage， 导致乘法实际上需要5个周期才可以得到对应的结果
+<img src="https://s2.loli.net/2023/08/14/kQGqA64f9TXx1tH.png" /></li>
+<li>bug
+修复：修改<code>multi</code>乘法的时序，将结果提前一个周期计算出来
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi<span class="variable">.v</span> b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  index <span class="number">57</span>fa64b.<span class="variable">.ce645f0</span> <span class="number">100644</span></span><br><span class="line">  --- a/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +++ b/src/verification/vsrc/multi<span class="variable">.v</span></span><br><span class="line">  +<span class="keyword">wire</span> [<span class="number">63</span>:<span class="number">0</span>] real_calculation;</span><br><span class="line">  +<span class="keyword">assign</span> real_calculation = (&#123;<span class="number">64</span>&#123;state==<span class="number">2&#x27;b11</span>&#125;&#125; &amp; &#123;ans_temp+&#123;mul16ans,<span class="number">32&#x27;b0</span>&#125;&#125;);</span><br><span class="line">  -<span class="keyword">assign</span> prod=ans_temp;</span><br><span class="line">  +<span class="keyword">assign</span> prod=real_calculation;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>ID Stage write_back_enable 没有考虑stall的情况</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：ID
+Stage在执行乘法指令时，应该只在乘法第四个周期才将write_back_enable拉高；
+但是目前ID Stage在前三个周期都将write_back_enable拉高了；
+这样会导致hazard unit错误地计算bypass信号 <img
+src="https://s2.loli.net/2023/08/14/drBTjoSpCXbWKnz.png" /></li>
+<li>bug 修复：在ID
+Stage计算write_back_enable的时候，需要判断乘法、除法指令的周期，只在最后一个周期拉高
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipelineID.v</span></span><br><span class="line">diff --git a/src/verification/vsrc/pipelineID<span class="variable">.v</span> b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/pipelineID<span class="variable">.v</span></span><br><span class="line">+    <span class="keyword">wire</span>        wb_en_mul_div;</span><br><span class="line">+    <span class="comment">// write back enable with mul and div operation</span></span><br><span class="line">+    <span class="keyword">assign</span> wb_en_mul_div = (~is_m_d_o &amp; ~is_d_d_o &amp; wb_en_o)|</span><br><span class="line">+                           ( is_m_d_o &amp; (mul_state==<span class="number">2&#x27;b11</span>))|</span><br><span class="line">+                           ( is_m_d_o &amp; div_last);</span><br><span class="line">-            reg_write_en_d_o  &lt;= wb_en_o;</span><br><span class="line">+            reg_write_en_d_o  &lt;= wb_en_mul_div;</span><br><span class="line">-    <span class="keyword">assign</span> dst_en_d_o=wb_en_o;</span><br><span class="line">+    <span class="keyword">assign</span> dst_en_d_o=wb_en_mul_div;</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>乘法器计算符号的时候，没有考虑乘数为零的情况</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug
+描述：乘法器计算的时候，如果有一个乘数为零，其结果的符号位应该为零，
+但是当前乘法器在计算符号位的时候，没有考虑乘数为零的情况，导致符号位计算错误
+<img src="https://s2.loli.net/2023/08/14/TdfOKtmP6jwe18i.png" /></li>
+<li>bug
+修复：在计算符号位的时候，判断乘数，如果有乘数为零，则强制符号位为零
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/src/verification/vsrc/multi16<span class="variable">.v</span> b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">--- a/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">+++ b/src/verification/vsrc/multi16<span class="variable">.v</span></span><br><span class="line">@@ -<span class="number">310</span>,<span class="number">10</span> +<span class="number">310</span>,<span class="number">9</span> @@ half_adder 	ha30_2_0(<span class="variable">.ain</span>(c29_1_0), <span class="variable">.bin</span>(s30_1_0), <span class="variable">.sout</span>(ans1[<span class="number">30</span>]), <span class="variable">.cout</span>(c30_2_</span><br><span class="line">-<span class="keyword">assign</span> sign_out=(ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">+<span class="keyword">assign</span> sign_out = (ain==<span class="number">0</span> | bin ==<span class="number">0</span>) ? <span class="number">0</span> : (ss&amp;(ain[<span class="number">15</span>]^bin[<span class="number">15</span>])) |</span><br><span class="line">        (su&amp;ain[<span class="number">15</span>]) 		|</span><br><span class="line">        (us&amp;bin[<span class="number">15</span>]);</span><br><span class="line"> <span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>除法器bug</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：当前测试版本除法器bug较多，例如不能正确计算除法结果、
+结果出现负数时会比正确答案小1；</li>
+<li>bug 修复：已经上报给淼鸿、并且已经解决所有bug</li>
+</ul></li>
+<li><p>CSR wdata选择错误</p>
+<ul>
+<li><p><label><input type="checkbox" checked="" />bug
+已修复</label></p></li>
+<li><p>bug
+描述：写入到CSR寄存器的时候，<code>CSR[x] = rs1</code>，当前代码错误地选择了ALU的计算结果作为写回值
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file top.v</span></span><br><span class="line">CSR csru(</span><br><span class="line">    <span class="variable">.raddr</span>                  ( CSR_addr_d_o_w        ),</span><br><span class="line">    <span class="variable">.waddr</span>                  ( CSR_addr_d_o          ),</span><br><span class="line">    <span class="variable">.wdata</span>                  ( alu_calculation_e_o   ), <span class="comment">// wrong</span></span><br><span class="line">    <span class="variable">.resetn</span>                 ( resetn                ),</span><br><span class="line">    <span class="variable">.clk</span>                    ( clk                   ),</span><br></pre></td></tr></table></figure></p></li>
+<li><p>bug
+修复：写入到CSR的数据选择rs1即可，<code>CSR[x] = rs1</code></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file top.v</span></span><br><span class="line">CSR csru(</span><br><span class="line">    <span class="variable">.raddr</span>                  ( CSR_addr_d_o_w        ),</span><br><span class="line">    <span class="variable">.waddr</span>                  ( CSR_addr_d_o          ),</span><br><span class="line">    <span class="variable">.wdata</span>                  (    ),</span><br><span class="line">    <span class="variable">.resetn</span>                 ( resetn                ),</span><br><span class="line">    <span class="variable">.clk</span>                    ( clk                   ),</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>概括</p>
+<ul>
+<li><label><input type="checkbox" checked="" />bug 已修复</label></li>
+<li>bug 描述：</li>
+<li>bug 修复：</li>
+</ul></li>
+</ol>
+<h2 id="测试通过的-riscv-tests">测试通过的 riscv-tests</h2>
+<ol type="1">
+<li>Immdiate Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />ADDI</label></li>
+<li><label><input type="checkbox" checked="" />SLTI</label></li>
+<li><label><input type="checkbox" checked="" />SLTIU</label></li>
+<li><label><input type="checkbox" checked="" />XORI</label></li>
+<li><label><input type="checkbox" checked="" />ORI</label></li>
+<li><label><input type="checkbox" checked="" />ANDI</label></li>
+<li><label><input type="checkbox" checked="" />SLLI</label></li>
+<li><label><input type="checkbox" checked="" />SRLI</label></li>
+<li><label><input type="checkbox" checked="" />SRAI</label></li>
+<li><label><input type="checkbox" checked="" />AUIPC</label></li>
+<li><label><input type="checkbox" checked="" />LUI</label></li>
+</ul></li>
+<li>Register-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />ADD</label></li>
+<li><label><input type="checkbox" checked="" />SUB</label></li>
+<li><label><input type="checkbox" checked="" />SLT</label></li>
+<li><label><input type="checkbox" checked="" />SLTU</label></li>
+<li><label><input type="checkbox" checked="" />XOR</label></li>
+<li><label><input type="checkbox" checked="" />OR</label></li>
+<li><label><input type="checkbox" checked="" />AND</label></li>
+<li><label><input type="checkbox" checked="" />SLL</label></li>
+<li><label><input type="checkbox" checked="" />SRL</label></li>
+<li><label><input type="checkbox" checked="" />SRA</label></li>
+</ul></li>
+<li>Branch-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />JALR</label></li>
+<li><label><input type="checkbox" checked="" />JAL</label></li>
+<li><label><input type="checkbox" checked="" />BEQ</label></li>
+<li><label><input type="checkbox" checked="" />BNE</label></li>
+<li><label><input type="checkbox" checked="" />BLT</label></li>
+<li><label><input type="checkbox" checked="" />BGE</label></li>
+<li><label><input type="checkbox" checked="" />BLTU</label></li>
+<li><label><input type="checkbox" checked="" />BGEU</label></li>
+</ul></li>
+<li>Memory-Type
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />LB</label></li>
+<li><label><input type="checkbox" checked="" />LH</label></li>
+<li><label><input type="checkbox" checked="" />LW</label></li>
+<li><label><input type="checkbox" checked="" />LBU</label></li>
+<li><label><input type="checkbox" checked="" />LHU</label></li>
+<li><label><input type="checkbox" checked="" />SB</label></li>
+<li><label><input type="checkbox" checked="" />SH</label></li>
+<li><label><input type="checkbox" checked="" />SW</label></li>
+</ul></li>
+<li>Multiple
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />DIV</label></li>
+<li><label><input type="checkbox" checked="" />DIVU</label></li>
+<li><label><input type="checkbox" checked="" />MUL</label></li>
+<li><label><input type="checkbox" checked="" />MULH</label></li>
+<li><label><input type="checkbox" checked="" />MULHSU</label></li>
+<li><label><input type="checkbox" checked="" />MULHU</label></li>
+<li><label><input type="checkbox" checked="" />REM</label></li>
+<li><label><input type="checkbox" checked="" />REMU</label></li>
+</ul></li>
+<li>Compressed
+<ul class="task-list">
+<li><label><input type="checkbox" />RVC</label></li>
+</ul></li>
+</ol>
+<h3 id="测试通过截图">测试通过截图</h3>
+<h4 id="immdiate-type">Immdiate-Type</h4>
+<ol type="1">
+<li>ADDI <img src="https://s2.loli.net/2023/07/27/ayvf7q5Zsjb24WB.png"
+alt="ADDI" /></li>
+<li>SLTI <img src="https://s2.loli.net/2023/08/02/XtVMlsZwGNq6Juj.png"
+alt="SLTI" /></li>
+<li>SLTIU <img src="https://s2.loli.net/2023/08/02/uQ1PjDWF38kH6Ic.png"
+alt="SLTIU" /></li>
+<li>XORI <img src="https://s2.loli.net/2023/07/21/R5YbuGZrDVf6cgj.png"
+alt="XORI" /></li>
+<li>ORI <img src="https://s2.loli.net/2023/07/21/QPRkNrMflacEoAj.png"
+alt="ORI" /></li>
+<li>ANDI <img src="https://s2.loli.net/2023/07/21/VCwrtB6vZhkdTNR.png"
+alt="ANDI" /></li>
+<li>SLLI <img src="https://s2.loli.net/2023/07/26/SfJrbcljPNHFBTR.png"
+alt="SLLI" /></li>
+<li>SRLI <img src="https://s2.loli.net/2023/08/02/JwRvtHl2V1dYMZo.png"
+alt="SRLI" /></li>
+<li>SRAI <img src="https://s2.loli.net/2023/08/02/xVch8pouNJ6RsCf.png"
+alt="SRAI" /></li>
+<li>AUIPC <img src="https://s2.loli.net/2023/07/27/6r1gowdD5TSCKZ7.png"
+alt="AUIPC" /></li>
+<li>LUI <img src="https://s2.loli.net/2023/07/21/W8MKySYt6eAOnI1.png"
+alt="LUI" /></li>
+</ol>
+<h4 id="register-type">Register-Type</h4>
+<ol type="1">
+<li>ADD <img src="https://s2.loli.net/2023/07/25/PMqymGolJQxSETR.png"
+alt="ADD" /></li>
+<li>SUB <img src="https://s2.loli.net/2023/08/03/dKxV53SpoQHMfn8.png"
+alt="SUB" /></li>
+<li>SLT <img src="https://s2.loli.net/2023/08/03/ETkQMaBeq9cjwhD.png"
+alt="SLT" /></li>
+<li>SLTU <img src="https://s2.loli.net/2023/07/27/kfzSRQiMFbYZLt2.png"
+alt="SLTU" /></li>
+<li>XOR <img src="https://s2.loli.net/2023/07/25/peKc3EVj7LxQBzb.png"
+alt="XOR" /></li>
+<li>OR <img src="https://s2.loli.net/2023/07/25/JaV15uRe96OHKwl.png"
+alt="OR" /></li>
+<li>AND <img src="https://s2.loli.net/2023/07/25/YszPN56nKEIgFdv.png"
+alt="AND" /></li>
+<li>SLL <img src="https://s2.loli.net/2023/08/03/QxT6GH43MXylE1w.png"
+alt="SLL" /></li>
+<li>SRL <img src="https://s2.loli.net/2023/08/03/7HYzR6fXwOIryGT.png"
+alt="SRL" /></li>
+<li>SRA <img src="https://s2.loli.net/2023/08/03/wj5VzZHxKMgQpSn.png"
+alt="SRA" /></li>
+</ol>
+<h4 id="branch-type">Branch-Type</h4>
+<ol type="1">
+<li>JALR</li>
+<li>JAL</li>
+<li>BEQ</li>
+<li>BNE</li>
+<li>BLT</li>
+<li>BGE</li>
+<li>BLTU</li>
+<li>BGEU</li>
+</ol>
+<h4 id="memory-type">Memory-Type</h4>
+<ol type="1">
+<li>LB <img src="https://s2.loli.net/2023/08/03/jGwqcSdVulAJOyv.png"
+alt="LB" /></li>
+<li>LH <img src="https://s2.loli.net/2023/08/03/G6EBYmbxyl7Ic9H.png"
+alt="LH" /></li>
+<li>LW <img src="https://s2.loli.net/2023/08/03/CQvgmxMZNwYy4SG.png"
+alt="LW" /></li>
+<li>LBU <img src="https://s2.loli.net/2023/08/03/UTrBvMqkwiHxjOo.png"
+alt="LBU" /></li>
+<li>LHU <img src="https://s2.loli.net/2023/08/03/Wzwnx47I5bdjsZG.png"
+alt="LHU" /></li>
+<li>SB <img src="https://s2.loli.net/2023/08/03/5pUa9qBZWfG4J1N.png"
+alt="SB" /></li>
+<li>SH <img src="https://s2.loli.net/2023/08/03/IJfoeUpvZEyKPiS.png"
+alt="SH" /></li>
+<li>SW <img src="https://s2.loli.net/2023/07/27/uc3dSQDjxvnhGAO.png"
+alt="SW" /></li>
+</ol>
+<h4 id="multiple">Multiple</h4>
+<ol type="1">
+<li>DIV</li>
+<li>DIVU</li>
+<li>MUL <img src="https://s2.loli.net/2023/08/10/lGqOvfeuZWAxYLQ.png"
+alt="MUL" /></li>
+<li>MULH <img src="https://s2.loli.net/2023/08/14/ILasCBXG41m3lM9.png"
+alt="MULH" /></li>
+<li>MULHSU <img src="https://s2.loli.net/2023/08/14/f8kbUcHMoQiCVRz.png"
+alt="MULHSU" /></li>
+<li>MULHU <img src="https://s2.loli.net/2023/08/14/fsXcdFi2QNan6BT.png"
+alt="MULHU" /></li>
+<li>REM</li>
+<li>REMU</li>
+</ol>
+<h4 id="compressed">Compressed</h4>
+<ol type="1">
+<li>RVC</li>
+</ol>
+<h1 id="编译32-bits的reference-model">编译32 bits的reference model</h1>
+<h2 id="q-为什么需要32-bits的reference-model">Q: 为什么需要32
+bits的reference model?</h2>
+<p>A: 在进行riscv-tests测试的时候，针对addi, xor等测试集，64
+bits的reference model勉强可以用（在使用的时候，针对64bits的reference
+model， 我们可以取其寄存器低32bits来同MCU进行比较）；<br />
+但是在遇到sra，srl等指令的时候，就不能这么操作了：因为64bits的reference
+model，其最高位是跟32bits的MCU是不同的，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lui ra, 0x80000</span><br><span class="line">srli a4, ra, 1 <span class="comment"># &lt;- miss match</span></span><br></pre></td></tr></table></figure>
+<p>在32bits的MCU上：<code>ra=0x80000000; a4=0x40000000;</code><br />
+在64bits的Ref上：<code>ra=0xffffffff80000000; a4=0x7fffffffc0000000;</code><br />
+即使取Ref的低32bits，也会有：<code>0xc0000000 != 0x40000000</code> <img
+src="https://s2.loli.net/2023/07/21/myp1vc9XGajgwSP.png"
+alt="must 32" /></p>
+<h2 id="编译32bits-reference-model遇到的问题">编译32bits reference
+model遇到的问题</h2>
+<blockquote>
+<p>目前DIFFTEST框架使用的是64bits的Spike作为reference
+model，在引入32bits的reference model时做了如下尝试:</p>
+</blockquote>
+<ol type="1">
+<li><p>尝试编译32bits的NEMU作为reference
+model，<strong>失败</strong></p>
+<ul>
+<li>在NEMU的<a
+target="_blank" rel="noopener" href="https://github.com/OpenXiangShan/NEMU/tree/master">GitHub主页</a>上，给出了编译的教程，但是该教程只针对64bits的版本</li>
+<li>尝试根据上述教程做修改编译32bits的NEMU作为reference
+model失败，<u>因为官方给出的NEMU只包含64bits版本的实现</u></li>
+<li>32bits的NEMU没有给出具体实现，因为一直以来<em>一生一芯</em>的培养过程当中，主要的培养内容就是让学生实现32bits版本的NEMU，
+因此NEMU自然不会给出32版本的NEMU实现</li>
+<li>另一方面，当前使用NEMU编译得到的64bits 的reference
+model在接入到DIFFTEST框架之后，会出现<u>segment
+fault</u>，目前还没有debug出原因。</li>
+</ul></li>
+<li><p>尝试编译32bits的spike作为reference model，没有进展</p>
+<ul>
+<li>根据<a
+target="_blank" rel="noopener" href="https://github.com/riscv-software-src/riscv-isa-sim/tree/master/arch_test_target/spike">Spike
+GitHub主页</a>
+上的教程，更改了XLEN版本，进行编译，但是编译得到的Spike还是64bits的 <img
+src="https://s2.loli.net/2023/07/28/ha4CoZfjxkYJgwz.png"
+alt="spike reference" /></li>
+</ul></li>
+<li><p>可行的思路：在查资料的时候找到了<a
+target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/2.4.html#differential-testing">一生一心第六期的讲义</a>，
+<u>该讲义中提到了在编写32bits的NMEU的时候，可以使用Spike作为32bit是的reference
+moedel</u>，
+所以打算按照该讲义搭建一生一芯第六期的开发环境，然后在该开发环境里生成32bits的Spike
+reference model。 <img
+src="https://s2.loli.net/2023/07/28/YXyJ9fZIp1mtzlr.png"
+alt="spike" /></p></li>
+</ol>
+<blockquote>
+<p>PS：感谢<strong>石峰</strong>同学在搭建Difftest框架时的帮助，例如MCU接入Difftest测试框架、编译Reference
+Model</p>
+</blockquote>
+<h2 id="受reference-model导致测试不通过的测试集">受reference
+model导致测试不通过的测试集</h2>
+<ol type="1">
+<li>右移指令</li>
+<li>SH, SB</li>
+<li>其他未测试过的指令集，也有可能受reference
+model原因导致测试不通过</li>
+</ol>
+<h2
+id="编译32版本的spike作为reference-model">编译32版本的spike作为reference
+model</h2>
+<p>参考了<a
+target="_blank" rel="noopener" href="https://ysyx.oscc.cc/docs/ics-pa/2.4.html#differential-testing">一生一心第六期的讲义</a>里的makefile，通过<code>make -nB</code>可以看到每<code>make</code>执行的每一条指令；<br />
+回到之前的difftest
+框架中，参考上述的<code>make</code>指令即可编译出32bits的spike作为reference
+model</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nemu/tools/spike-diff</span><br><span class="line">make -s GUEST_ISA=riscv32 SHARE=1 ENGINE=interpreter <span class="comment"># set to build 32 bits version</span></span><br><span class="line"><span class="built_in">mkdir</span> -p repo/build</span><br><span class="line"><span class="built_in">cd</span> repo/build &amp;&amp; ../configure</span><br><span class="line">sed -i -e <span class="string">&#x27;s/-g -O2/-O2/&#x27;</span> repo/build/Makefile</span><br><span class="line">CFLAGS=<span class="string">&quot;-fvisibility=hidden&quot;</span> CXXFLAGS=<span class="string">&quot;-fvisibility=hidden&quot;</span></span><br><span class="line"><span class="built_in">cd</span> spike-diff &amp;&amp; make</span><br></pre></td></tr></table></figure>
+<p>除此之外，需要将difftest里CPU_state里的gpr跟pc都更改为32bits位宽</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">  <span class="comment">// uint64_t gpr[32];</span></span><br><span class="line">  <span class="comment">// uint64_t pc;</span></span><br><span class="line">  uint32_t gpr[<span class="number">32</span>];</span><br><span class="line">  uint32_t pc;</span><br><span class="line">&#125; CPU_state;</span><br></pre></td></tr></table></figure>
+<h1 id="回归测试">回归测试</h1>
+<blockquote>
+<p>之前测试riscv-tests时都是手动在Makefile里指定要测试的测试集，测试集不通过时会发现bug；一直修改bug直到通过测试集；
+为了避免修改之后之前通过的测试集反而通过不了了，每次修改之后都应该把所有的测试集跑一遍，保证之前通过的测试集依然能够通过</p>
+</blockquote>
+<h2 id="目录结构介绍">目录结构介绍</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├── build</span><br><span class="line">├── csrc</span><br><span class="line">├── dump.vcd</span><br><span class="line">├── Makefile</span><br><span class="line">├── README.md</span><br><span class="line">├── result.log</span><br><span class="line">├── riscvtest</span><br><span class="line">├── so</span><br><span class="line">└── vsrc</span><br></pre></td></tr></table></figure>
+<p>本目录格式如上所示，各个部分介绍如下：</p>
+<ol type="1">
+<li>build：执行make命令后会编译可执行文件跟中间文件，这些文件都放在build目录下</li>
+<li>csrc：difftest相关的代码</li>
+<li>vsrc：MCU的所有verilog文件</li>
+<li>riscvtest：汇编测试文件，在该目录下可以编译所有的汇编文件得到可执行的bin文件</li>
+<li>so：golden reference存放目录，该目录下有32位的spike.so文件</li>
+<li>result.log：对所有的riscvtest测试集做回归方针，每个测试集是否通过会记录在该文件下</li>
+<li>dump.vcd：波形图</li>
+</ol>
+<h2 id="编译汇编文件">编译汇编文件</h2>
+<ol type="1">
+<li>进入到riscvtest目录下</li>
+<li>编译一个文件：在其Makefile中用EXEC指定想要编译的汇编文件名
+<ul>
+<li><code>make</code>：编译该汇编文件得到elf文件，并且得到bin文件</li>
+<li><code>make code</code>：查看反汇编文件的内容</li>
+</ul></li>
+<li>编译所有文件: <code>make getAll</code></li>
+</ol>
+<h2 id="仿真测试">仿真测试</h2>
+<ol type="1">
+<li>进入到verification目录下</li>
+<li>测试一个测试集：在Makefile中用IMG指定想要测试的测试集，然后<code>make run</code>即可运行difftest，并且进入到debug模式
+<ul>
+<li><code>si</code>可以进行单步调试，逐行执行指令</li>
+<li><code>c</code>可以执行所有指令，直到所有指令执行完毕、或者出现错误</li>
+</ul></li>
+<li>回归测试（测试所有测试集）： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test_all</span><br></pre></td></tr></table></figure>
+所有测试集通过的情况会记录在<code>result.log</code>文件中 &gt; PS:
+<u>测试一个测试集</u>跟<u>测试所有测试集</u>，需要编译的difftest有些许不同，因此在切换测试模式之前，需要先<code>make clean</code></li>
+<li>查看波形：<code>make waveform</code>，即可通过gtkwave打开仿真生成的波形</li>
+</ol>
+<h2 id="语法测试">语法测试</h2>
+<h3 id="spyglass检查语法错误">Spyglass检查语法错误</h3>
+<ol type="1">
+<li>Top文件里，变量先使用后定义导致的错误 <img
+src="https://s2.loli.net/2023/08/21/4yrnpiKZPGIfAov.png" /></li>
+<li>Difftest函数导致的报错 <img
+src="https://s2.loli.net/2023/08/21/hx7tBJq1vgPDcHu.png" /></li>
+<li>最终的测试报告 <img
+src="https://s2.loli.net/2023/08/21/XouUBkwxZa1f3MV.png" /></li>
+</ol>
+<blockquote>
+<p>项目地址：<code>/home/fujie/Developer/verify</code></p>
+</blockquote>
+<h3 id="verilator检查语法错误">Verilator检查语法错误</h3>
+<ol type="1">
+<li><p>发现的语法错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">verilator --lint-only -Wall --top-module top top.</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://s2.loli.net/2023/08/21/bnEXsfLKIQ3taZz.png" /></p></li>
+<li><p>修复完top的<strong>变量名重定义</strong>之后，再次检测语法错误，报错的情况如下：</p>
+<ul>
+<li><p>文件名跟模块名不一致：1个，已解决</p></li>
+<li><p>pin没有连接：1个，已解决</p></li>
+<li><p>信号没有驱动：1个，已解决</p></li>
+<li><p>信号未被使用、信号某些比特未被使用：23个</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 8%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>信号未使用字段</th>
+<th>所属文件</th>
+<th>已解决</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instr</td>
+<td>top</td>
+<td>✅</td>
+<td>difftest相关信号、忽略</td>
+</tr>
+<tr>
+<td>instrIllegal_e_o</td>
+<td>pipelineID</td>
+<td>✅</td>
+<td>预留给CSR Unit、忽略</td>
+</tr>
+<tr>
+<td>instr_i[6:0]</td>
+<td>extendingUnit</td>
+<td>✅</td>
+<td>只用得到部分bits，忽略</td>
+</tr>
+<tr>
+<td>resetn</td>
+<td>memory_block</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr>
+<td>sram_addr</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr>
+<td>ceb</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr>
+<td>web</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>verilator错误，忽略</td>
+</tr>
+<tr>
+<td>flush_delay</td>
+<td>pipelineIF_withFIFO</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr>
+<td>alu_calculation_e_i</td>
+<td>pipelineMEM_withloadstore</td>
+<td>✅</td>
+<td>D-memory只有1k，忽略</td>
+</tr>
+<tr>
+<td>clk</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr>
+<td>resetn</td>
+<td>pipelineWB</td>
+<td>✅</td>
+<td>删除该无用信号</td>
+</tr>
+<tr>
+<td>fin_d_o</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>ld_dst2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>jd2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>jd_b3</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>bptrt</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>bptnt1</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>bnt2</td>
+<td>hazard</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>resetn</td>
+<td>alu</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>e_last</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>sub3_pc[34]</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>rem[34:33]</td>
+<td>long_div</td>
+<td>✅</td>
+<td></td>
+</tr>
+<tr>
+<td>adder8[16]</td>
+<td>multi16</td>
+<td>✅</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># top name not match</span></span><br><span class="line">%Warning-DECLFILENAME: CSA32.v:5:8: Filename <span class="string">&#x27;CSA32&#x27;</span> does not match MODULE name: <span class="string">&#x27;CSA35&#x27;</span></span><br><span class="line">    5 | module CSA35(ain,bin,cin,sout,cout);</span><br><span class="line">      |        ^~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.014</span><br><span class="line">                       ... Use <span class="string">&quot;/* verilator lint_off DECLFILENAME */&quot;</span> and lint_on around <span class="built_in">source</span> to <span class="built_in">disable</span> this message.</span><br><span class="line"></span><br><span class="line"><span class="comment"># pin empty</span></span><br><span class="line">%Warning-PINCONNECTEMPTY: top.v:358:10: Cell pin connected by name with empty reference: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">  358 |         .mw_st                  (),</span><br><span class="line">      |          ^~~~~</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not driven</span></span><br><span class="line">%Warning-UNDRIVEN: hazard.v:26:26: Signal is not driven: <span class="string">&#x27;mw_st&#x27;</span></span><br><span class="line">                                 : ... In instance top.hu</span><br><span class="line">   26 | output fd_st,de_st,em_st,mw_st;</span><br><span class="line">      |                          ^~~~~</span><br><span class="line">                   pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line"></span><br><span class="line"><span class="comment"># signals not used</span></span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:28:24: Bits of signal are not used: <span class="string">&#x27;instr&#x27;</span>[63:32]</span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   28 |     input  wire [63:0] instr,</span><br><span class="line">      |                        ^~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:87:13: Signal is not used: <span class="string">&#x27;fin_d_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   87 |     wire    fin_d_o;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: top.v:99:11: Signal is not used: <span class="string">&#x27;instrIllegal_e_o&#x27;</span></span><br><span class="line">                                  : ... In instance top</span><br><span class="line">   99 |     wire  instrIllegal_e_o;</span><br><span class="line">      |           ^~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:32:16: Signal is not used: <span class="string">&#x27;sram_addr&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   32 |     wire [9:0] sram_addr;</span><br><span class="line">      |                ^~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:10: Signal is not used: <span class="string">&#x27;ceb&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |          ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:33:15: Signal is not used: <span class="string">&#x27;web&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   33 |     wire ceb, web;</span><br><span class="line">      |               ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineIF_withFIFO.v:44:17: Signal is not used: <span class="string">&#x27;flush_delay&#x27;</span></span><br><span class="line">                                                  : ... In instance top.u_pipeline_withFIFO</span><br><span class="line">   44 |     reg         flush_delay;</span><br><span class="line">      |                 ^~~~~~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineMEM_withloadstore.v:20:23: Bits of signal are not used: <span class="string">&#x27;alu_calculation_e_i&#x27;</span>[31:12]</span><br><span class="line">                                                        : ... In instance top.u_pipelineMEM_withloadstore</span><br><span class="line">   20 |     input wire [31:0] alu_calculation_e_i,</span><br><span class="line">      |                       ^~~~~~~~~~~~~~~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:14:23: Signal is not used: <span class="string">&#x27;clk&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   14 |     input wire        clk,</span><br><span class="line">      |                       ^~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: pipelineWB.v:15:23: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                         : ... In instance top.u_pipelineWB</span><br><span class="line">   15 |     input wire        resetn,</span><br><span class="line">      |                       ^~~~~~</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:33:13: Signal is not used: <span class="string">&#x27;ld_dst2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   33 | reg ld_dst1,ld_dst2;</span><br><span class="line">      |             ^~~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:9: Signal is not used: <span class="string">&#x27;jd2&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |         ^~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:38:25: Signal is not used: <span class="string">&#x27;jd_b3&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   38 | reg jd1,jd2,jd_b1,jd_b2,jd_b3;</span><br><span class="line">      |                         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:9: Signal is not used: <span class="string">&#x27;bptrt&#x27;</span></span><br><span class="line">                                    : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |         ^~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:39:21: Signal is not used: <span class="string">&#x27;bptnt1&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   39 | reg bpt,bptrt,bptnt,bptnt1;</span><br><span class="line">      |                     ^~~~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: hazard.v:40:14: Signal is not used: <span class="string">&#x27;bnt2&#x27;</span></span><br><span class="line">                                     : ... In instance top.hu</span><br><span class="line">   40 | reg bnt,bnt1,bnt2;</span><br><span class="line">      |              ^~~~</span><br><span class="line">                       pipelineWB.v:40:1: ... note: In file included from pipelineWB.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: extendingUnit.v:27:23: Bits of signal are not used: <span class="string">&#x27;instr_i&#x27;</span>[6:0]</span><br><span class="line">                                            : ... In instance top.u_pipelineID.u_extendingUnit</span><br><span class="line">   27 |     input wire [31:0] instr_i,</span><br><span class="line">      |                       ^~~~~~~</span><br><span class="line">                       decoder.v:307:1: ... note: In file included from decoder.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: alu.v:14:11: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                  : ... In instance top.u_pipelineEXE.u_alu</span><br><span class="line">   14 | input clk,resetn;</span><br><span class="line">      |           ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: memory_block.v:9:16: Signal is not used: <span class="string">&#x27;resetn&#x27;</span></span><br><span class="line">                                          : ... In instance top.u_pipelineMEM_withloadstore.u_dmemory.u_memory_block3</span><br><span class="line">    9 |     input wire resetn,</span><br><span class="line">      |                ^~~~~~</span><br><span class="line">                       imemory.v:4:1: ... note: In file included from imemory.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:14:26: Signal is not used: <span class="string">&#x27;e_last&#x27;</span></span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   14 | input d_init, e_advance, e_last;</span><br><span class="line">      |                          ^~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:24:22: Bits of signal are not used: <span class="string">&#x27;sub3_pc&#x27;</span>[34]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   24 | wire [34:0] sub3_ps, sub3_pc, rem_sub3;</span><br><span class="line">      |                      ^~~~~~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: long_div.v:27:12: Bits of signal are not used: <span class="string">&#x27;rem&#x27;</span>[34:33]</span><br><span class="line">                                       : ... In instance top.u_pipelineEXE.u_alu.div</span><br><span class="line">   27 | reg [34:0] rem;</span><br><span class="line">      |            ^~~</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br><span class="line">%Warning-UNUSEDSIGNAL: multi16.v:15:69: Bits of signal are not used: <span class="string">&#x27;adder8&#x27;</span>[16]</span><br><span class="line">                                      : ... In instance top.u_pipelineEXE.u_alu.mul.m16</span><br><span class="line">   15 | wire [16:0] adder0,adder1,adder2,adder3,adder4,adder5,adder6,adder7,adder8;</span><br><span class="line">      |                                                                     ^~~~~~</span><br><span class="line">                       long_div.v:92:1: ... note: In file included from long_div.v</span><br><span class="line">                       pipelineIF_withFIFO.v:4:1: ... note: In file included from pipelineIF_withFIFO.v</span><br><span class="line">                       top.v:12:1: ... note: In file included from top.v</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="benchmarks">Benchmarks</h1>
+<h3 id="什么是基准测试">什么是基准测试</h3>
+<ol type="1">
+<li>目的：测试处理器运行的速度，从而评价处理器的性能</li>
+<li>影响处理器单位时间内工作的因素有很多，如：编译器性能、访存的时间、应用的种类</li>
+<li>基准测试：精心设计的一套程序用于覆盖一些通用的计算场景，如列表操作、矩阵计算等</li>
+<li>测试原理：比较处理器完成基准测试的时间，时间越快越好</li>
+</ol>
+<h3 id="coremark">CoreMark</h3>
+<p>网站主页](https://www.eembc.org/coremark/)</p>
+<ul>
+<li>CoreMark主要用于测试<strong>嵌入式系统</strong>的MCU跟CPU的性能，
+测试标准是在配置参数的组合下<u>单位时间内运行的CoreMark程序次数（单位：CoreMark/MHz）</u>，该数字值越大则说明测试的性能越好</li>
+<li>诞生于2009年，目的是作为Dhrystone的替代品（Dhrystone其实主要测试的是编译器的性能），
+为了避免编译器优化导致预先计算出结果，基准测试中的每个操作都会派生一个在编译时不可用的值。</li>
+<li>CoreMark由C编写，包含的测试集主要有：==列表处理（列表搜索、排序）、矩阵操作、状态机测试、CRC测试==</li>
+<li>CoreMark支持8 bits到64 bits的微处理器</li>
+</ul>
+<h3 id="microbench">Microbench</h3>
+<blockquote>
+<p>每个benchmark都记录以<code>REF_CPU</code>为基础测得的运行时间微秒数。每个benchmark的评分是相对于<code>REF_CPU</code>的运行速度，与基准处理器一样快的得分为<code>REF_SCORE=100000</code>。
+所有benchmark的平均得分是整体得分。</p>
+</blockquote>
+<ol type="1">
+<li><p>需要实现==TRM==和==IOE==的API。</p></li>
+<li><p>在IOE的全部实现均留空的情况下仍可运行。如果有正确实现的<code>AM_TIMER_UPTIME</code>，可以输出正确的统计时间。若这个功能没有实现(返回<code>0</code>)，仍可进行正确性测试。</p></li>
+<li><p>使用<code>putch(ch)</code>输出。</p></li>
+<li><p>堆区<code>heap</code>必须初始化(堆区可为空)。如果<code>heap.start == heap.end</code>，即分配了空的堆区，只能运行不使用堆区的测试程序。每个基准程序会预先指定堆区的大小，堆区不足的基准程序将被忽略。</p></li>
+<li><p>主要包含的测试程序：</p>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 60%" />
+<col style="width: 15%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+<th>ref堆区使用</th>
+<th>huge堆区使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qsort</td>
+<td>快速排序随机整数数组</td>
+<td>640KB</td>
+<td>16MB</td>
+</tr>
+<tr>
+<td>queen</td>
+<td>位运算实现的n皇后问题</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>bf</td>
+<td>Brainf**k解释器，快速排序输入的字符串</td>
+<td>32KB</td>
+<td>32KB</td>
+</tr>
+<tr>
+<td>fib</td>
+<td>Fibonacci数列f(n)=f(n-1)+…+f(n-m)的矩阵求解</td>
+<td>256KB</td>
+<td>2MB</td>
+</tr>
+<tr>
+<td>sieve</td>
+<td>Eratosthenes筛法求素数</td>
+<td>2MB</td>
+<td>10MB</td>
+</tr>
+<tr>
+<td>15pz</td>
+<td>A*算法求解4x4数码问题</td>
+<td>2MB</td>
+<td>64MB</td>
+</tr>
+<tr>
+<td>dinic</td>
+<td>Dinic算法求解二分图最大流</td>
+<td>680KB</td>
+<td>2MB</td>
+</tr>
+<tr>
+<td>lzip</td>
+<td>Lzip数据压缩</td>
+<td>4MB</td>
+<td>64MB</td>
+</tr>
+<tr>
+<td>ssort</td>
+<td>Skew算法后缀排序</td>
+<td>4MB</td>
+<td>64MB</td>
+</tr>
+<tr>
+<td>md5</td>
+<td>计算长随机字符串的MD5校验和</td>
+<td>10MB</td>
+<td>64MB</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h3 id="source-code">Source Code</h3>
+<ul>
+<li>Microbench <img
+src="https://s2.loli.net/2023/09/01/pVzw6s8hkRtgLMO.png" /></li>
+<li>Coremark <img
+src="https://s2.loli.net/2023/09/01/9xMLikWUq7KjXFB.png" /></li>
+</ul>
+<h3 id="mcu移植coremark">MCU移植CoreMark：</h3>
+<ul>
+<li>提供对printf的重映射支持：在测试完成之后，需要在中断打印测试分数</li>
+<li>提供一个足够精准的时间测量手段：CoreMark的评价标准是<u>单位时间内运行的CoreMark程序次数是</u></li>
+</ul>
+<p><img src="https://s2.loli.net/2023/09/01/PgHoDackpyq5jlU.png" /></p>
+<h2 id="benchmark-vs-cpi">Benchmark vs ==CPI==</h2>
+<h3 id="影响benchmark得分的因素">影响Benchmark得分的因素</h3>
+<p>Benchmark的跑分需要计算一个关键的数据，即<strong>程序的运行时间</strong>，处理器微架构一模一样的情况下：</p>
+<ol type="1">
+<li>模拟器上跑benchmark：将处理器编译成模拟器在x86主机上运行，该模拟器运行benchmark的时间，受<strong>x86主机性能</strong>的影响
+<img src="https://s2.loli.net/2023/09/01/JRcsUmGWtadbI4p.png" /></li>
+<li>在FPGA上跑benchmark：将RTL移植到FPGA上运行benchmark程序，运行的时间受<strong>频率</strong>的影响
+<img src="https://s2.loli.net/2023/09/01/wTJSViA4HcXqPD5.png" />
+<ul>
+<li>如上图所示：coremark官网上跑分排行榜里的处理器得分，会给出<code>CoreMark</code>跟<code>Coremark/MHz</code>，其实后者更有意义</li>
+<li>例如：Intel Core
+I5在2500MHz下的CoreMark得分为12725分、Atmel的设备在21MHz下的得分为71分，因此频率对于CoreMark得分影响很大</li>
+<li>开源项目如蜂鸟以及Coremark官网上的跑分排行榜，都是在硬件上得出来的，而且会附上频率</li>
+</ul></li>
+<li>除此之外
+<ul>
+<li>Benchmarks得分受访存的影响很大，访问慢速存储器会导致程序的运行时间大大增加，从而严重降低得分</li>
+<li>Benchmarks不能完整测试处理器所有的性能，例如尽管Intel I5相比Arm
+M4有更好的浮点运算能力，但是其在Benchmarks里的<code>CoreMark/MHz</code>得分却比后者低了2倍</li>
+</ul></li>
+</ol>
+<h3
+id="在模拟器上跑分的时候通过cpi更能体现性能">在模拟器上跑分的时候，通过CPI更能体现性能</h3>
+<ol type="1">
+<li>在处理器微架构确定的情况下，处理器运行同一套benchmark的CPI是恒定的</li>
+<li>CPI(Clock Per Instructions)在MCU上如何计算?
+<ul>
+<li>在TOP里设置两个计数器: <code>cycle_register</code>,
+<code>instruction_register</code></li>
+<li>每个时钟上升沿都将cycle_register加一</li>
+<li>在一条指令提交的时候才将instruction_register加一，被flush的指令不会导致instruction_register加一</li>
+<li>在MCU上跑benchmark程序，结束后即可计算CPI:
+<code>CPI=cycle_register/instruction_register</code></li>
+</ul></li>
+</ol>
+<h2 id="spyglass-license-failure">Spyglass License Failure</h2>
+<blockquote>
+<p>source了您目录下的<code>.bashrc</code>文件，依然会License Failure</p>
+</blockquote>
+<ol type="1">
+<li><p>通过<code>make all</code>启动spyglass <img
+src="https://s2.loli.net/2023/09/02/VYR3FdzOMunmHAC.png" /></p></li>
+<li><p>通过<code>spyglass -gui</code>启动spyglass图形化界面</p>
+<figure>
+<img src="https://s2.loli.net/2023/09/02/huytiDNSjUmgw7A.png"
+alt="image-20230902080311122.png" />
+<figcaption aria-hidden="true">image-20230902080311122.png</figcaption>
+</figure>
+<p><img
+src="https://s2.loli.net/2023/09/02/arGoXQCi5dOj3LI.png" /></p></li>
+</ol>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://github.com/eembc/coremark">Core Github</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ganssle.com/rants/coremark.html">How fast is
+your CPU, By Jack Ganssle</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/WenGalois123/p/17455352.html">Spyglass的Lint检查
+by WenGalois123</a></li>
+</ol>
+<h1 id="异步difftest">异步Difftest</h1>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+              <a href="/tags/DIFFTEST/" rel="tag"># DIFFTEST</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/19/find-job/" rel="prev" title="找工作小抄">
+                  <i class="fa fa-chevron-left"></i> 找工作小抄
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/02/vga-v2/" rel="next" title="VGA设计第二版">
+                  VGA设计第二版 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="学习《Effective C++》的读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="effective_cpp">
+<meta property="og:url" content="http://timemeansalot.github.io/2022/03/28/effective-cpp/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="学习《Effective C++》的读书笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-28T06:26:03.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.096Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2022/03/28/effective-cpp/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2022/03/28/effective-cpp/","path":"2022/03/28/effective-cpp/","title":"effective_cpp"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>effective_cpp | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#item-4-always-initialize-object-before-using-it"><span class="nav-number">1.</span> <span class="nav-text">Item 4: always
+initialize object before using it</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-2.-constructors-destructors-and-assignment-operations"><span class="nav-number"></span> <span class="nav-text">Chapter
+2. Constructors, Destructors and Assignment Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#item-5-know-what-functions-c-silently-writes-and-calls"><span class="nav-number">1.</span> <span class="nav-text">Item 5:
+Know what functions C++ silently writes and calls</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-6-explicitly-disallow-the-use-of-compiler-generated-functions"><span class="nav-number">2.</span> <span class="nav-text">Item
+6: Explicitly disallow the use of compiler generated functions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-7-declare-destructors-virtual-in-polymorphic-base-classes"><span class="nav-number">3.</span> <span class="nav-text">Item
+7: Declare destructors virtual in polymorphic base classes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-8-prevent-exceptions-from-leaving-destructors"><span class="nav-number">4.</span> <span class="nav-text">Item 8:
+Prevent exceptions from leaving destructors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-9-never-call-virtual-functions-during-construction-or-destruction"><span class="nav-number">5.</span> <span class="nav-text">Item
+9: Never call virtual functions during construction or destruction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-10-have-assignment-operation-return-a-reference-to-this"><span class="nav-number">6.</span> <span class="nav-text">Item
+10: Have assignment operation return a reference to *this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-11-handle-assignment-to-self-in-operator"><span class="nav-number">7.</span> <span class="nav-text">Item 11: Handle
+assignment to self in operator&#x3D;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-12-copy-all-parts-of-an-object"><span class="nav-number">8.</span> <span class="nav-text">Item 12: Copy all parts of
+an object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-3.-resource-management"><span class="nav-number"></span> <span class="nav-text">Chapter 3. Resource
+Management</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#item-13-using-objects-to-manage-resources"><span class="nav-number">1.</span> <span class="nav-text">Item 13: Using
+objects to manage resources</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-14-think-carefully-about-copying-behavior-in-resource-managing-classes"><span class="nav-number">2.</span> <span class="nav-text">Item
+14: Think carefully about copying behavior in resource-managing
+classes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-15-provide-access-to-raw-resources-in-resource-managing-classes"><span class="nav-number">3.</span> <span class="nav-text">Item
+15: Provide access to raw resources in resource-managing classes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-16-use-the-same-form-in-corresponding-uses-of-new-and-delete"><span class="nav-number">4.</span> <span class="nav-text">Item
+16: Use the same form in corresponding uses of new and delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-17-store-new_ed-objects-in-smart-pointers-in-standard-statements"><span class="nav-number">5.</span> <span class="nav-text">Item
+17: Store new_ed objects in smart pointers in standard statements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-4.-designs-and-declarations"><span class="nav-number"></span> <span class="nav-text">Chapter 4. Designs and
+Declarations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#item-18-make-interfaces-easy-to-use-correctly-and-hard-to-use-incorrectly"><span class="nav-number">1.</span> <span class="nav-text">Item
+18: make interfaces easy to use correctly and hard to use
+incorrectly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-19-treat-class-design-as-type-design"><span class="nav-number">2.</span> <span class="nav-text">Item 19: Treat class
+design as type design</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-20-prefer-pass-by-reference-to-const-to-pass-by-value"><span class="nav-number">3.</span> <span class="nav-text">Item
+20: Prefer pass-by-reference-to-const to pass-by-value</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-21-dont-try-to-return-a-reference-when-you-must-return-an-object"><span class="nav-number">4.</span> <span class="nav-text">Item
+21: Don&#39;t try to return a reference when you must return an object</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-22-declared-data-members-private"><span class="nav-number">5.</span> <span class="nav-text">Item 22: Declared data
+members private</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-23-prefer-non-member-function-to-member-function"><span class="nav-number">6.</span> <span class="nav-text">Item 23:
+Prefer non-member function to member function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item-24-declare-non-member-functions-when-type-conversions-should-apply-to-all-parameters"><span class="nav-number">7.</span> <span class="nav-text">Item
+24: Declare non-member functions when type conversions should apply to
+all parameters</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2022/03/28/effective-cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="effective_cpp | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          effective_cpp
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-03-28 14:26:03" itemprop="dateCreated datePublished" datetime="2022-03-28T14:26:03+08:00">2022-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>学习《Effective C++》的读书笔记</p>
+<span id="more"></span>
+<h2 id="item-4-always-initialize-object-before-using-it">Item 4: always
+initialize object before using it</h2>
+<ol type="1">
+<li>manually initialize all built-in type</li>
+<li>use <strong>initialization list</strong> to initialize data members
+in class when writing constructors for class.</li>
+<li>use a function which returns the reference of (this can make the
+<strong>non-local static variable</strong> become local static
+variable), instead of directly use non-local static variable itself. So
+the initialization of the local static variable will happen when the
+corresponding function is called. However the <u>initialization order of
+two non-local static variable declared in two translation unit is
+unknow,</u> which could be disastrous.</li>
+</ol>
+<h1
+id="chapter-2.-constructors-destructors-and-assignment-operations">Chapter
+2. Constructors, Destructors and Assignment Operations</h1>
+<h2 id="item-5-know-what-functions-c-silently-writes-and-calls">Item 5:
+Know what functions C++ silently writes and calls</h2>
+<blockquote>
+<p>If we don't create, C++ compiler will declares <strong>constructor,
+copy constructor, destructor and copy assignment operator</strong> for
+us. If we would use these functions in our code, the compiler will write
+these functions for us.</p>
+</blockquote>
+<h2
+id="item-6-explicitly-disallow-the-use-of-compiler-generated-functions">Item
+6: Explicitly disallow the use of compiler generated functions</h2>
+<p>Just as mentions in Item5, the compiler would automatically create
+functions for us, what can we do if <strong>we don't want the compiler
+to create</strong> some of such classes?</p>
+<p>For example, we want to make the copy of two objects illegal, but the
+compiler will always make a copy constructor and copy assignment
+operator for our class.</p>
+<ul>
+<li>The way to make copy of objects illegal is that <strong>we can
+manually define copy constructor and copy assignment operation, but we
+defined them as private.</strong> So the copy function cannot be
+called</li>
+<li>Moreover, if you <strong>don't provide function definition</strong>
+for your manually defined copy function, then you can't even call them
+using class member function, you will get a link error.</li>
+<li>You can create a base class who declared the copy function as
+private and doesn't provide function body. Then every <strong>class
+inherits from this base class is not allow to copy.</strong></li>
+</ul>
+<h2
+id="item-7-declare-destructors-virtual-in-polymorphic-base-classes">Item
+7: Declare destructors virtual in polymorphic base classes</h2>
+<p>If you want to use pointer of parent class to access child objects,
+you must declare the parent destructor as virtual. If you don't do that,
+when you try to free the child object using the parent pointer, you can
+only delete the members inherited from parent class, you can't delete
+the members of the child class.</p>
+<ul>
+<li>If you want to delete all members in child object using parent
+pointer, you must declare parent's destructor as virtual.</li>
+<li>It's bad to inherit from a parent class who doesn't provide virtual
+destructor.</li>
+<li>You can make an <strong>abstract class</strong> by declare it's
+destructor as a <strong>pure virtual destructor</strong>. But you have
+to provide the definition of that destructor outside the class.</li>
+</ul>
+<h2 id="item-8-prevent-exceptions-from-leaving-destructors">Item 8:
+Prevent exceptions from leaving destructors</h2>
+<ol type="1">
+<li>Can't emit exceptions in destructor: If an error is thrown in
+destructor, It will probably make the process to free resources
+fail.</li>
+<li>Make a client class to deal with the exceptions, you can make a
+<strong>non-destruct function</strong> to handle with exceptions and you
+can handle exceptions in the destructor of client class.</li>
+</ol>
+<h2
+id="item-9-never-call-virtual-functions-during-construction-or-destruction">Item
+9: Never call virtual functions during construction or destruction</h2>
+<ol type="1">
+<li>Don't call virtual function in a constructor or destructor. Because
+if you make a constructor of parent class call a virtual function, and
+you think it's going to call the function of derived class. However, it
+can only call the virtual function in parent class itself. Because when
+we call the constructor of parent class, the derived class has not been
+defined yet, how could we call the function defined in derived
+class?</li>
+<li>We can pass back information to parent class from child class for
+different derived class, so they can have different behavior.</li>
+<li><strong>Static</strong> functions can only modify static members of
+the class; it's shared by all objects of that class; it's called by
+class_name::function_name</li>
+</ol>
+<h2
+id="item-10-have-assignment-operation-return-a-reference-to-this">Item
+10: Have assignment operation return a reference to *this</h2>
+<p>The assign operation in C++ to the right first, for example a=b=c=15,
+C++ first make c=15, them assign b=c, then assign a=b.</p>
+<p>When we do operator override, the assignment operation must return
+*this.</p>
+<h2 id="item-11-handle-assignment-to-self-in-operator">Item 11: Handle
+assignment to self in operator=</h2>
+<p>When we write operator= for a class, we have to make sure the
+function forms well when we do <strong>a=a</strong>, which a is an
+instance of the class. There are 3 ways to assignment error and
+exception error:</p>
+<ol type="1">
+<li>compare resource address and target address</li>
+<li>allocate new resource before delete old resource</li>
+<li>use <em>copy and swap</em> technical</li>
+</ol>
+<h2 id="item-12-copy-all-parts-of-an-object">Item 12: Copy all parts of
+an object</h2>
+<blockquote>
+<p>Return reference in copy assignment operation can reduce of "copy
+constructor and destructor". Because if we return value in copy
+assignment operation, we have use copy constructor to copy the object in
+copy assignment function to the left value of =. For example</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// define class food</span></span><br><span class="line">food f1;</span><br><span class="line">food f2=f1;</span><br></pre></td></tr></table></figure>
+<p>In the code above, if we pass by value in copy assignment function:
+the object created in the copy function must be copied to f2 by copy
+constructor, and the object inside copy assignment must be freed by
+calling destructor. However, if we pass by reference in copy assignment,
+the call of <em>copy constructor and destructor</em> can be reduced.</p>
+<ol type="1">
+<li>copy all members in class. If you have add new members, you have to
+modify your copy constructor and copy assignment operator.</li>
+<li>call copy functions of parent class when writing copy functions for
+child class.</li>
+<li><em>never</em> call copy constructor in copy assignment operation,
+vise versa. Even they are very similar with each other. You can put the
+common parts of the two functions into a third function name
+<em>Init</em>, then both the copy constructor and copy assignment
+operator can call the Init function.</li>
+</ol>
+<h1 id="chapter-3.-resource-management">Chapter 3. Resource
+Management</h1>
+<p>Resources are something you must free after finishing using them.</p>
+<h2 id="item-13-using-objects-to-manage-resources">Item 13: Using
+objects to manage resources</h2>
+<p>Because we have to delete the resource after using it. However, we
+can't make sure our code can reach the <em>delete sentence</em>. We have
+to use objects to manager resources in order to use the destructor to
+release the resource(C++ make sure the destructor can always be
+executed.) <strong>This is called RAII(resource acquisition is
+initialization).</strong></p>
+<ol type="1">
+<li>auto_pointer is a pointer who will automatic call the delete
+function of the object which it points to. There can be only one
+auto_pointer pointed to the same object--&gt; When copy one auto_pointer
+to another, the original copy_pointer will be destroyed--&gt;
+Auto_pointers can't be stored in C++ containers, because C++ containers
+require the contents exhibit "normal copy behavior".</li>
+<li>reference-counting smart pointers(RCSP) will count how much copy of
+the pointer. If there is zero copy of the RCSP pointer, it will call the
+delete function of the object which it points to to release
+resource.</li>
+</ol>
+<h2
+id="item-14-think-carefully-about-copying-behavior-in-resource-managing-classes">Item
+14: Think carefully about copying behavior in resource-managing
+classes</h2>
+<ol type="1">
+<li>Coping an RAII object entails copying the resource it manages.</li>
+</ol>
+<h2
+id="item-15-provide-access-to-raw-resources-in-resource-managing-classes">Item
+15: Provide access to raw resources in resource-managing classes</h2>
+<ol type="1">
+<li>APIs often require access to raw resources, so each RAII class
+should offer a way to get at the resource it manages.</li>
+<li>Access may be via explicit or implicit conversion, explicit
+conversion is more safe while implicit conversion is more convenient for
+clients.</li>
+</ol>
+<h2
+id="item-16-use-the-same-form-in-corresponding-uses-of-new-and-delete">Item
+16: Use the same form in corresponding uses of new and delete</h2>
+<ol type="1">
+<li>if use [ ] in <em>new</em> expression, use [ ] in <em>delete
+expression</em>, if don't use [ ] in <em>new</em> expression, don't use
+[ ] in <em>delete expression</em>.</li>
+</ol>
+<h2
+id="item-17-store-new_ed-objects-in-smart-pointers-in-standard-statements">Item
+17: Store new_ed objects in smart pointers in standard statements</h2>
+<ol type="1">
+<li>Failure to do this can lead to subtle resource leaks when exceptions
+are thrown.</li>
+</ol>
+<h1 id="chapter-4.-designs-and-declarations">Chapter 4. Designs and
+Declarations</h1>
+<h2
+id="item-18-make-interfaces-easy-to-use-correctly-and-hard-to-use-incorrectly">Item
+18: make interfaces easy to use correctly and hard to use
+incorrectly</h2>
+<ol type="1">
+<li>Good interfaces are easy to use correctly and hard to use
+incorrectlly.</li>
+<li>Prevent error include consistency in interfaces and behave
+compatibility with build-in types.</li>
+</ol>
+<h2 id="item-19-treat-class-design-as-type-design">Item 19: Treat class
+design as type design</h2>
+<p>Class design is type design. Before defining a new type, be sure to
+consider all the issues discussed in this item.</p>
+<h2 id="item-20-prefer-pass-by-reference-to-const-to-pass-by-value">Item
+20: Prefer pass-by-reference-to-const to pass-by-value</h2>
+<ol type="1">
+<li>For user defined type, it's more efficient to
+pass-by-reference-const than pass-by-value. Because pass by reference
+will not create new object, so no copy constructor or destructor are
+used.</li>
+<li><em>Slicing problem:</em> If you pass by value and set parameter as
+parent class type, when you put a child child object to that function,
+only the parent class part can be copied while the child class part will
+be drop.</li>
+<li>For build-in type, STL iterator and function object type, it's more
+convenient to pass-by-value, they are easy to copy.</li>
+<li>Pass-by-value are indeed pass <strong>pointers</strong>.</li>
+</ol>
+<h2
+id="item-21-dont-try-to-return-a-reference-when-you-must-return-an-object">Item
+21: Don't try to return a reference when you must return an object</h2>
+<p>Don't pass reference to objects that not exists.</p>
+<ol type="1">
+<li>Any function return a pointer or reference to a local object is not
+allowed, because local object will be destroyed when the function
+exits.</li>
+<li>Don't return reference of pointer to static local object, though
+they will not be destroyed, but there could be an issue if more than one
+of that object is needed.</li>
+</ol>
+<h2 id="item-22-declared-data-members-private">Item 22: Declared data
+members private</h2>
+<ol type="1">
+<li>Hiding data members behind function can easily control the read and
+write access of data member</li>
+<li>If you make clients access data members directly, your ability to
+change anything public is extremely restricted. Because to much clients
+code will broken if you make a change to your class.</li>
+<li>In fact, protected data members are no more encapsulated than public
+data members.</li>
+</ol>
+<h2 id="item-23-prefer-non-member-function-to-member-function">Item 23:
+Prefer non-member function to member function</h2>
+<p>Although encapsulation is very import in C++, if will define to much
+member function, it's an harm to encapsulation.</p>
+<p><strong>The more client can see inside a class, the better
+encapsulation the class has.</strong> non-member functions can increase
+encapsulation, flexibility, and extensibility.</p>
+<h2
+id="item-24-declare-non-member-functions-when-type-conversions-should-apply-to-all-parameters">Item
+24: Declare non-member functions when type conversions should apply to
+all parameters</h2>
+<ol type="1">
+<li>Do not use explicit keyword when you want to perform implicit
+conversion</li>
+<li>If you need type conversions on all parameters to a function, the
+function must be a non-member.</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Programming/" rel="tag"># Programming</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/09/learn-python/" rel="prev" title="learn_python">
+                  <i class="fa fa-chevron-left"></i> learn_python
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/21/algorithm-notes/" rel="next" title="算法笔记-学习Labuladong的算法时，做的笔记">
+                  算法笔记-学习Labuladong的算法时，做的笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

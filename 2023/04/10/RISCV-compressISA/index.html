@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"timemeansalot.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RISC-V 压缩指令集学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RISC-V压缩指令集">
+<meta property="og:url" content="http://timemeansalot.github.io/2023/04/10/RISCV-compressISA/index.html">
+<meta property="og:site_name" content="timemeansalot">
+<meta property="og:description" content="RISC-V 压缩指令集学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/04/10/C73opKyZbMJrktW.png">
+<meta property="og:image" content="http://timemeansalot.github.io/Users/fujie/Pictures/typora/rvc.svg">
+<meta property="og:image" content="https://s2.loli.net/2023/04/26/vLnagHUEzKwyx5e.png">
+<meta property="article:published_time" content="2023-04-10T11:58:24.000Z">
+<meta property="article:modified_time" content="2024-12-22T02:09:10.095Z">
+<meta property="article:author" content="FuJie">
+<meta property="article:tag" content="RISC-V">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/04/10/C73opKyZbMJrktW.png">
+
+
+<link rel="canonical" href="http://timemeansalot.github.io/2023/04/10/RISCV-compressISA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://timemeansalot.github.io/2023/04/10/RISCV-compressISA/","path":"2023/04/10/RISCV-compressISA/","title":"RISC-V压缩指令集"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RISC-V压缩指令集 | timemeansalot</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">timemeansalot</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力、奋斗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#risc-v-%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">RISC-V 压缩指令基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">压缩指令格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c.lw-%E6%A0%BC%E5%BC%8F%E4%B8%BE%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">C.LW 格式举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E6%88%90-rv32i-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">恢复成 RV32I 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#op00"><span class="nav-number">2.2.1.</span> <span class="nav-text">op&#x3D;00</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#op01"><span class="nav-number">2.2.2.</span> <span class="nav-text">op&#x3D;01</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#op10"><span class="nav-number">2.2.3.</span> <span class="nav-text">op&#x3D;&#x3D;10</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E7%9B%B8%E4%BC%BC%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">🌟 格式相似的指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E6%B3%95%E6%8C%87%E4%BB%A4illegal-instruction"><span class="nav-number">4.</span> <span class="nav-text">🌟 非法指令(illegal
+instruction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rvc-%E7%9A%84-imm-%E5%A6%82%E4%BD%95%E6%8B%93%E5%B1%95%E4%B8%BA%E5%AF%B9%E5%BA%94-rv32i-%E7%9A%84-imm"><span class="nav-number">5.</span> <span class="nav-text">🌟 RVC 的 imm
+如何拓展为对应 RV32I 的 imm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E6%88%90%E5%85%B6%E4%BB%96%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4change-to-other-rvc-instruction"><span class="nav-number">6.</span> <span class="nav-text">变成其他压缩指令(change
+to other RVC instruction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hints-instruction"><span class="nav-number">7.</span> <span class="nav-text">HINTs instruction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rvc-%E6%8C%87%E4%BB%A4%E6%8B%93%E5%B1%95%E6%88%90-rv32i-%E5%85%B7%E4%BD%93%E6%96%B9%E6%B3%95"><span class="nav-number">8.</span> <span class="nav-text">RVC 指令拓展成 RV32I
+具体方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#verilog-%E5%AE%9E%E7%8E%B0"><span class="nav-number">9.</span> <span class="nav-text">Verilog 实现</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="FuJie"
+      src="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+  <p class="site-author-name" itemprop="name">FuJie</p>
+  <div class="site-description" itemprop="description">花丛才有蜜蜂，粪坑只有苍蝇</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/timemeansalot" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;timemeansalot" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/timemeansalot@gmail.com" title="E-Mail → timemeansalot@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://timemeansalot.github.io/2023/04/10/RISCV-compressISA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://s2.ax1x.com/2019/03/19/AuQxUJ.jpg">
+      <meta itemprop="name" content="FuJie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="timemeansalot">
+      <meta itemprop="description" content="花丛才有蜜蜂，粪坑只有苍蝇">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RISC-V压缩指令集 | timemeansalot">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RISC-V压缩指令集
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-10 19:58:24" itemprop="dateCreated datePublished" datetime="2023-04-10T19:58:24+08:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-22 10:09:10" itemprop="dateModified" datetime="2024-12-22T10:09:10+08:00">2024-12-22</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2023/04/10/C73opKyZbMJrktW.png"
+alt="RV-32C" /> RISC-V 压缩指令集学习笔记</p>
+<span id="more"></span>
+<h2 id="risc-v-压缩指令基础">RISC-V 压缩指令基础</h2>
+<ol type="1">
+<li><p>RV32I 会在下述情况下压缩指令，生成 RISC-V 压缩指令(RVC)</p>
+<ol type="1">
+<li>imm, offset 很小的时候</li>
+<li>register 是 x0 或者 x2</li>
+<li>register 是常用的那 8 个: x8~x15</li>
+<li>rs1=rd</li>
+</ol></li>
+<li><p>RVC 中的指令大致可以分为如下三类:</p>
+<ol type="1">
+<li>Load and Store(4): <code>LW</code>, <code>SW</code>,
+<code>LWSP</code>, <code>SWSP</code></li>
+<li>Control(6): <code>J</code>, <code>JAL</code>, <code>JR</code>,
+<code>JALR</code>, <code>BEQZ</code>, <code>BNEZ</code></li>
+<li>Integer:
+<ul>
+<li>Register-Immediate(9): <code>LI</code>, <code>LUI</code>,
+<code>ADDI</code>, <code>ADDI16SP</code>, <code>ADDI4SPN</code>,
+<code>SLLI</code>, <code>SRLI</code>, <code>SRAI</code>,
+<code>ANDI</code></li>
+<li>Register-Register(6): <code>MV</code>, <code>AND</code>,
+<code>OR</code>, <code>XOR</code>, <code>SUB</code>,
+<code>ADD</code></li>
+<li>Others(3): <code>NOP</code>, <code>EBREAK</code>,
+<code>HINT</code></li>
+</ul></li>
+</ol></li>
+<li><p>RV-32IM 中有对应压缩指令的指令</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(opcode_{[6:2]}\)</span></th>
+<th>RV-32I 指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01101</td>
+<td>LUI</td>
+</tr>
+<tr>
+<td>01000</td>
+<td>SW</td>
+</tr>
+<tr>
+<td>00000</td>
+<td>LW</td>
+</tr>
+<tr>
+<td>00100</td>
+<td>ADDI, ANDI, SLLI, SRLI, SRAI</td>
+</tr>
+<tr>
+<td>01100</td>
+<td>ADD, SUB, XOR, OR, AND,</td>
+</tr>
+<tr>
+<td>11001</td>
+<td>JALR</td>
+</tr>
+<tr>
+<td>11011</td>
+<td>JAL</td>
+</tr>
+<tr>
+<td>11000</td>
+<td>BEQ, BNE</td>
+</tr>
+<tr>
+<td>11100</td>
+<td>EBREAK</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>RV-32IM 中没有对应压缩指令的指令：</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(opcode_{[6:2]}\)</span></th>
+<th>RV-32IM 指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00101</td>
+<td>AUIPC</td>
+</tr>
+<tr>
+<td>01000</td>
+<td>SB, SH</td>
+</tr>
+<tr>
+<td>00000</td>
+<td>LB, BH, LBU, LHU</td>
+</tr>
+<tr>
+<td>00100</td>
+<td>SLTI, SLTIU, XORI, ORI</td>
+</tr>
+<tr>
+<td>01100</td>
+<td>SLT, SLTU, SLLI, SRLI, SRAI</td>
+</tr>
+<tr>
+<td>11000</td>
+<td>BLT, BGE, BLTU, BGEU</td>
+</tr>
+<tr>
+<td>01100</td>
+<td>MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<h2 id="压缩指令格式">压缩指令格式</h2>
+<h3 id="c.lw-格式举例">C.LW 格式举例</h3>
+<ol type="1">
+<li><p><code>LW</code> for <em>load word</em>,
+是<code>CL</code>格式的压缩指令</p></li>
+<li><p>功能：<code>x[8+rd’] = sext(M[x[8+rs1’] + uimm][31:0])</code></p></li>
+<li><p>扩展成 32bits
+指令：<code>c.lw rd’,uimm(rs1’) --&gt; lw rd’,offset[6:2](rs1’)</code></p>
+<ul>
+<li>imm 占 5bits，imm 乘 4，<strong>零扩展</strong>为 32bits</li>
+<li>rs1'和 rd'都是寄存器的下标，只有 3bits，其可以索引 x8~x15
+的寄存器</li>
+</ul></li>
+<li><p>将 C.LW 拓展为 32bits 的 LW 指令</p>
+<ul>
+<li><p>已知 C.LW 格式</p>
+<table>
+<thead>
+<tr>
+<th>15-13</th>
+<th>12-10</th>
+<th>9-7</th>
+<th>6-5</th>
+<th>4-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>010</td>
+<td>uimm[5:3]</td>
+<td>rs1'</td>
+<td>uimm[2|6]</td>
+<td>rd'</td>
+<td>00</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>已知 LW 格式</p>
+<table>
+<thead>
+<tr>
+<th>31-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset</td>
+<td>rs1</td>
+<td>010</td>
+<td>rd</td>
+<td>00000</td>
+<td>11</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>用 c 表示 RVC 指令, i 表示 RV32I 指令，则由 c 拓展得到 i
+策略如下</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 17%" />
+<col style="width: 6%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr>
+<th>31-20</th>
+<th>19-15</th>
+<th>14-12</th>
+<th>11-7</th>
+<th>6-2</th>
+<th>1-0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5'b0, c[5], c[12:10], c[5], 2'b0</td>
+<td>2'b01, c[9:7]</td>
+<td>010</td>
+<td>2'b01, c[4:2]</td>
+<td>5'b00000</td>
+<td>2'b11</td>
+</tr>
+</tbody>
+</table>
+<p><code>i=&#123;5'b0, c[5], c[12:10], c[5], 2'b0, 2'b01, c[9:7], 010, 2'b01, c[4:2] , 7'b0000011&#125;</code></p></li>
+</ul></li>
+</ol>
+<p>由于 RVC
+指令的格式、功能比较固定，且官方的手册已经说的足够精简了，因此本文档不再专门逐一总结其余
+26 条 RV32I 相关的 RVC 指令，请参考以下链接自行阅读：</p>
+<ol type="1">
+<li>🌟<a
+target="_blank" rel="noopener" href="https://five-embeddev.com/riscv-isa-manual/latest/c.html">Official:
+“C” Standard Extension for Compressed Instructions, Version 2.0</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://msyksphinz-self.github.io/riscv-isadoc/html/rvc.html">RV32C,
+RV64C Instructions on riscv-isa-page</a></li>
+</ol>
+<h3 id="恢复成-rv32i-指令">恢复成 RV32I 指令</h3>
+<blockquote>
+<p>RVC 恢复成 RV32I 指令的时候，首先根据 op 部分对指令进行分类，再根据
+funct3 部分对指令分类。如果多个指令 op 和 funct3
+都相同，则需要进一步根据其它字段来区分他们</p>
+</blockquote>
+<h4 id="op00">op=00</h4>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 15%" />
+<col style="width: 23%" />
+<col style="width: 15%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th>压缩指令</th>
+<th>op=inst[1:0]</th>
+<th>funct3=inst[15:13]</th>
+<th>压缩指令格式</th>
+<th>对应 32I 指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADDI4SPN</td>
+<td>00</td>
+<td>000</td>
+<td>CIW</td>
+<td><code>addi rd’,x2,nzuimm</code></td>
+</tr>
+<tr>
+<td>LW</td>
+<td>00</td>
+<td>010</td>
+<td>CL</td>
+<td><code>lw rd’,offset[6:2](rs1’)</code></td>
+</tr>
+<tr>
+<td>SW</td>
+<td>00</td>
+<td>110</td>
+<td>CS</td>
+<td><code>sw rs2’,offset[6:2](rs1’)</code></td>
+</tr>
+</tbody>
+</table>
+<p>op=00 时，如果 funct3 不是上述 3 种情况，则都是非法压缩指令</p>
+<h4 id="op01">op=01</h4>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 16%" />
+<col style="width: 24%" />
+<col style="width: 16%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>压缩指令</th>
+<th>op=inst[1:0]</th>
+<th>funct3=inst[15:13]</th>
+<th>压缩指令格式</th>
+<th>对应 32I 指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NOP</td>
+<td>01</td>
+<td>000</td>
+<td>CI</td>
+<td><code>addi x0, x0, 0</code></td>
+</tr>
+<tr>
+<td>ADDI</td>
+<td>01</td>
+<td>000</td>
+<td>CI</td>
+<td><code>addi rd, rd, nzimm[5:0]</code></td>
+</tr>
+<tr>
+<td>JAL</td>
+<td>01</td>
+<td>001</td>
+<td>CJ</td>
+<td><code>jal x1, offset[11:1]</code></td>
+</tr>
+<tr>
+<td>LI</td>
+<td>01</td>
+<td>010</td>
+<td>CI</td>
+<td><code>addi rd,x0,imm[5:0]</code></td>
+</tr>
+<tr>
+<td>LUI</td>
+<td>01</td>
+<td>011</td>
+<td>CI</td>
+<td><code>lui rd,nzuimm[17:12]</code></td>
+</tr>
+<tr>
+<td>ADDI16SP</td>
+<td>01</td>
+<td>011</td>
+<td>CI</td>
+<td><code>addi x2,x2, nzimm[9:4]</code></td>
+</tr>
+<tr>
+<td>SRLI</td>
+<td>01</td>
+<td>100000</td>
+<td>CB</td>
+<td><code>srli rd’,rd’,shamt[5:0]</code></td>
+</tr>
+<tr>
+<td>SRAI</td>
+<td>01</td>
+<td>100001</td>
+<td>CB</td>
+<td><code>srai rd’,rd’,shamt[5:0]</code></td>
+</tr>
+<tr>
+<td>ANDI</td>
+<td>01</td>
+<td>100x10</td>
+<td>CB</td>
+<td><code>andi rd’,rd’,imm[5:0]</code></td>
+</tr>
+<tr>
+<td>SUB</td>
+<td>01</td>
+<td>100011</td>
+<td>CA</td>
+<td><code>sub rd’,rd’,rs2’</code></td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>01</td>
+<td>100011</td>
+<td>CA</td>
+<td><code>xor rd’,rd’,rs2’</code></td>
+</tr>
+<tr>
+<td>OR</td>
+<td>01</td>
+<td>100011</td>
+<td>CA</td>
+<td><code>or rd’,rd’,rs2</code></td>
+</tr>
+<tr>
+<td>AND</td>
+<td>01</td>
+<td>100011</td>
+<td>CA</td>
+<td><code>and rd’,rd’,rs2’</code></td>
+</tr>
+<tr>
+<td>J</td>
+<td>01</td>
+<td>101</td>
+<td>CJ</td>
+<td><code>jal x0,offset[11:1]</code></td>
+</tr>
+<tr>
+<td>BEQZ</td>
+<td>01</td>
+<td>110</td>
+<td>CB</td>
+<td><code>beq rs1’,x0,offset[8:1]</code></td>
+</tr>
+<tr>
+<td>BNEZ</td>
+<td>01</td>
+<td>111</td>
+<td>CB</td>
+<td><code>bne rs1’,x0,offset[8:1]</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="op10">op==10</h4>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 16%" />
+<col style="width: 24%" />
+<col style="width: 16%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>压缩指令</th>
+<th>op=inst[1:0]</th>
+<th>funct3=inst[15:13]</th>
+<th>压缩指令格式</th>
+<th>对应 32I 指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLLI</td>
+<td>10</td>
+<td>000</td>
+<td>CI</td>
+<td><code>slli rd,rd,shamt[5:0]</code></td>
+</tr>
+<tr>
+<td>LWSP</td>
+<td>10</td>
+<td>010</td>
+<td>CI</td>
+<td><code>lw rd,offset[7:2](x2)</code></td>
+</tr>
+<tr>
+<td>MV</td>
+<td>10</td>
+<td>1000</td>
+<td>CR</td>
+<td><code>add rd, x0, rs2</code></td>
+</tr>
+<tr>
+<td>JR</td>
+<td>10</td>
+<td>1000</td>
+<td>CR</td>
+<td><code>jalr x0,rs1,0</code></td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>10</td>
+<td>1001</td>
+<td>CR</td>
+<td><code>add rd,rd,rs2</code></td>
+</tr>
+<tr>
+<td>EBREAK</td>
+<td>10</td>
+<td>1001</td>
+<td>CR</td>
+<td><code>ebreak</code></td>
+</tr>
+<tr>
+<td>JALR</td>
+<td>10</td>
+<td>1001</td>
+<td>CR</td>
+<td><code>jalr x1,rs1,0</code></td>
+</tr>
+<tr>
+<td>SWSP</td>
+<td>10</td>
+<td>110</td>
+<td>CSS</td>
+<td><code>sw rs2,offset[7:2](x2)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="格式相似的指令">🌟 格式相似的指令</h2>
+<ol type="1">
+<li><code>SRLI</code>、<code>SRAI</code>和<code>ANDI</code>[11:10]:
+<ul>
+<li><code>SRLI</code>: 00</li>
+<li><code>SRAI</code>: 01</li>
+<li><code>ANDI</code>: 10</li>
+</ul></li>
+<li><code>J</code>和<code>JAL</code>只有 inst[15]不一样</li>
+<li><code>JR</code>和<code>JALR</code>只有 inst[12]不一样</li>
+<li><code>BNEZ</code>和<code>BEQZ</code>只有 inst[13]不一样</li>
+</ol>
+<h2 id="非法指令illegal-instruction">🌟 非法指令(illegal
+instruction)</h2>
+<ol type="1">
+<li><code>ADDI4SPN</code>: <span class="math inline">\(imm ==
+0\)</span>, 被保留了(reserved)</li>
+<li><code>LUI</code>: <span class="math inline">\(imm == 0\)</span>,
+reserved</li>
+<li><code>ADDI16SP</code>: <span class="math inline">\(imm ==
+0\)</span>, reserved</li>
+<li><code>SLLI</code>、<code>SRLI</code>和<code>SRAI</code>: <span
+class="math inline">\(imm5=inst[12]==1\)</span>，导致移位超过了
+31bits</li>
+<li><code>LWSP</code>: <span
+class="math inline">\(rd=inst[11:7]=x0\)</span>, reserved</li>
+<li><code>JR</code>:<span class="math inline">\(rs1 == x0\)</span>,
+<code>JR</code>其 offset 恒为 0，若 rs1 还等于 x0, 则跳转 PC 就是当前的
+PC</li>
+<li>其他未定义的压缩指令也都是 illegal instruction</li>
+</ol>
+<h2 id="rvc-的-imm-如何拓展为对应-rv32i-的-imm">🌟 RVC 的 imm
+如何拓展为对应 RV32I 的 imm</h2>
+<ol type="1">
+<li><p>立即数做零扩展 (zero-extend imm): <code>SLLI</code>,
+<code>ADDI4SPN</code>, <code>SRLI</code>, <code>SRAI</code>,
+<code>SW</code>, <code>LW</code>, <code>LWSP</code>,
+<code>SWSP</code>;<br />
+立即数做符号拓展 (sign-extend imm): Others</p>
+<blockquote>
+<p>RVC 中的 imm 的位宽会比 RV32I 指令中的 imm
+位宽小，因此需要扩展为对应的位宽.</p>
+</blockquote></li>
+<li><p>imm 左移位数</p>
+<ul>
+<li>1: <code>J</code>, <code>JAL</code>,<code>BEQZ</code>,
+<code>BNEZ</code></li>
+<li>2: <code>ADDI4SPN</code>, <code>LW</code>, <code>SW</code>,
+<code>LWSP</code>, <code>SWSP</code></li>
+<li>4: <code>ADDI16SP</code></li>
+<li>12: <code>LUI</code></li>
+</ul>
+<blockquote>
+<p>RVC 中的 imm 拓展到 RV32I
+中的立即数的时候，会有一个放大（scale）倍数，需要对其 imm 进行左移</p>
+</blockquote></li>
+</ol>
+<h2
+id="变成其他压缩指令change-to-other-rvc-instruction">变成其他压缩指令(change
+to other RVC instruction)</h2>
+<ol type="1">
+<li><code>ADDI</code>: 如果<span class="math inline">\(rd==x0\)</span>,
+则<code>ADDI -&gt; NOP</code></li>
+<li><code>LUI</code>: 如果<span class="math inline">\(rd=x2\)</span>,
+则<code>LUI -&gt; ADDI16SP</code></li>
+<li><code>MV</code>: 如果<span class="math inline">\(rs2=x0\)</span>,
+则<code>MV -&gt; JR</code></li>
+<li><code>ADD</code>: 如果<span class="math inline">\(rs2=x0\)</span>,
+则<code>ADD -&gt; EBREAK</code></li>
+<li><code>JALR</code>: 如果<span class="math inline">\(rs1==x0\)</span>,
+则<code>JALR -&gt; EBREAK</code></li>
+</ol>
+<h2 id="hints-instruction">HINTs instruction</h2>
+<blockquote>
+<p>HINTs 指令功能类似于 nop 指令，它除了增加 PC 或者其他 counter
+之外不会对系统产生任何影响, 不用在微架构里实现 HINTs 指令</p>
+</blockquote>
+<ol type="1">
+<li><code>NOP</code>和<code>ADDI</code>: <span
+class="math inline">\(imm==0\)</span></li>
+<li><code>LI</code>, <code>LUI</code>: <span
+class="math inline">\(rd==x0\)</span></li>
+<li><code>SLLI</code>, <code>SRLI</code>和<code>SRAI</code>: <span
+class="math inline">\(rd==x0\)</span> 或者<span
+class="math inline">\(imm==0\)</span></li>
+</ol>
+<h2 id="rvc-指令拓展成-rv32i-具体方法">RVC 指令拓展成 RV32I
+具体方法</h2>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 75%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>压缩指令</th>
+<th>恢复成 RV32I 指令的方法</th>
+<th>illegal 情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADDI4SPN</td>
+<td><code>i=&#123;2'b0,c[10:7],c[12:11],c[5],c[6],2'b00,5'h02,3'b000,2'b01,c[4:2],5'b00100,2'b11&#125;;</code></td>
+<td><code>c[12:5] == 8'b0</code></td>
+</tr>
+<tr>
+<td>LW</td>
+<td><code>i=&#123;5'b0,c[5],c[12:10],c[6],2'b00,2'b01,c[9:7],3'b010,2'b01,c[4:2],7'b0000011&#125;&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>SW</td>
+<td><code>i=&#123;5'b0,c[5],c[12],2'b01,c[4:2],2'b01,c[9:7],3'b010,c[11:10],c[6],2'b00,7'b0100011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>ADDI, NOP</td>
+<td><code>i=&#123;&#123;6&#123;c[12]&#125;&#125;,c[12],c[6:2],c[11:7],3'b0,c[11:7],7'b0010011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>J, JAL</td>
+<td><code>i=&#123;c[12],c[8],c[10:9],c[6],c[7],c[2],c[11],c[5:3],&#123;9&#123;c[12]&#125;&#125;,4'b0,~c[15],7'b1101111&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>LI</td>
+<td><code>i=&#123;&#123;6&#123;c[12]&#125;&#125;,c[12],c[6:2],5'b0,3'b0,c[11:7],7'b0010011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>LUI</td>
+<td><code>i=&#123;&#123;15&#123;c[12]&#125;&#125;,c[6:2],c[11:7],7'b0110111&#125;;</code></td>
+<td>{c[12],c[6:2]}==6'b0</td>
+</tr>
+<tr>
+<td>ADDI16SP</td>
+<td><code>i=&#123;&#123;3&#123;c[12]&#125;&#125;,c[4:3],c[5],c[2],c[6],4'b0,5'h02,3'b000,5'h02,7'b0010011&#125;;</code></td>
+<td>{c[12],c[6:2]}==6'b0</td>
+</tr>
+<tr>
+<td>SRLI, SRAI</td>
+<td><code>i=&#123;1'b0,c[10],5'b0,c[6:2],2'b01,c[9:7],3'b101,2'b01,c[9:7],7'b0010011&#125;;</code></td>
+<td>c[12]=1'b1</td>
+</tr>
+<tr>
+<td>ANDI</td>
+<td><code>i=&#123;&#123;6&#123;c[12]&#125;&#125;,c[12],c[6:2],2'b01,c[9:7],3'b111,2'b01,c[9:7],7'b0010011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>SUB</td>
+<td><code>i=&#123;2'b01,5'b0,2'b01,c[4:2],2'b01,c[9:7],3'b000,2'b01,c[9:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>XOR</td>
+<td><code>i=&#123;7'b0,2'b01,c[4:2],2'b01,c[9:7],3'b100,2'b01,c[9:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>OR</td>
+<td><code>i=&#123;7'b0,2'b01,c[4:2],2'b01,c[9:7],3'b110,2'b01,c[9:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>AND</td>
+<td><code>i=&#123;7'b0,2'b01,c[4:2],2'b01,c[9:7],3'b111,2'b01,c[9:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>BEQZ, BNEZ</td>
+<td><code>i=&#123;&#123;4&#123;c[12]&#125;&#125;,c[6:5],c[2],5'b0,2'b01,c[9:7],2'b00,c[13],c[11:10],c[4:3],c[12],7'b1100011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>SLLI</td>
+<td><code>i=&#123;7'b0,c[6:2],c[11:7],3'b001,c[11:7],7'b0010011&#125;;</code></td>
+<td>c[12]=1'b1</td>
+</tr>
+<tr>
+<td>LWSP</td>
+<td><code>i=&#123;4'b0,c[3:2],c[12],c[6:4],2'b00,5'h02,3'b010,c[11:7],7'b0000011&#125;;</code></td>
+<td>c[11:7]=5'b0</td>
+</tr>
+<tr>
+<td>MV</td>
+<td><code>i=&#123;7'b0,c[6:2],5'b0,3'b0,c[11:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>JR</td>
+<td><code>i=&#123;12'b0,c[11:7],3'b0,5'b0,7'b1100111&#125;;</code></td>
+<td>c[11:7]=5'b0</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td><code>i=&#123;7'b0,c[6:2],c[11:7],3'b0,c[11:7],7'b0110011&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>JALR</td>
+<td><code>i=&#123;12'b0,c[11:7],3'b000,5'b00001,7'b1100111&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>EBREAK</td>
+<td><code>i=&#123;32'h00_10_00_73&#125;;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>SWSP</td>
+<td><code>i=&#123;4'b0,c[8:7],c[12],c[6:2],5'h02,3'b010,c[11:9],2'b00,7'b0100011&#125;;</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;">
+
+</div>
+<figure>
+<img src="/Users/fujie/Pictures/typora/rvc.svg" alt="rvc" />
+<figcaption aria-hidden="true">rvc</figcaption>
+</figure>
+<h2 id="verilog-实现">Verilog 实现</h2>
+<p>将 16 bits 的压缩指令，恢复成 32bits 的正常指令，再通过 decoder
+进行解码 <img src="https://s2.loli.net/2023/04/26/vLnagHUEzKwyx5e.png"
+alt="compress Instructions expanding to 32I" /> <img
+src="https://s2.loli.net/2023/04/26/yrsJhVn7MU4AkH6.png"
+alt="waveforms" /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RISC-V/" rel="tag"># RISC-V</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/06/RISCV-bus/" rel="prev" title="RISC-V总线">
+                  <i class="fa fa-chevron-left"></i> RISC-V总线
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/14/essayIdeas/" rel="next" title="论文的点子">
+                  论文的点子 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FuJie</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">438k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6:38</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
